@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Timee — A billion years in the making. A moment of peace in your pocket. Discover crystals for mindfulness and slow living." />
+  <title>Timee — Crystals for the Present Moment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ==================== NAV ==================== -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner container">
+      <a href="#" class="nav__logo">tim<span class="nav__logo--ee">ee</span></a>
+      <button class="nav__toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav__links" id="navLinks">
+        <li><a href="#story">The Story</a></li>
+        <li><a href="#products">Crystals</a></li>
+        <li><a href="#philosophy">Philosophy</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero" id="hero">
+    <div class="hero__bg"></div>
+    <div class="hero__content container">
+      <div class="hero__crystal-icon">
+        <svg viewBox="0 0 80 100" width="80" height="100">
+          <polygon points="40,5 75,85 40,70 5,85" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+          <polygon points="40,15 65,78 40,65 15,78" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.3"/>
+          <line x1="40" y1="5" x2="40" y2="15" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+          <line x1="40" y1="70" x2="40" y2="85" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+        </svg>
+      </div>
+      <h1 class="hero__title">
+        <span class="hero__title--small">Timee</span>
+        <span class="hero__title--large">A billion years<br/>in the making.</span>
+        <span class="hero__title--sub">A moment of peace in your pocket.</span>
+      </h1>
+      <a href="#products" class="btn btn--outline hero__cta">Discover the collection</a>
+    </div>
+    <div class="hero__scroll">
+      <span>Scroll</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ==================== STORY ==================== -->
+  <section class="story" id="story">
+    <div class="container">
+      <div class="story__grid">
+        <div class="story__visual">
+          <div class="story__shape">
+            <div class="story__shape-inner">
+              <span class="story__bee">🐝</span>
+            </div>
+          </div>
+        </div>
+        <div class="story__text">
+          <h2 class="section-title">The Timee Story</h2>
+          <p class="story__p">
+            Time is the most precious thing we have. Yet we give it away so easily —
+            to notifications, to noise, to the relentless rush of more.
+          </p>
+          <p class="story__p">
+            At Timee, we believe in <em>slowing down</em>. In finding beauty in the
+            natural world. In surrounding ourselves with objects that carry meaning.
+          </p>
+          <p class="story__p">
+            Inspired by the <strong>bee</strong> — nature's most intentional creator —
+            and the <strong>crystal</strong> — formed over millions of years deep
+            within the earth — Timee brings you small reminders to breathe,
+            to be present, to reconnect with what matters.
+          </p>
+          <div class="story__signature">
+            <span class="story__sig-text">— Timee</span>
+            <span class="story__sig-sub">Slow down. Feel more.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PRODUCTS ==================== -->
+  <section class="products" id="products">
+    <div class="container">
+      <div class="products__header">
+        <h2 class="section-title section-title--light">Our First Collection</h2>
+        <p class="products__intro">
+          Three ways to bring a moment of stillness into your day.
+          Hand-selected crystals, thoughtfully packaged.
+        </p>
+      </div>
+
+      <div class="products__grid">
+
+        <!-- Product 1 -->
+        <article class="product-card">
+          <div class="product-card__visual product-card__visual--1">
+            <div class="product-card__gem">
+              <div class="gem gem--amethyst"></div>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__tag">Best Seller</span>
+            <h3 class="product-card__title">Pocket Stone</h3>
+            <p class="product-card__desc">
+              A single amethyst or rose quartz crystal, polished smooth.
+              Carry it with you. Touch it when you need to ground yourself.
+            </p>
+            <div class="product-card__footer">
+              <span class="product-card__price">$14.99</span>
+              <button class="btn btn--small btn--ghost" data-product="pocket-stone">Coming Soon</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 2 -->
+        <article class="product-card product-card--featured">
+          <div class="product-card__visual product-card__visual--2">
+            <div class="product-card__gem">
+              <div class="gem gem--multi"></div>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__tag product-card__tag--featured">Editor's Pick</span>
+            <h3 class="product-card__title">Crystal Kit</h3>
+            <p class="product-card__desc">
+              Four crystals in harmony: amethyst, rose quartz, citrine,
+              and black obsidian. Each with its own meaning.
+              A toolkit for emotional balance.
+            </p>
+            <div class="product-card__footer">
+              <span class="product-card__price">$34.99</span>
+              <button class="btn btn--small btn--ghost" data-product="crystal-kit">Coming Soon</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 3 -->
+        <article class="product-card">
+          <div class="product-card__visual product-card__visual--3">
+            <div class="product-card__gem">
+              <div class="gem gem--moon"></div>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__tag">New</span>
+            <h3 class="product-card__title">Moon Phase Crystal</h3>
+            <p class="product-card__desc">
+              Your birth month's guardian crystal on a wooden moon phase
+              display stand. Twelve months. Twelve stones. One journey.
+            </p>
+            <div class="product-card__footer">
+              <span class="product-card__price">$59.99</span>
+              <button class="btn btn--small btn--ghost" data-product="moon-phase">Coming Soon</button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Pre-order / waitlist CTA -->
+      <div class="products__cta">
+        <p>Want to know when we launch?</p>
+        <a href="#contact" class="btn btn--primary">Get notified</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PHILOSOPHY ==================== -->
+  <section class="philosophy" id="philosophy">
+    <div class="container">
+      <div class="philosophy__grid">
+        <div class="philosophy__item">
+          <div class="philosophy__icon">
+            <svg viewBox="0 0 48 48" width="48" height="48">
+              <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="1"/>
+              <path d="M24 12v12l8 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="philosophy__title">Time</h3>
+          <p class="philosophy__text">
+            Crystals form over millions of years. They remind us that
+            the best things can't be rushed.
+          </p>
+        </div>
+        <div class="philosophy__item">
+          <div class="philosophy__icon">
+            <svg viewBox="0 0 48 48" width="48" height="48">
+              <path d="M24 8C16 8 12 14 12 20c0 8 12 20 12 20s12-12 12-20c0-6-4-12-12-12z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="24" cy="20" r="4" fill="none" stroke="currentColor" stroke-width="1"/>
+            </svg>
+          </div>
+          <h3 class="philosophy__title">Intention</h3>
+          <p class="philosophy__text">
+            Like the bee building its hive, every object we create
+            serves a purpose — to bring you back to the present.
+          </p>
+        </div>
+        <div class="philosophy__item">
+          <div class="philosophy__icon">
+            <svg viewBox="0 0 48 48" width="48" height="48">
+              <path d="M12 36c0-6 4-10 12-18S36 18 36 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M28 36h8v-8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="philosophy__title">Connection</h3>
+          <p class="philosophy__text">
+            We believe in small, meaningful rituals — a breath before you begin,
+            a moment of gratitude at the end of the day.
+          </p>
+        </div>
+      </div>
+
+      <div class="philosophy__quote">
+        <blockquote>
+          "Every crystal carries the memory of time.<br/>
+          Every bee builds with purpose.<br/>
+          <strong>Every moment deserves to be felt.</strong>"
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CONTACT / WAITLIST ==================== -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact__card">
+        <div class="contact__content">
+          <h2 class="section-title">Stay in Touch</h2>
+          <p class="contact__text">
+            No launch noise. Just a quiet note when we're ready —
+            and occasionally, a story about the natural world.
+          </p>
+          <form class="contact__form" id="waitlistForm">
+            <input
+              type="email"
+              id="emailInput"
+              class="contact__input"
+              placeholder="Your email address"
+              required
+              aria-label="Email address"
+            />
+            <button type="submit" class="btn btn--primary contact__btn">Notify me</button>
+          </form>
+          <p class="contact__privacy">
+            No spam. Unsubscribe anytime.
+          </p>
+          <div class="contact__success" id="successMsg">
+            Thank you! We'll let you know when we launch.
+          </div>
+        </div>
+        <div class="contact__visual">
+          <div class="contact__circle"></div>
+          <span class="contact__emoji">🐝</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <a href="#" class="nav__logo">tim<span class="nav__logo--ee">ee</span></a>
+        <p class="footer__tagline">A billion years in the making.<br/>A moment of peace in your pocket.</p>
+      </div>
+      <div class="footer__links">
+        <h4 class="footer__heading">Links</h4>
+        <ul>
+          <li><a href="#story">The Story</a></li>
+          <li><a href="#products">Crystals</a></li>
+          <li><a href="#philosophy">Philosophy</a></li>
+        </ul>
+      </div>
+      <div class="footer__social">
+        <h4 class="footer__heading">Connect</h4>
+        <ul>
+          <li><a href="#" target="_blank">Instagram</a></li>
+          <li><a href="#" target="_blank">TikTok</a></li>
+          <li><a href="mailto:hello@timee.world">hello@timee.world</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom container">
+      <p>&copy; 2026 Timee. All rights reserved.</p>
+      <p class="footer__credit">Made with intention.</p>
+    </div>
+  </footer>
+
+  <!-- Product detail modal -->
+  <div class="modal" id="productModal">
+    <div class="modal__overlay"></div>
+    <div class="modal__content">
+      <button class="modal__close" aria-label="Close">&times;</button>
+      <div class="modal__body">
+        <h3 class="modal__title"></h3>
+        <p class="modal__desc"></p>
+        <p class="modal__price"></p>
+        <p class="modal__note">This product is not yet available. Join the waitlist to be notified at launch.</p>
+        <a href="#contact" class="btn btn--primary modal__cta">Join Waitlist</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
