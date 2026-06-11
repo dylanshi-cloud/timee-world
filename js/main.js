@@ -170,4 +170,89 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   console.log('🐝 Timee — A billion years in the making.');
+
+  // ---------- Checkout Modal ----------
+  const productInfo = {
+    'pink-elephant': { title: 'Pink Crystal Elephant', price: '$29.99' },
+    'aquamarine-bracelet': { title: 'Aquamarine Bracelet', price: '$29.99' },
+    'geode-mirror': { title: 'Amethyst Geode Mirror', price: '$29.99' },
+    'amethyst-bracelet': { title: 'Amethyst Bracelet', price: '$24.99' },
+    'pixiu-bracelet': { title: 'Pi Xiu Bracelet', price: '$24.99' },
+    'titanium-bangle': { title: 'Titanium Gold Bangle', price: '$39.99' }
+  };
+
+  const checkoutHTML = `
+    <div class="modal" id="checkoutModal">
+      <div class="modal__overlay" id="checkoutOverlay"></div>
+      <div class="modal__content" style="max-width:520px">
+        <button class="modal__close" id="checkoutClose">&times;</button>
+        <div class="modal__body">
+          <h3 class="modal__title" id="checkoutTitle">Order</h3>
+          <p style="color:var(--color-text-light);font-weight:300;font-size:0.95rem" id="checkoutDesc"></p>
+          <p style="font-family:var(--font-serif);font-size:1.3rem;color:var(--color-accent);margin:0.5rem 0" id="checkoutPrice"></p>
+          <form id="orderForm" style="display:flex;flex-direction:column;gap:0.8rem;margin-top:1rem">
+            <input type="hidden" id="orderProduct" name="product" />
+            <input type="hidden" id="orderPrice" name="price" />
+            <input type="text" name="name" placeholder="Your full name" required class="contact__input" />
+            <input type="email" name="email" placeholder="Your email address" required class="contact__input" />
+            <textarea name="address" placeholder="Shipping address (street, city, country, zip)" rows="3" required class="contact__input" style="resize:vertical;font-family:var(--font-sans);font-weight:300"></textarea>
+            <div style="font-size:0.8rem;color:var(--color-text-muted);padding:0.5rem 0">
+              📦 We'll send you a PayPal invoice within 24 hours. Free shipping on orders over $50.
+            </div>
+            <button type="submit" class="btn btn--primary" style="align-self:flex-start">Place Order</button>
+          </form>
+          <div id="orderSuccess" style="display:none;padding:1rem;background:#E8F5E9;color:#2E7D32;border-radius:0;font-size:0.95rem;margin-top:1rem">
+            ✅ Order received! We'll email you a PayPal invoice within 24 hours.
+          </div>
+        </div>
+      </div>
+    </div>`;
+  document.body.insertAdjacentHTML('beforeend', checkoutHTML);
+
+  const coModal = document.getElementById('checkoutModal');
+  const coClose = document.getElementById('checkoutClose');
+  const coOverlay = document.getElementById('checkoutOverlay');
+  const coForm = document.getElementById('orderForm');
+  const coTitle = document.getElementById('checkoutTitle');
+  const coDesc = document.getElementById('checkoutDesc');
+  const coPrice = document.getElementById('checkoutPrice');
+  const coProduct = document.getElementById('orderProduct');
+  const coPriceInput = document.getElementById('orderPrice');
+  const coSuccess = document.getElementById('orderSuccess');
+
+  document.querySelectorAll('.buy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var info = productInfo[this.dataset.product];
+      if (!info) return;
+      coTitle.textContent = info.title;
+      coDesc.textContent = 'You are ordering: ' + info.title;
+      coPrice.textContent = info.price;
+      coProduct.value = info.title;
+      coPriceInput.value = info.price;
+      coModal.classList.add('modal--open');
+      coForm.style.display = 'flex';
+      coSuccess.style.display = 'none';
+      coForm.reset();
+    });
+  });
+
+  coClose.addEventListener('click', function() { coModal.classList.remove('modal--open'); });
+  coOverlay.addEventListener('click', function() { coModal.classList.remove('modal--open'); });
+
+  coForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var name = this.name.value;
+    var email = this.email.value;
+    var address = this.address.value;
+    var product = this.product.value;
+    var price = this.price.value;
+    var subj = encodeURIComponent('Timee Order: ' + product);
+    var body = encodeURIComponent(
+      'Product: ' + product + '\nPrice: ' + price + '\nName: ' + name + '\nEmail: ' + email + '\nAddress: ' + address + '\n\nPlease send PayPal invoice to: ' + email
+    );
+    window.open('mailto:hello@timee.world?subject=' + subj + '&body=' + body, '_blank');
+    this.style.display = 'none';
+    coSuccess.style.display = 'block';
+  });
 });
