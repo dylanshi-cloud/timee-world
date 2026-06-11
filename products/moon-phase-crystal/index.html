@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moon Phase Crystal — Timee</title>
+  <meta name="description" content="Your birth month's guardian crystal on a wooden moon phase display stand. Twelve months, twelve stones. $59.99." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .product-detail { padding: 8rem 0 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .product-detail__gallery { position: sticky; top: 6rem; }
+    .product-detail__main-image { aspect-ratio: 1; background: linear-gradient(145deg, #3D2A1B, #A07A4A); display: flex; align-items: center; justify-content: center; border-radius: 0; margin-bottom: 1rem; }
+    .product-detail__main-image .gem-big { width: 160px; height: 160px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, #F5E6CC, #D4A574); box-shadow: 0 12px 48px rgba(212,165,116,0.5); }
+    .product-detail__thumbnails { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+    .product-detail__thumb { aspect-ratio: 1; background: var(--color-bg-alt); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 1px solid var(--color-border); }
+    .product-detail__info { display: flex; flex-direction: column; gap: 1.2rem; }
+    .product-detail__breadcrumb { font-size: 0.8rem; color: var(--color-text-muted); }
+    .product-detail__breadcrumb a { color: var(--color-text-muted); }
+    .product-detail__breadcrumb a:hover { color: var(--color-accent); }
+    .product-detail__title { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); }
+    .product-detail__price { font-family: var(--font-serif); font-size: 1.8rem; color: var(--color-accent); }
+    .product-detail__desc { font-weight: 300; line-height: 1.8; color: var(--color-text-light); }
+    .product-detail__cta { padding: 1rem 2rem; background: var(--color-accent); color: #fff; border: none; font-family: var(--font-sans); font-size: 0.9rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: background 0.3s; align-self: flex-start; }
+    .product-detail__cta:hover { background: var(--color-accent-dark); }
+    .product-detail__accordion { border-top: 1px solid var(--color-border); padding-top: 1.5rem; }
+    .product-detail__accordion details { margin-bottom: 1rem; }
+    .product-detail__accordion summary { font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; padding: 0.5rem 0; }
+    .product-detail__accordion .content { font-size: 0.9rem; color: var(--color-text-light); font-weight: 300; line-height: 1.7; padding: 0.5rem 0; }
+    .birthstone-chart { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin: 1rem 0; }
+    .birthstone-chart .month { padding: 0.75rem; border: 1px solid var(--color-border); text-align: center; font-size: 0.85rem; }
+    .birthstone-chart .month strong { font-family: var(--font-serif); display: block; }
+    .birthstone-chart .month span { color: var(--color-text-light); font-size: 0.75rem; }
+    @media (max-width: 768px) { .product-detail { grid-template-columns: 1fr; } .product-detail__gallery { position: static; } .birthstone-chart { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+  <nav class="nav nav--scrolled">
+    <div class="nav__inner container">
+      <a href="/" class="nav__logo" style="color:var(--color-text)">tim<span class="nav__logo--ee">ee</span></a>
+      <ul class="nav__links">
+        <li><a href="/#story" style="color:var(--color-text-light)!important">The Story</a></li>
+        <li><a href="/#products" style="color:var(--color-text-light)!important">Crystals</a></li>
+        <li><a href="/blog/" style="color:var(--color-text-light)!important">Journal</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container product-detail">
+    <div class="product-detail__gallery">
+      <div class="product-detail__main-image"><div class="gem-big"></div></div>
+      <div class="product-detail__thumbnails">
+        <div class="product-detail__thumb">🌑</div>
+        <div class="product-detail__thumb">🌓</div>
+        <div class="product-detail__thumb">🌕</div>
+      </div>
+    </div>
+    <div class="product-detail__info">
+      <div class="product-detail__breadcrumb"><a href="/">Home</a> / <a href="/#products">Crystals</a> / Moon Phase Crystal</div>
+      <h1 class="product-detail__title">Moon Phase Crystal</h1>
+      <div class="product-detail__price">$59.99</div>
+      <p class="product-detail__desc">Your birth month's guardian crystal, displayed on a handcrafted wooden moon phase stand. A beautiful reminder of the cycles of nature — and your place within them. Twelve months, twelve stones, one journey.</p>
+
+      <div class="birthstone-chart">
+        <div class="month"><strong>Jan</strong><span>Garnet</span></div>
+        <div class="month"><strong>Feb</strong><span>Amethyst</span></div>
+        <div class="month"><strong>Mar</strong><span>Aquamarine</span></div>
+        <div class="month"><strong>Apr</strong><span>Diamond</span></div>
+        <div class="month"><strong>May</strong><span>Emerald</span></div>
+        <div class="month"><strong>Jun</strong><span>Pearl</span></div>
+        <div class="month"><strong>Jul</strong><span>Ruby</span></div>
+        <div class="month"><strong>Aug</strong><span>Peridot</span></div>
+        <div class="month"><strong>Sep</strong><span>Sapphire</span></div>
+        <div class="month"><strong>Oct</strong><span>Opal</span></div>
+        <div class="month"><strong>Nov</strong><span>Topaz</span></div>
+        <div class="month"><strong>Dec</strong><span>Turquoise</span></div>
+      </div>
+
+      <button class="product-detail__cta">Coming Soon — Join Waitlist</button>
+      <div class="product-detail__accordion">
+        <details>
+          <summary>Product Details</summary>
+          <div class="content">Includes your birth month's guardian crystal mounted on a laser-engraved wooden moon phase display stand. The stand shows the 8 phases of the moon, with your crystal resting at the center. Packaged in a premium gift box with a meaning card.</div>
+        </details>
+        <details>
+          <summary>The Meaning</summary>
+          <div class="content">Each birthstone carries unique energy. Garnet for vitality, Amethyst for peace, Aquamarine for courage, Diamond for clarity, Emerald for love, Pearl for wisdom, Ruby for passion, Peridot for growth, Sapphire for truth, Opal for creativity, Topaz for joy, Turquoise for protection.</div>
+        </details>
+        <details>
+          <summary>Shipping & Returns</summary>
+          <div class="content">Free shipping on orders over $50. 14-day satisfaction guarantee.</div>
+        </details>
+      </div>
+    </div>
+  </div>
+  <footer class="footer" style="margin-top:4rem">
+    <div class="container footer__bottom">
+      <p>&copy; 2026 Timee. All rights reserved.</p>
+      <p class="footer__credit">Made with intention.</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crystal Kit — Timee</title>
+  <meta name="description" content="Four harmony crystals: Amethyst, Rose Quartz, Citrine, Black Obsidian. A complete toolkit for emotional balance. $34.99." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .product-detail { padding: 8rem 0 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .product-detail__gallery { position: sticky; top: 6rem; }
+    .product-detail__main-image { aspect-ratio: 1; background: linear-gradient(145deg, #1B3A2D, #4A9F76); display: flex; align-items: center; justify-content: center; border-radius: 0; margin-bottom: 1rem; }
+    .product-detail__main-image .gem-big { width: 160px; height: 160px; border-radius: 50%; background: conic-gradient(from 0deg, #9B59B6, #E8A87C, #F1C40F, #2C3E50, #9B59B6); box-shadow: 0 12px 48px rgba(232,168,124,0.5); }
+    .product-detail__thumbnails { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+    .product-detail__thumb { aspect-ratio: 1; background: var(--color-bg-alt); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 1px solid var(--color-border); }
+    .product-detail__info { display: flex; flex-direction: column; gap: 1.2rem; }
+    .product-detail__breadcrumb { font-size: 0.8rem; color: var(--color-text-muted); }
+    .product-detail__breadcrumb a { color: var(--color-text-muted); }
+    .product-detail__breadcrumb a:hover { color: var(--color-accent); }
+    .product-detail__title { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); }
+    .product-detail__price { font-family: var(--font-serif); font-size: 1.8rem; color: var(--color-accent); }
+    .product-detail__desc { font-weight: 300; line-height: 1.8; color: var(--color-text-light); }
+    .product-detail__cta { padding: 1rem 2rem; background: var(--color-accent); color: #fff; border: none; font-family: var(--font-sans); font-size: 0.9rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: background 0.3s; align-self: flex-start; }
+    .product-detail__cta:hover { background: var(--color-accent-dark); }
+    .product-detail__accordion { border-top: 1px solid var(--color-border); padding-top: 1.5rem; }
+    .product-detail__accordion details { margin-bottom: 1rem; }
+    .product-detail__accordion summary { font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; padding: 0.5rem 0; }
+    .product-detail__accordion .content { font-size: 0.9rem; color: var(--color-text-light); font-weight: 300; line-height: 1.7; padding: 0.5rem 0; }
+    .stone-list { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+    .stone-card { padding: 1rem; border: 1px solid var(--color-border); text-align: center; }
+    .stone-card .swatch { width: 40px; height: 40px; border-radius: 50%; margin: 0 auto 0.5rem; }
+    .stone-card h4 { font-family: var(--font-serif); font-size: 1rem; }
+    .stone-card p { font-size: 0.8rem; color: var(--color-text-light); }
+    @media (max-width: 768px) { .product-detail { grid-template-columns: 1fr; gap: 2rem; } .product-detail__gallery { position: static; } .stone-list { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <nav class="nav nav--scrolled">
+    <div class="nav__inner container">
+      <a href="/" class="nav__logo" style="color:var(--color-text)">tim<span class="nav__logo--ee">ee</span></a>
+      <ul class="nav__links">
+        <li><a href="/#story" style="color:var(--color-text-light)!important">The Story</a></li>
+        <li><a href="/#products" style="color:var(--color-text-light)!important">Crystals</a></li>
+        <li><a href="/blog/" style="color:var(--color-text-light)!important">Journal</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container product-detail">
+    <div class="product-detail__gallery">
+      <div class="product-detail__main-image"><div class="gem-big"></div></div>
+      <div class="product-detail__thumbnails">
+        <div class="product-detail__thumb">💜</div>
+        <div class="product-detail__thumb">💗</div>
+        <div class="product-detail__thumb">🖤</div>
+      </div>
+    </div>
+    <div class="product-detail__info">
+      <div class="product-detail__breadcrumb"><a href="/">Home</a> / <a href="/#products">Crystals</a> / Crystal Kit</div>
+      <h1 class="product-detail__title">Crystal Kit</h1>
+      <div class="product-detail__price">$34.99</div>
+      <p class="product-detail__desc">A harmonious set of four crystals, each chosen for its unique energy. Together, they form a complete toolkit for emotional balance — calm, love, abundance, and protection. Comes with a guide to help you work with each stone.</p>
+      <div class="stone-list">
+        <div class="stone-card">
+          <div class="swatch" style="background:radial-gradient(circle at 35% 35%, #9B59B6, #6C3483)"></div>
+          <h4>Amethyst</h4>
+          <p>Calm & clarity</p>
+        </div>
+        <div class="stone-card">
+          <div class="swatch" style="background:radial-gradient(circle at 35% 35%, #E8A87C, #D4866C)"></div>
+          <h4>Rose Quartz</h4>
+          <p>Love & compassion</p>
+        </div>
+        <div class="stone-card">
+          <div class="swatch" style="background:radial-gradient(circle at 35% 35%, #F1C40F, #D4A017)"></div>
+          <h4>Citrine</h4>
+          <p>Joy & abundance</p>
+        </div>
+        <div class="stone-card">
+          <div class="swatch" style="background:radial-gradient(circle at 35% 35%, #2C3E50, #1A252F)"></div>
+          <h4>Black Obsidian</h4>
+          <p>Protection</p>
+        </div>
+      </div>
+      <button class="product-detail__cta">Coming Soon — Join Waitlist</button>
+      <div class="product-detail__accordion">
+        <details>
+          <summary>What's Included</summary>
+          <div class="content">4 natural crystals (approx. 2-4cm each) in a premium gift box, a linen pouch, and a detailed guide explaining each crystal's meaning and how to use it.</div>
+        </details>
+        <details>
+          <summary>How to Use</summary>
+          <div class="content">Keep your Crystal Kit on your desk, nightstand, or altar. Each day, choose the crystal whose energy matches what you need — or simply hold the whole set during meditation.</div>
+        </details>
+        <details>
+          <summary>Shipping & Returns</summary>
+          <div class="content">Free shipping on orders over $50. 14-day satisfaction guarantee.</div>
+        </details>
+      </div>
+    </div>
+  </div>
+  <footer class="footer" style="margin-top:4rem">
+    <div class="container footer__bottom">
+      <p>&copy; 2026 Timee. All rights reserved.</p>
+      <p class="footer__credit">Made with intention.</p>
+    </div>
+  </footer>
+</body>
+</html>

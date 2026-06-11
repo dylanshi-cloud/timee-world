@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Timee Journal — Mindfulness, Crystals & Slow Living</title>
+  <meta name="description" content="Explore the Timee Journal for stories about mindfulness, crystal healing, slow living, and finding peace in a busy world." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .blog-hero { padding: 8rem 0 3rem; text-align: center; background: var(--color-bg-alt); }
+    .blog-hero h1 { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); }
+    .blog-hero p { color: var(--color-text-light); max-width: 500px; margin: 1rem auto 0; }
+    .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; padding: 3rem 0 5rem; }
+    .blog-card { background: #fff; border: 1px solid var(--color-border); transition: all 0.4s var(--ease-out); }
+    .blog-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+    .blog-card__image { aspect-ratio: 16/9; background: var(--color-bg-alt); display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+    .blog-card__body { padding: 1.5rem; }
+    .blog-card__date { font-size: 0.75rem; color: var(--color-text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+    .blog-card__title { font-family: var(--font-serif); font-size: 1.2rem; margin: 0.5rem 0; line-height: 1.4; }
+    .blog-card__title a { color: var(--color-text); transition: color 0.3s; }
+    .blog-card__title a:hover { color: var(--color-accent); }
+    .blog-card__excerpt { font-size: 0.9rem; color: var(--color-text-light); line-height: 1.6; font-weight: 300; }
+    .blog-card__tags { display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap; }
+    .blog-card__tags span { font-size: 0.7rem; padding: 0.2rem 0.6rem; background: var(--color-bg); color: var(--color-text-muted); letter-spacing: 0.05em; }
+  </style>
+</head>
+<body>
+  <nav class="nav nav--scrolled">
+    <div class="nav__inner container">
+      <a href="/" class="nav__logo" style="color:var(--color-text)">tim<span class="nav__logo--ee">ee</span></a>
+      <ul class="nav__links">
+        <li><a href="/#story" style="color:var(--color-text-light)!important">The Story</a></li>
+        <li><a href="/#products" style="color:var(--color-text-light)!important">Crystals</a></li>
+        <li><a href="/blog/" style="color:var(--color-accent)!important">Journal</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="blog-hero">
+    <div class="container">
+      <h1>The Timee Journal</h1>
+      <p>Stories about mindfulness, slow living, and finding peace in a busy world.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container blog-grid">
+      <article class="blog-card">
+        <div class="blog-card__image">🪨</div>
+        <div class="blog-card__body">
+          <span class="blog-card__date">June 12, 2026</span>
+          <h2 class="blog-card__title"><a href="/blog/what-crystal-should-i-carry-for-anxiety/">What Crystal Should I Carry for Anxiety?</a></h2>
+          <p class="blog-card__excerpt">We surveyed the most popular crystals for anxiety relief — here's how to choose the right one for your specific needs.</p>
+          <div class="blog-card__tags"><span>crystal healing</span><span>anxiety relief</span><span>amethyst</span></div>
+        </div>
+      </article>
+      <article class="blog-card">
+        <div class="blog-card__image">🕯️</div>
+        <div class="blog-card__body">
+          <span class="blog-card__date">Coming soon</span>
+          <h2 class="blog-card__title">How to Cleanse Your Crystals (3 Simple Methods)</h2>
+          <p class="blog-card__excerpt">Keep your crystals working at their best with these easy cleansing rituals.</p>
+          <div class="blog-card__tags"><span>crystal care</span><span>cleansing</span></div>
+        </div>
+      </article>
+      <article class="blog-card">
+        <div class="blog-card__image">🌙</div>
+        <div class="blog-card__body">
+          <span class="blog-card__date">Coming soon</span>
+          <h2 class="blog-card__title">Birthstone Meanings: A Complete Guide</h2>
+          <p class="blog-card__excerpt">Every birth month has a guardian crystal. Find out what yours means.</p>
+          <div class="blog-card__tags"><span>birthstone</span><span>astrology</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <footer class="footer" style="margin-top:3rem">
+    <div class="container footer__bottom">
+      <p>&copy; 2026 Timee. All rights reserved.</p>
+      <p class="footer__credit">Made with intention.</p>
+    </div>
+  </footer>
+</body>
+</html>
