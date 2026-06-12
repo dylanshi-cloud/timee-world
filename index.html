@@ -9,6 +9,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Coze chat button - match Timee brand */
+    .coze-web-chat-assistant-button { box-shadow: 0 4px 20px rgba(200,146,90,0.3) !important; }
+    .coze-web-chat-assistant-button:hover { transform: scale(1.05); }
+  </style>
 </head>
 <body>
 
@@ -367,15 +372,15 @@
     new CozeWebSDK.WebChatClient({
       config: { bot_id: '7650332710011240474' },
       componentProps: {
-        title: 'Timee Customer Service 🐝',
+        title: 'Timee 🐝',
         lang: 'en',
-        layout: 'pc',
-        width: 390
+        width: 400,
+        icon: 'https://timee.world/images/bee-icon.svg'
       },
       ui: {
         base: { zIndex: 1000 },
-        chatBot: { uploadable: false, width: 390 },
-        asstBtn: { isNeed: true },
+        chatBot: { uploadable: false, width: 400 },
+        asstBtn: { isNeed: true, width: 60, height: 60 },
         footer: { isShow: false }
       }
     });
