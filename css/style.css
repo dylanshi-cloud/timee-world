@@ -395,13 +395,9 @@ ul { list-style: none; }
 }
 
 .story__bee {
+  font-size: clamp(4rem, 6vw, 6rem);
   display: block;
   animation: float 5s ease-in-out infinite;
-}
-.story__bee img {
-  width: clamp(80px, 10vw, 120px);
-  height: auto;
-  display: block;
 }
 
 .story__text {
@@ -765,12 +761,8 @@ ul { list-style: none; }
 
 .contact__emoji {
   position: absolute;
+  font-size: clamp(3rem, 5vw, 4.5rem);
   animation: float 5s ease-in-out infinite;
-}
-.contact__emoji img {
-  width: clamp(48px, 6vw, 72px);
-  height: auto;
-  display: block;
 }
 
 /* ============================================================
