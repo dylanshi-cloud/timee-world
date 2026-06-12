@@ -173,12 +173,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---------- Checkout Modal ----------
   const productInfo = {
-    'pink-elephant': { title: 'Pink Crystal Elephant', price: '$42.99', sold: true },
-    'aquamarine-bracelet': { title: 'Aquamarine Bracelet', price: '$41.99' },
-    'geode-mirror': { title: 'Amethyst Geode Mirror', price: '$61.99' },
-    'amethyst-bracelet': { title: 'Amethyst Bracelet', price: '$34.99' },
-    'pixiu-bracelet': { title: 'Pi Xiu Bracelet', price: '$30.99' },
-    'titanium-bangle': { title: 'Titanium Gold Bangle', price: '$163.99' }
+    'pink-elephant': { title: 'Pink Crystal Elephant', price: '$426', sold: true },
+    'aquamarine-bracelet': { title: 'Aquamarine Bracelet', price: '$420' },
+    'geode-mirror': { title: 'Amethyst Geode Mirror', price: '$624' },
+    'amethyst-bracelet': { title: 'Amethyst Bracelet', price: '$350' },
+    'pixiu-bracelet': { title: 'Pi Xiu Bracelet', price: '$310' },
+    'titanium-bangle': { title: 'Titanium Gold Bangle', price: '$1,639' }
   };
 
   const checkoutHTML = `
