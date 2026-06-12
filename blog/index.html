@@ -85,15 +85,14 @@
     </div>
   </footer>
 
-  <script src="https://sf-cdn.coze.cn/obj/copilot-web-chat/sdk/copilot-web-chat.js"></script>
+  <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.15/libs/cn/index.js"></script>
   <script>
-    CozeWebChat.init({
-      bot_id: '7650332710011240474',
-      lang: 'en',
-      layout: { position: 'right', bottom: '100px', right: '30px', width: '380px', height: '600px' },
-      icon: { enabled: true, width: 50, height: 50, backgroundColor: '#C8925A' },
-      chat: { title: 'Timee Customer Service 🐝', placeholder: 'Ask us anything...', inputPlaceholder: 'Type your message...', showTime: true }
+    new CozeWebSDK.WebChatClient({
+      config: { bot_id: '7650332710011240474' },
+      componentProps: { title: 'Timee Customer Service 🐝', lang: 'en', layout: 'pc', width: 390 },
+      ui: { base: { zIndex: 1000 }, chatBot: { width: 390 }, asstBtn: { isNeed: true }, footer: { isShow: false } }
     });
   </script>
 </body>
+</html>
 </html>

@@ -102,9 +102,9 @@
     </div>
   </footer>
 
-  <script src="https://sf-cdn.coze.cn/obj/copilot-web-chat/sdk/copilot-web-chat.js"></script>
+  <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.15/libs/cn/index.js"></script>
   <script>
-    CozeWebChat.init({bot_id:'7650332710011240474',lang:'en',layout:{position:'right',bottom:'100px',right:'30px'},icon:{enabled:true,width:50,height:50,backgroundColor:'#C8925A'},chat:{title:'Timee 🐝',showTime:true}});
+    new CozeWebSDK.WebChatClient({config:{bot_id:'7650332710011240474'},componentProps:{title:'Timee 🐝',lang:'en'},ui:{asstBtn:{isNeed:true}}});
   </script>
 </body>
 </html>
