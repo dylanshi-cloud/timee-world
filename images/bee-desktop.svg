@@ -1,46 +1,92 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
   <defs>
-    <linearGradient id="wingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F5E6CC" stop-opacity="0.6"/>
-      <stop offset="100%" stop-color="#E8D5B7" stop-opacity="0.3"/>
-    </linearGradient>
-    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#F7DC6F"/>
+    <radialGradient id="bodyGlow" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#F7DC6F" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#F7DC6F" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F9E154"/>
+      <stop offset="40%" stop-color="#F4C430"/>
       <stop offset="100%" stop-color="#D4A017"/>
     </linearGradient>
-    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#C8925A" stop-opacity="0.15"/>
-      <stop offset="100%" stop-color="#C8925A" stop-opacity="0"/>
+    <linearGradient id="wingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#E8E0D0" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="wingShine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <!-- subtle glow behind -->
-  <circle cx="100" cy="100" r="90" fill="url(#glow)"/>
-  <!-- Left wing -->
-  <ellipse cx="65" cy="65" rx="40" ry="24" fill="url(#wingGrad)" stroke="#E8D5B7" stroke-width="0.8" transform="rotate(-25,65,65)"/>
-  <path d="M40 58 Q55 48 75 55" fill="none" stroke="#D4C4A0" stroke-width="0.5" opacity="0.5"/>
-  <!-- Right wing -->
-  <ellipse cx="135" cy="65" rx="40" ry="24" fill="url(#wingGrad)" stroke="#E8D5B7" stroke-width="0.8" transform="rotate(25,135,65)"/>
-  <path d="M125 58 Q145 48 160 55" fill="none" stroke="#D4C4A0" stroke-width="0.5" opacity="0.5"/>
-  <!-- Body -->
-  <ellipse cx="100" cy="110" rx="32" ry="42" fill="url(#bodyGrad)" stroke="#C8925A" stroke-width="1"/>
-  <!-- Stripes -->
-  <path d="M69 92 Q100 86 131 92" fill="none" stroke="#3D2B1F" stroke-width="4" stroke-linecap="round" transform="rotate(-3,100,92)"/>
-  <path d="M70 105 Q100 99 130 105" fill="none" stroke="#3D2B1F" stroke-width="4" stroke-linecap="round" transform="rotate(-2,100,105)"/>
-  <path d="M73 118 Q100 112 127 118" fill="none" stroke="#3D2B1F" stroke-width="3.5" stroke-linecap="round" transform="rotate(-1,100,118)"/>
-  <!-- Stinger -->
-  <path d="M100 150 L96 162 L104 162 Z" fill="#3D2B1F"/>
-  <!-- Head -->
-  <circle cx="100" cy="82" r="22" fill="#3D2B1F"/>
+
+  <!-- Soft glow behind bee -->
+  <circle cx="100" cy="95" r="85" fill="url(#bodyGlow)"/>
+
+  <!-- LEFT WING -->
+  <g transform="translate(100,85) rotate(-35) translate(-100,-85)">
+    <ellipse cx="68" cy="72" rx="38" ry="24" fill="url(#wingGrad)" stroke="#D4C8B8" stroke-width="0.5"/>
+    <path d="M45 68 Q55 58 75 62" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.4"/>
+    <path d="M50 75 Q60 65 78 68" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.3"/>
+  </g>
+
+  <!-- RIGHT WING -->
+  <g transform="translate(100,85) rotate(35) translate(-100,-85)">
+    <ellipse cx="132" cy="72" rx="38" ry="24" fill="url(#wingGrad)" stroke="#D4C8B8" stroke-width="0.5"/>
+    <path d="M125 68 Q115 58 95 62" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.4"/>
+    <path d="M120 75 Q110 65 92 68" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.3"/>
+  </g>
+
+  <!-- BODY -->
+  <ellipse cx="100" cy="108" rx="32" ry="40" fill="url(#bodyGrad)" stroke="#B8860B" stroke-width="0.8"/>
+
+  <!-- Body highlight -->
+  <ellipse cx="90" cy="96" rx="12" ry="22" fill="#FFFFFF" opacity="0.15" transform="rotate(-8,90,96)"/>
+
+  <!-- STRIPES -->
+  <g stroke-linecap="round">
+    <path d="M69 92 Q100 84 131 92" fill="none" stroke="#3D2B1F" stroke-width="5.5" transform="rotate(-2,100,92)"/>
+    <path d="M70 104 Q100 96 130 104" fill="none" stroke="#3D2B1F" stroke-width="5.5" transform="rotate(-1,100,104)"/>
+    <path d="M73 116 Q100 109 127 116" fill="none" stroke="#3D2B1F" stroke-width="5" transform="rotate(-1,100,116)"/>
+  </g>
+
+  <!-- STINGER -->
+  <path d="M100 146 L96 158 L104 158 Z" fill="#3D2B1F"/>
+
+  <!-- HEAD -->
+  <circle cx="100" cy="80" r="22" fill="#3D2B1F"/>
+
+  <!-- Head highlight -->
+  <ellipse cx="94" cy="74" rx="10" ry="8" fill="#FFFFFF" opacity="0.08"/>
+
+  <!-- EYES -->
+  <ellipse cx="91" cy="76" rx="5" ry="6" fill="#FFFFFF"/>
+  <ellipse cx="109" cy="76" rx="5" ry="6" fill="#FFFFFF"/>
+  <circle cx="93" cy="75" r="2.5" fill="#3D2B1F"/>
+  <circle cx="111" cy="75" r="2.5" fill="#3D2B1F"/>
   <!-- Eye shine -->
-  <ellipse cx="92" cy="78" rx="4" ry="5" fill="#fff" opacity="0.9"/>
-  <ellipse cx="108" cy="78" rx="4" ry="5" fill="#fff" opacity="0.9"/>
-  <circle cx="93" cy="77" r="1.5" fill="#3D2B1F"/>
-  <circle cx="109" cy="77" r="1.5" fill="#3D2B1F"/>
-  <!-- Antennae -->
-  <path d="M92 62 Q85 40 78 32" fill="none" stroke="#3D2B1F" stroke-width="2" stroke-linecap="round"/>
-  <circle cx="78" cy="32" r="3.5" fill="#C8925A"/>
-  <path d="M108 62 Q115 40 122 32" fill="none" stroke="#3D2B1F" stroke-width="2" stroke-linecap="round"/>
-  <circle cx="122" cy="32" r="3.5" fill="#C8925A"/>
-  <!-- Light reflection on body -->
-  <ellipse cx="90" cy="95" rx="10" ry="18" fill="rgba(255,255,255,0.15)" transform="rotate(-10,90,95)"/>
+  <circle cx="91" cy="74" r="1.2" fill="#FFFFFF"/>
+  <circle cx="109" cy="74" r="1.2" fill="#FFFFFF"/>
+
+  <!-- CHEEKS (blush) -->
+  <ellipse cx="82" cy="84" rx="5" ry="3" fill="#E8A87C" opacity="0.3"/>
+  <ellipse cx="118" cy="84" rx="5" ry="3" fill="#E8A87C" opacity="0.3"/>
+
+  <!-- SMILE -->
+  <path d="M93 87 Q100 92 107 87" fill="none" stroke="#3D2B1F" stroke-width="1.8" stroke-linecap="round"/>
+
+  <!-- ANTENNAE -->
+  <g stroke="#3D2B1F" stroke-width="2" stroke-linecap="round" fill="none">
+    <path d="M92 60 Q87 42 78 30"/>
+    <circle cx="78" cy="30" r="4" fill="#F4C430" stroke="none"/>
+    <path d="M108 60 Q113 42 122 30"/>
+    <circle cx="122" cy="30" r="4" fill="#F4C430" stroke="none"/>
+  </g>
+
+  <!-- LEGS -->
+  <g stroke="#3D2B1F" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6">
+    <path d="M72 100 L58 108 L52 106"/>
+    <path d="M72 110 L58 118 L52 116"/>
+    <path d="M128 100 L142 108 L148 106"/>
+    <path d="M128 110 L142 118 L148 116"/>
+  </g>
 </svg>
