@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var body = encodeURIComponent(
       'Product: ' + product + '\nPrice: ' + price + '\nName: ' + name + '\nEmail: ' + email + '\nAddress: ' + address + '\n\nPlease send PayPal invoice to: ' + email
     );
-    window.open('mailto:hello@timee.world?subject=' + subj + '&body=' + body, '_blank');
+    window.open('mailto:dylan_shi@hotmail.com?subject=' + subj + '&body=' + body, '_blank');
     this.style.display = 'none';
     coSuccess.style.display = 'block';
   });
