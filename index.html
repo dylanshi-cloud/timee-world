@@ -367,28 +367,69 @@
   <script src="js/main.js"></script>
 
   <!-- Coze Web Chat SDK -->
-  <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.15/libs/cn/index.js"></script>
+    <script src="js/main.js"></script>
+
+  <style>
+    .tw-btn{position:fixed;bottom:30px;right:30px;z-index:9999;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#C8925A,#A67845);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(200,146,90,0.4);display:flex;align-items:center;justify-content:center;transition:all 0.3s}
+    .tw-btn:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(200,146,90,0.5)}
+    .tw-panel{position:fixed;bottom:100px;right:30px;z-index:9998;width:380px;height:560px;background:#fff;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,0.12);display:none;flex-direction:column;overflow:hidden}
+    .tw-panel.open{display:flex}
+    .tw-panel .hdr{background:#2D3436;color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
+    .tw-panel .hdr h3{font-family:Playfair Display,serif;font-size:16px;margin:0}
+    .tw-panel .hdr .x{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;opacity:0.6}
+    .tw-panel .hdr .x:hover{opacity:1}
+    .tw-msgs{flex:1;overflow-y:auto;padding:16px;background:#FAF7F2;display:flex;flex-direction:column;gap:10px}
+    .tw-msg{max-width:85%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;font-weight:300;white-space:pre-wrap}
+    .tw-msg.bot{align-self:flex-start;background:#fff;border:1px solid #eee;color:#2D3436}
+    .tw-msg.user{align-self:flex-end;background:#C8925A;color:#fff}
+    .tw-inp{padding:12px 16px;border-top:1px solid #eee;display:flex;gap:8px;background:#fff}
+    .tw-inp input{flex:1;padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;outline:none}
+    .tw-inp input:focus{border-color:#C8925A}
+    .tw-inp button{padding:10px 18px;background:#C8925A;color:#fff;border:none;border-radius:8px;cursor:pointer}
+    .tw-inp button:hover{background:#A67845}
+    @media(max-width:480px){.tw-panel{width:calc(100vw - 32px);right:16px;bottom:90px;height:60vh}.tw-btn{bottom:20px;right:20px;width:54px;height:54px}}
+  </style>
+
+  <div class="tw-btn" id="twB"><svg viewBox="0 0 100 100" width="32" height="32"><ellipse cx="50" cy="55" rx="16" ry="20" fill="rgba(255,255,255,0.9)"/><rect x="36" y="44" width="28" height="5" rx="2" fill="#2C3E50" opacity=".7"/><rect x="37" y="52" width="26" height="5" rx="2" fill="#2C3E50" opacity=".7"/><rect x="40" y="60" width="20" height="5" rx="2" fill="#2C3E50" opacity=".7"/><circle cx="44" cy="42" r="2.5" fill="#2C3E50"/><circle cx="56" cy="42" r="2.5" fill="#2C3E50"/><ellipse cx="35" cy="32" rx="10" ry="7" fill="rgba(255,255,255,0.4)" transform="rotate(-20,35,32)"/><ellipse cx="65" cy="32" rx="10" ry="7" fill="rgba(255,255,255,0.4)" transform="rotate(20,65,32)"/></svg></div>
+
+  <div class="tw-panel" id="twP">
+    <div class="hdr"><h3>Timee 🐝</h3><button class="x" id="twX">&times;</button></div>
+    <div class="tw-msgs" id="twM"><div class="tw-msg bot">Hello! Welcome to Timee. Ask me about products, prices, shipping, or anything else!</div></div>
+    <div class="tw-inp"><input id="twI" placeholder="Ask us anything..." /><button id="twS">Send</button></div>
+  </div>
+
   <script>
-    new CozeWebSDK.WebChatClient({
-      config: { bot_id: '7650332710011240474' },
-      auth: {
-        type: 'token',
-        token: 'sat_Of7vJmMyKKqeRa02CS7PHC3A7i6xJpC1aD5E3Y59mnuftL7a6ytOOYKgY9VmxKV4'
-      },
-      componentProps: {
-        title: 'Timee 🐝',
-        lang: 'en',
-        width: 400,
-        icon: 'https://timee.world/images/bee-icon.svg'
-      },
-      ui: {
-        base: { zIndex: 1000 },
-        chatBot: { uploadable: false, width: 400 },
-        asstBtn: { isNeed: true, width: 60, height: 60 },
-        footer: { isShow: false }
-        footer: { isShow: false }
+    (function(){
+      var t='sat_Of7vJmMyKKqeRa02CS7PHC3A7i6xJpC1aD5E3Y59mnuftL7a6ytOOYKgY9VmxKV4',b='7650332710011240474',u='u'+Date.now();
+      var B=document.getElementById("twB"),P=document.getElementById("twP"),X=document.getElementById("twX"),M=document.getElementById("twM"),I=document.getElementById("twI"),S=document.getElementById("twS");
+      B.onclick=function(){P.classList.toggle("open")};X.onclick=function(){P.classList.remove("open")};
+      function add(t,r){var d=document.createElement("div");d.className="tw-msg "+r;d.textContent=t;M.appendChild(d);M.scrollTop=M.scrollHeight;return d}
+      function send(){
+        var q=I.value.trim();if(!q)return;I.value="";add(q,"user");var l=add("Typing...","bot");
+        fetch("https://api.coze.cn/v3/chat",{method:"POST",headers:{"Authorization":"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify({bot_id:b,user_id:u,query:q,stream:false})})
+        .then(function(r){return r.json()}).then(function(d){
+          var ci=d.data&&d.data.id,cv=d.data&&d.data.conversation_id;
+          if(!ci){l.remove();add("Please email dylan_shi@hotmail.com for help!","bot");return}
+          function poll(){
+            fetch("https://api.coze.cn/v3/chat/retrieve?chat_id="+ci+"&conversation_id="+cv,{headers:{"Authorization":"Bearer "+t}})
+            .then(function(r){return r.json()}).then(function(s){
+              var st=s.data&&s.data.status;
+              if(st=="completed"||st=="done"){
+                fetch("https://api.coze.cn/v3/chat/message/list?conversation_id="+cv+"&chat_id="+ci,{headers:{"Authorization":"Bearer "+t}})
+                .then(function(r){return r.json()}).then(function(md){
+                  l.remove();var list=md.data||[],reply="";
+                  for(var i=0;i<list.length;i++){if(list[i].role=="assistant"){reply=list[i].content;break}}
+                  add(reply||"Thanks! We'll get back to you soon.","bot")
+                })
+              }else if(st=="failed"||st=="error"){l.remove();add("Please email dylan_shi@hotmail.com for help!","bot")}
+              else{setTimeout(poll,1500)}
+            })
+          }
+          setTimeout(poll,1500)
+        }).catch(function(){l.remove();add("Connection issue! Email dylan_shi@hotmail.com","bot")})
       }
-    });
+      S.onclick=send;I.onkeydown=function(e){if(e.key=="Enter")send()}
+    })();
   </script>
 </body>
 </html>

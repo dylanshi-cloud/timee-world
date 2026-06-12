@@ -108,9 +108,38 @@
     </div>
   </footer>
 
-  <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.15/libs/cn/index.js"></script>
+  
   <script>
-    new CozeWebSDK.WebChatClient({config:{bot_id:'7650332710011240474'},auth:{type:'token',token:'sat_Of7vJmMyKKqeRa02CS7PHC3A7i6xJpC1aD5E3Y59mnuftL7a6ytOOYKgY9VmxKV4'},componentProps:{title:'Timee 🐝',lang:'en',width:400,icon:'https://timee.world/images/bee-icon.svg'},ui:{chatBot:{uploadable:false},asstBtn:{isNeed:true,width:60,height:60},footer:{isShow:false}}});
+    (function(){
+      var t="sat_Of7vJmMyKKqeRa02CS7PHC3A7i6xJpC1aD5E3Y59mnuftL7a6ytOOYKgY9VmxKV4",b="7650332710011240474",u="u"+Date.now();
+      var B=document.getElementById("twB"),P=document.getElementById("twP"),X=document.getElementById("twX"),M=document.getElementById("twM"),I=document.getElementById("twI"),S=document.getElementById("twS");
+      B.onclick=function(){P.classList.toggle("open")};X.onclick=function(){P.classList.remove("open")};
+      function add(t,r){var d=document.createElement("div");d.className="tw-msg "+r;d.textContent=t;M.appendChild(d);M.scrollTop=M.scrollHeight;return d}
+      function send(){
+        var q=I.value.trim();if(!q)return;I.value="";add(q,"user");var l=add("Typing...","bot");
+        fetch("https://api.coze.cn/v3/chat",{method:"POST",headers:{"Authorization":"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify({bot_id:b,user_id:u,query:q,stream:false})})
+        .then(function(r){return r.json()}).then(function(d){
+          var ci=d.data&&d.data.id,cv=d.data&&d.data.conversation_id;
+          if(!ci){l.remove();add("Email dylan_shi@hotmail.com","bot");return}
+          function poll(){
+            fetch("https://api.coze.cn/v3/chat/retrieve?chat_id="+ci+"&conversation_id="+cv,{headers:{"Authorization":"Bearer "+t}})
+            .then(function(r){return r.json()}).then(function(s){
+              if(s.data&&(s.data.status=="completed"||s.data.status=="done")){
+                fetch("https://api.coze.cn/v3/chat/message/list?conversation_id="+cv+"&chat_id="+ci,{headers:{"Authorization":"Bearer "+t}})
+                .then(function(r){return r.json()}).then(function(md){
+                  l.remove();var list=md.data||[],reply="";
+                  for(var i=0;i<list.length;i++){if(list[i].role=="assistant"){reply=list[i].content;break}}
+                  add(reply||"Thanks!","bot")
+                })
+              }else if(s.data&&(s.data.status=="failed")){l.remove();add("Email dylan_shi@hotmail.com","bot")}
+              else{setTimeout(poll,1500)}
+            })
+          }
+          setTimeout(poll,1500)
+        }).catch(function(){l.remove();add("Email dylan_shi@hotmail.com","bot")})
+      }
+      S.onclick=send;I.onkeydown=function(e){if(e.key=="Enter")send()}
+    })();
   </script>
 </body>
 </html>
