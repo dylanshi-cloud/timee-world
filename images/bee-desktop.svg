@@ -1,92 +1,233 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
   <defs>
-    <radialGradient id="bgGlow" cx="45%" cy="45%" r="55%">
-      <stop offset="0%" stop-color="#F9E154" stop-opacity="0.15"/>
+    <!-- Outer glow -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F9E154" stop-opacity="0.12"/>
+      <stop offset="40%" stop-color="#F9E154" stop-opacity="0.06"/>
       <stop offset="100%" stop-color="#F9E154" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FDE25E"/>
-      <stop offset="35%" stop-color="#F7C530"/>
-      <stop offset="100%" stop-color="#D4920A"/>
-    </linearGradient>
+
+    <!-- Body main gradient - rich gold -->
+    <radialGradient id="bodyGrad" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FFF3A0"/>
+      <stop offset="20%" stop-color="#FDE25E"/>
+      <stop offset="55%" stop-color="#F4B820"/>
+      <stop offset="80%" stop-color="#D4920A"/>
+      <stop offset="100%" stop-color="#A67008"/>
+    </radialGradient>
+
+    <!-- Body highlight -->
+    <radialGradient id="bodyHighlight" cx="30%" cy="25%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Wing gradient - iridescent -->
     <linearGradient id="wingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.85"/>
-      <stop offset="50%" stop-color="#D9E8F5" stop-opacity="0.45"/>
-      <stop offset="100%" stop-color="#B8D0E8" stop-opacity="0.25"/>
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
+      <stop offset="30%" stop-color="#E3F0FA" stop-opacity="0.6"/>
+      <stop offset="60%" stop-color="#D4E8F8" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#A8C8E8" stop-opacity="0.15"/>
     </linearGradient>
-    <linearGradient id="eyeShine" x1="0%" y1="0%" x2="100%" y2="100%">
+
+    <!-- Wing iridescent shimmer -->
+    <linearGradient id="wingShimmer" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E8C4F8" stop-opacity="0"/>
+      <stop offset="40%" stop-color="#E8C4F8" stop-opacity="0.15"/>
+      <stop offset="60%" stop-color="#B8E8F8" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#B8E8F8" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Eye gradient -->
+    <radialGradient id="eyeWhite" cx="35%" cy="35%" r="65%">
       <stop offset="0%" stop-color="#FFFFFF"/>
-      <stop offset="100%" stop-color="#D4E8F8"/>
-    </linearGradient>
+      <stop offset="60%" stop-color="#E8F0F8"/>
+      <stop offset="100%" stop-color="#C8D8E8"/>
+    </radialGradient>
+
+    <!-- Eye pupil -->
+    <radialGradient id="eyePupil" cx="40%" cy="35%" r="55%">
+      <stop offset="0%" stop-color="#5A4030"/>
+      <stop offset="60%" stop-color="#3D2B1F"/>
+      <stop offset="100%" stop-color="#1A0E08"/>
+    </radialGradient>
+
+    <!-- Fluffy fur filter -->
+    <filter id="furTexture">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="noise" seed="42"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+
+    <!-- Glow filter -->
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Drop shadow for depth -->
+    <filter id="dropShadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#3D2B1F" flood-opacity="0.25"/>
+    </filter>
   </defs>
 
-  <circle cx="100" cy="100" r="80" fill="url(#bgGlow)"/>
+  <!-- Background glow -->
+  <circle cx="200" cy="200" r="160" fill="url(#bgGlow)"/>
 
-  <!-- === WINGS (behind body, angled for flying pose) === -->
-  <!-- Left (back) wing - more upright, behind -->
-  <g transform="translate(105,85) rotate(-55) translate(-105,-85)">
-    <ellipse cx="82" cy="72" rx="40" ry="18" fill="url(#wingGrad)" stroke="#B8C8D8" stroke-width="0.6"/>
-    <path d="M55 68 Q65 56 85 62" fill="none" stroke="#FFF" stroke-width="1.8" opacity="0.5"/>
-    <path d="M60 76 Q72 66 88 70" fill="none" stroke="#FFF" stroke-width="1.2" opacity="0.3"/>
-  </g>
-  <!-- Right (front) wing - more visible, forward -->
-  <g transform="translate(98,88) rotate(-35) translate(-98,-88)">
-    <ellipse cx="60" cy="78" rx="42" ry="20" fill="url(#wingGrad)" stroke="#B8C8D8" stroke-width="0.6"/>
-    <path d="M30 74 Q45 60 68 68" fill="none" stroke="#FFF" stroke-width="2" opacity="0.5"/>
-    <path d="M35 82 Q50 72 72 76" fill="none" stroke="#FFF" stroke-width="1.2" opacity="0.3"/>
-    <!-- Wing vein detail -->
-    <path d="M55 72 Q48 64 40 62" fill="none" stroke="#D0DCE8" stroke-width="0.5" opacity="0.4"/>
-  </g>
+  <!-- === WINGS === -->
 
-  <!-- === BODY (flying pose - tilted left-forward) === -->
-  <g transform="translate(-8,12)">
-    <ellipse cx="100" cy="108" rx="36" ry="40" fill="url(#bodyGrad)" stroke="#B8860B" stroke-width="0.8"/>
-    <!-- Body highlight -->
-    <ellipse cx="88" cy="98" rx="10" ry="22" fill="#FFF" opacity="0.15" transform="rotate(-10,88,98)"/>
+  <!-- Left (back) wing -->
+  <g transform="translate(215,160) rotate(-50) translate(-215,-160)" filter="url(#dropShadow)">
+    <!-- Wing base -->
+    <ellipse cx="160" cy="140" rx="75" ry="32" fill="url(#wingGrad)" stroke="#A0B8D0" stroke-width="0.8"/>
+    <ellipse cx="160" cy="140" rx="75" ry="32" fill="url(#wingShimmer)"/>
+    <!-- Wing veins -->
+    <path d="M120 130 Q145 110 185 120" fill="none" stroke="#D0DCE8" stroke-width="1.2" opacity="0.5"/>
+    <path d="M125 142 Q150 126 190 132" fill="none" stroke="#D0DCE8" stroke-width="0.8" opacity="0.35"/>
+    <path d="M118 150 Q140 140 175 144" fill="none" stroke="#D0DCE8" stroke-width="0.6" opacity="0.25"/>
+    <!-- Wing highlight -->
+    <path d="M135 122 Q155 112 175 118" fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0.4"/>
   </g>
 
-  <!-- === STRIPES === -->
-  <g transform="translate(-8,12)" stroke-linecap="round">
-    <path d="M65 96 Q100 86 135 96" fill="none" stroke="#3D2B1F" stroke-width="5.5" transform="rotate(-3,100,96)"/>
-    <path d="M65 108 Q100 99 135 108" fill="none" stroke="#3D2B1F" stroke-width="5.5" transform="rotate(-2,100,108)"/>
-    <path d="M67 120 Q100 112 133 120" fill="none" stroke="#3D2B1F" stroke-width="5" transform="rotate(-2,100,120)"/>
+  <!-- Right (front) wing - more prominent -->
+  <g transform="translate(195,165) rotate(-30) translate(-195,-165)" filter="url(#dropShadow)">
+    <!-- Wing base -->
+    <ellipse cx="115" cy="150" rx="80" ry="36" fill="url(#wingGrad)" stroke="#A0B8D0" stroke-width="1"/>
+    <ellipse cx="115" cy="150" rx="80" ry="36" fill="url(#wingShimmer)"/>
+    <!-- Wing veins -->
+    <path d="M70 138 Q100 115 150 126" fill="none" stroke="#C8D8E8" stroke-width="1.5" opacity="0.5"/>
+    <path d="M75 150 Q105 132 155 140" fill="none" stroke="#C8D8E8" stroke-width="1" opacity="0.35"/>
+    <path d="M68 160 Q95 148 140 152" fill="none" stroke="#C8D8E8" stroke-width="0.7" opacity="0.25"/>
+    <path d="M72 168 Q100 158 130 160" fill="none" stroke="#C8D8E8" stroke-width="0.5" opacity="0.2"/>
+    <!-- Wing highlight -->
+    <path d="M80 130 Q105 116 140 124" fill="none" stroke="#FFFFFF" stroke-width="4" opacity="0.45"/>
+    <!-- Small iridescent spot -->
+    <ellipse cx="145" cy="142" rx="12" ry="6" fill="#D8F0F8" opacity="0.15" transform="rotate(-15,145,142)"/>
+  </g>
+
+  <!-- === BODY (flying pose, tilted left-forward) === -->
+  <g transform="translate(-20,20)">
+    <!-- Body shadow -->
+    <ellipse cx="205" cy="230" rx="55" ry="60" fill="#A67008" opacity="0.3" filter="url(#softGlow)"/>
+
+    <!-- Main body -->
+    <ellipse cx="200" cy="215" rx="55" ry="62" fill="url(#bodyGrad)" stroke="#B8860B" stroke-width="1"/>
+
+    <!-- Body highlight/sheen -->
+    <ellipse cx="180" cy="195" rx="18" ry="35" fill="url(#bodyHighlight)" transform="rotate(-8,180,195)"/>
+
+    <!-- Fur texture overlay (subtle) -->
+    <ellipse cx="200" cy="215" rx="55" ry="62" fill="none" stroke="#D4920A" stroke-width="0.3" opacity="0.3" filter="url(#furTexture)"/>
+  </g>
+
+  <!-- === BODY STRIPES (dark brown bands) === -->
+  <g transform="translate(-20,20)">
+    <!-- Stripe 1 - top -->
+    <path d="M148 180 Q200 168 252 180" fill="none" stroke="#3D2B1F" stroke-width="8" stroke-linecap="round" opacity="0.85" transform="rotate(-3,200,180)"/>
+    <!-- Stripe 2 -->
+    <path d="M146 196 Q200 184 254 196" fill="none" stroke="#3D2B1F" stroke-width="8" stroke-linecap="round" opacity="0.9" transform="rotate(-2,200,196)"/>
+    <!-- Stripe 3 -->
+    <path d="M146 212 Q200 201 254 212" fill="none" stroke="#3D2B1F" stroke-width="8" stroke-linecap="round" opacity="0.9" transform="rotate(-2,200,212)"/>
+    <!-- Stripe 4 -->
+    <path d="M148 228 Q200 218 252 228" fill="none" stroke="#3D2B1F" stroke-width="7.5" stroke-linecap="round" opacity="0.85" transform="rotate(-2,200,228)"/>
+    <!-- Stripe 5 - bottom, faded -->
+    <path d="M152 242 Q200 233 248 242" fill="none" stroke="#3D2B1F" stroke-width="6" stroke-linecap="round" opacity="0.6" transform="rotate(-2,200,242)"/>
+  </g>
+
+  <!-- === FUZZY FUR (around body edges) === -->
+  <g transform="translate(-20,20)" fill="#F4B820" opacity="0.4">
+    <ellipse cx="153" cy="200" rx="6" ry="4"/>
+    <ellipse cx="150" cy="212" rx="5" ry="3.5"/>
+    <ellipse cx="152" cy="225" rx="5" ry="3"/>
+    <ellipse cx="248" cy="200" rx="6" ry="4"/>
+    <ellipse cx="250" cy="212" rx="5" ry="3.5"/>
+    <ellipse cx="249" cy="224" rx="5" ry="3"/>
   </g>
 
   <!-- === STINGER === -->
-  <path d="M92 148 L88 160 L96 160 Z" fill="#3D2B1F" transform="translate(-8,12)"/>
-
-  <!-- === HEAD (slightly forward, left-tilted) === -->
-  <g transform="translate(-12,6)">
-    <circle cx="100" cy="78" r="24" fill="#3D2B1F"/>
-    <!-- Head highlight -->
-    <ellipse cx="93" cy="71" rx="10" ry="8" fill="#FFF" opacity="0.08"/>
+  <g transform="translate(-20,20)">
+    <path d="M185 275 L180 295 L193 295 Z" fill="#3D2B1F"/>
+    <path d="M185 275 L188 295 L193 295 Z" fill="#5A4030" opacity="0.5"/>
   </g>
 
-  <!-- === EYES (big shiny white eyes, left-facing) === -->
-  <!-- Left eye (farther, slightly smaller) -->
-  <ellipse cx="84" cy="78" rx="7" ry="9" fill="url(#eyeShine)" stroke="#2A2210" stroke-width="0.5"/>
-  <ellipse cx="83" cy="76" rx="3.5" ry="5" fill="#3D2B1F"/>
-  <circle cx="82" cy="74" r="1.8" fill="#FFF"/>
+  <!-- === HEAD === -->
+  <g transform="translate(-20,10)">
+    <!-- Head shadow -->
+    <circle cx="200" cy="142" r="36" fill="#3D2B1F" opacity="0.15"/>
+    <!-- Head base -->
+    <circle cx="200" cy="140" r="36" fill="#3D2B1F"/>
+    <!-- Head highlight -->
+    <ellipse cx="188" cy="128" rx="18" ry="14" fill="#FFFFFF" opacity="0.06"/>
+    <!-- Fuzzy top of head -->
+    <circle cx="200" cy="105" r="4" fill="#5A4030" opacity="0.5"/>
+    <circle cx="194" cy="107" r="3.5" fill="#5A4030" opacity="0.4"/>
+    <circle cx="206" cy="107" r="3.5" fill="#5A4030" opacity="0.4"/>
+  </g>
 
-  <!-- Right eye (closer, bigger - the bright visible one) -->
-  <ellipse cx="107" cy="80" rx="8.5" ry="10" fill="url(#eyeShine)" stroke="#2A2210" stroke-width="0.5"/>
-  <ellipse cx="106" cy="78" rx="4.5" ry="6.5" fill="#3D2B1F"/>
-  <circle cx="105" cy="75" r="2.5" fill="#FFF"/>
-  <!-- Extra eye shine dot -->
-  <circle cx="108" cy="80" r="1.2" fill="#FFF" opacity="0.6"/>
+  <!-- === EYES (big, shiny, expressive) === -->
+  <g transform="translate(-20,10)">
+    <!-- Left eye (farther, slightly smaller) -->
+    <ellipse cx="178" cy="140" rx="12" ry="14" fill="url(#eyeWhite)" stroke="#2A2210" stroke-width="0.8"/>
+    <ellipse cx="177" cy="138" rx="6" ry="8.5" fill="url(#eyePupil)"/>
+    <circle cx="175" cy="134" r="3" fill="#FFFFFF"/>
+    <circle cx="179" cy="140" r="1.5" fill="#FFFFFF" opacity="0.6"/>
 
-  <!-- === CHEEKS === -->
-  <ellipse cx="78" cy="88" rx="5" ry="3.5" fill="#E8A87C" opacity="0.35"/>
-  <ellipse cx="120" cy="90" rx="5" ry="3.5" fill="#E8A87C" opacity="0.35"/>
+    <!-- Right eye (closer, bigger - the bright expressive one) -->
+    <ellipse cx="216" cy="142" rx="14" ry="16" fill="url(#eyeWhite)" stroke="#2A2210" stroke-width="0.8"/>
+    <ellipse cx="215" cy="139" rx="7.5" ry="10" fill="url(#eyePupil)"/>
+    <circle cx="213" cy="134" r="4" fill="#FFFFFF"/>
+    <circle cx="219" cy="141" r="2" fill="#FFFFFF" opacity="0.6"/>
+  </g>
 
-  <!-- === SMILE === -->
-  <path d="M90 92 Q95 98 102 93" fill="none" stroke="#3D2B1F" stroke-width="2" stroke-linecap="round"/>
+  <!-- === CHEEKS (cute blush) === -->
+  <g transform="translate(-20,10)">
+    <ellipse cx="164" cy="160" rx="9" ry="5.5" fill="#E8A87C" opacity="0.3"/>
+    <ellipse cx="230" cy="162" rx="9" ry="5.5" fill="#E8A87C" opacity="0.3"/>
+  </g>
+
+  <!-- === SMILE (cute wavy) === -->
+  <g transform="translate(-20,10)">
+    <path d="M182 168 Q188 178 200 172 Q212 178 218 168" fill="none" stroke="#5A4030" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Smile dimple dots -->
+    <circle cx="180" cy="169" r="1.5" fill="#3D2B1F" opacity="0.4"/>
+    <circle cx="220" cy="169" r="1.5" fill="#3D2B1F" opacity="0.4"/>
+  </g>
 
   <!-- === ANTENNAE === -->
-  <g stroke="#3D2B1F" stroke-width="2.5" stroke-linecap="round" fill="none">
-    <path d="M90 56 Q82 38 72 26"/>
-    <circle cx="72" cy="26" r="4.5" fill="#F4C430" stroke="none"/>
-    <path d="M108 56 Q114 36 118 24"/>
-    <circle cx="118" cy="24" r="4.5" fill="#F4C430" stroke="none"/>
+  <g transform="translate(-20,10)">
+    <!-- Left antenna -->
+    <path d="M185 108 Q170 70 140 45" fill="none" stroke="#3D2B1F" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+    <!-- Left antenna tip glow -->
+    <circle cx="140" cy="45" r="7" fill="#F4C430" opacity="0.3" filter="url(#softGlow)"/>
+    <circle cx="140" cy="45" r="5.5" fill="#F4C430"/>
+    <ellipse cx="138" cy="43" rx="2.5" ry="1.5" fill="#FFFFFF" opacity="0.5" transform="rotate(-30,138,43)"/>
+
+    <!-- Right antenna -->
+    <path d="M218 108 Q230 68 250 42" fill="none" stroke="#3D2B1F" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+    <!-- Right antenna tip glow -->
+    <circle cx="250" cy="42" r="7" fill="#F4C430" opacity="0.3" filter="url(#softGlow)"/>
+    <circle cx="250" cy="42" r="5.5" fill="#F4C430"/>
+    <ellipse cx="248" cy="40" rx="2.5" ry="1.5" fill="#FFFFFF" opacity="0.5" transform="rotate(-30,248,40)"/>
+  </g>
+
+  <!-- === LEGS === -->
+  <g transform="translate(-20,20)" fill="none" stroke="#3D2B1F" stroke-width="3" stroke-linecap="round" opacity="0.7">
+    <!-- Front legs -->
+    <path d="M160 195 Q140 210 135 230"/>
+    <path d="M240 195 Q258 210 262 228"/>
+    <!-- Middle legs -->
+    <path d="M155 215 Q138 228 132 248"/>
+    <path d="M245 215 Q260 228 266 248"/>
+    <!-- Back legs -->
+    <path d="M158 238 Q145 252 140 268"/>
+    <path d="M242 238 Q255 252 260 268"/>
+  </g>
+
+  <!-- === SUBTLE DUST TRAIL (tiny sparkles behind bee) === -->
+  <g fill="#F4C430" opacity="0.4">
+    <circle cx="130" cy="260" r="2"/>
+    <circle cx="115" cy="275" r="1.5"/>
+    <circle cx="140" cy="285" r="1.8"/>
+    <circle cx="120" cy="295" r="1.2"/>
+    <circle cx="105" cy="250" r="1.3"/>
   </g>
 </svg>

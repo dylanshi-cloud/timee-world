@@ -399,7 +399,7 @@ ul { list-style: none; }
   display: block;
   animation: float 5s ease-in-out infinite;
 }
-.bee-desktop { display: none; width: clamp(80px, 10vw, 120px); height: auto; }
+.bee-desktop { display: none; width: clamp(120px, 15vw, 200px); height: auto; filter: drop-shadow(0 4px 12px rgba(200,146,90,0.2)); }
 .bee-mobile { display: inline; }
 @media (min-width: 769px) {
   .bee-desktop { display: inline; }
@@ -770,7 +770,7 @@ ul { list-style: none; }
   font-size: clamp(3rem, 5vw, 4.5rem);
   animation: float 5s ease-in-out infinite;
 }
-.contact__emoji .bee-desktop { width: clamp(48px, 6vw, 72px); height: auto; }
+.contact__emoji .bee-desktop { width: clamp(60px, 8vw, 100px); height: auto; filter: drop-shadow(0 4px 12px rgba(200,146,90,0.2)); }
 .contact__emoji .bee-mobile { display: inline; }
 @media (min-width: 769px) {
   .contact__emoji .bee-desktop { display: inline; }
