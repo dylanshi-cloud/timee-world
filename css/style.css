@@ -942,8 +942,212 @@ ul { list-style: none; }
 }
 
 /* ============================================================
-   REVEAL ANIMATIONS
+   ✦ ANIMATIONS — Timee Signature Motion
+   Ethereal · Slow · Natural · Premium
    ============================================================ */
+
+/* ---------- 1. Hero Particle Canvas ---------- */
+.hero__particles {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ---------- 2. Hero Text Stagger Entrance ---------- */
+.hero__crystal-icon {
+  opacity: 0;
+  animation: crystalEntrance 0.8s var(--ease-out) 0.1s forwards,
+             float 6s ease-in-out 1s infinite;
+}
+
+@keyframes crystalEntrance {
+  from {
+    opacity: 0;
+    transform: scale(0.6) rotate(-15deg);
+  }
+  to {
+    opacity: 0.7;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.hero__title--small {
+  opacity: 0;
+  animation: fadeUp 0.9s var(--ease-out) 0.3s forwards;
+}
+.hero__title--large {
+  opacity: 0;
+  animation: fadeUp 1s var(--ease-out) 0.6s forwards;
+}
+.hero__title--sub {
+  opacity: 0;
+  animation: fadeUp 0.9s var(--ease-out) 1.0s forwards;
+}
+.hero__cta {
+  opacity: 0;
+  animation: fadeUp 0.9s var(--ease-out) 1.4s forwards;
+}
+.hero__scroll {
+  opacity: 0;
+  animation: fadeIn 1s ease-out 2s forwards;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---------- 3. Enhanced Bee Flight ---------- */
+.story__bee {
+  animation: beeFlight 7s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes beeFlight {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  15% {
+    transform: translate(8px, -10px) rotate(4deg) scale(1.02);
+  }
+  30% {
+    transform: translate(-3px, -18px) rotate(-2deg) scale(0.98);
+  }
+  45% {
+    transform: translate(-8px, -8px) rotate(-4deg) scale(1);
+  }
+  60% {
+    transform: translate(5px, -14px) rotate(3deg) scale(1.01);
+  }
+  75% {
+    transform: translate(-5px, -4px) rotate(-1deg) scale(0.99);
+  }
+}
+
+/* ---------- 4. Product Card Shimmer ---------- */
+.product-card__visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.06) 40%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.06) 60%,
+    transparent 75%
+  );
+  transform: translateX(-110%);
+  transition: transform 0.9s var(--ease-out);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.product-card:hover .product-card__visual::after {
+  transform: translateX(110%);
+}
+
+/* Night shimmer: slow auto-shimmer on featured card */
+.product-card--featured .product-card__visual::after {
+  animation: shimmerSweep 6s ease-in-out infinite;
+  transform: translateX(-110%);
+}
+
+@keyframes shimmerSweep {
+  0%, 85%, 100% { transform: translateX(-110%); }
+  92% { transform: translateX(110%); }
+}
+
+/* Ensure product images stay below shimmer overlay */
+.product-card__visual img {
+  position: relative;
+  z-index: 0;
+}
+
+/* ---------- 5. Philosophy SVG Stroke Draw ---------- */
+.philosophy__icon svg path,
+.philosophy__icon svg circle {
+  stroke-dasharray: 500;
+  stroke-dashoffset: 500;
+  transition: stroke-dashoffset 1.6s var(--ease-out);
+}
+
+.philosophy__icon svg polygon {
+  stroke-dasharray: 500;
+  stroke-dashoffset: 500;
+  transition: stroke-dashoffset 1.6s var(--ease-out);
+}
+
+.philosophy__icon--drawn svg path,
+.philosophy__icon--drawn svg circle,
+.philosophy__icon--drawn svg polygon {
+  stroke-dashoffset: 0;
+}
+
+/* Stagger delays for each item */
+.philosophy__item:nth-child(1) .philosophy__icon svg path,
+.philosophy__item:nth-child(1) .philosophy__icon svg circle {
+  transition-delay: 0s;
+}
+.philosophy__item:nth-child(2) .philosophy__icon svg path,
+.philosophy__item:nth-child(2) .philosophy__icon svg circle {
+  transition-delay: 0.2s;
+}
+.philosophy__item:nth-child(3) .philosophy__icon svg path,
+.philosophy__item:nth-child(3) .philosophy__icon svg circle {
+  transition-delay: 0.4s;
+}
+
+/* ---------- 6. Contact Breathing Circle ---------- */
+.contact__circle {
+  animation: breathe 4.5s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(200, 146, 90, 0);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 40px 10px rgba(200, 146, 90, 0.08);
+  }
+}
+
+/* ---------- 7. Cursor Glow (Desktop) ---------- */
+.cursor-glow {
+  position: fixed;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(200, 146, 90, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: left 0.08s linear, top 0.08s linear, opacity 0.4s ease;
+  opacity: 0;
+  will-change: left, top;
+}
+
+/* Hide cursor glow on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .cursor-glow {
+    display: none;
+  }
+}
+
+/* ---------- Enhanced Reveal ---------- */
 .reveal {
   opacity: 0;
   transform: translateY(30px);
@@ -953,6 +1157,21 @@ ul { list-style: none; }
 .reveal--visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ---------- Scrollbar subtle styling ---------- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent-light);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
 }
 
 /* ============================================================

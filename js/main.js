@@ -4,7 +4,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ---------- Navigation scroll effect ----------
+  // ============================================================
+  // 1. NAVIGATION
+  // ============================================================
   const nav = document.getElementById('nav');
 
   const handleScroll = () => {
@@ -43,7 +45,130 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ---------- Reveal on scroll (Intersection Observer) ----------
+  // ============================================================
+  // 2. HERO CANVAS PARTICLES ✦
+  //    Floating light motes in the dark hero background,
+  //    like dust catching golden light in a quiet room.
+  // ============================================================
+  const heroParticles = document.getElementById('heroParticles');
+  if (heroParticles) {
+    const ctx = heroParticles.getContext('2d');
+    let particles = [];
+    let animId;
+
+    const resize = () => {
+      heroParticles.width = heroParticles.offsetWidth;
+      heroParticles.height = heroParticles.offsetHeight;
+    };
+
+    const initParticles = () => {
+      particles = [];
+      const count = Math.min(55, Math.floor(heroParticles.width / 12));
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * heroParticles.width,
+          y: Math.random() * heroParticles.height,
+          size: Math.random() * 2.5 + 0.5,
+          speedY: -(Math.random() * 0.25 + 0.08),
+          speedX: (Math.random() - 0.5) * 0.15,
+          opacity: Math.random() * 0.35 + 0.06,
+          glow: Math.random() > 0.6,
+        });
+      }
+    };
+
+    const drawParticles = () => {
+      ctx.clearRect(0, 0, heroParticles.width, heroParticles.height);
+
+      for (const p of particles) {
+        p.y += p.speedY;
+        p.x += p.speedX;
+
+        // Wrap around edges
+        if (p.y < -10) {
+          p.y = heroParticles.height + 10;
+          p.x = Math.random() * heroParticles.width;
+        }
+        if (p.x < -10) p.x = heroParticles.width + 10;
+        if (p.x > heroParticles.width + 10) p.x = -10;
+
+        // Draw particle
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+        ctx.fill();
+
+        // Glow halo on larger particles
+        if (p.glow && p.size > 1.2) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * 4, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(200, 146, 90, ${p.opacity * 0.12})`;
+          ctx.fill();
+        }
+      }
+
+      animId = requestAnimationFrame(drawParticles);
+    };
+
+    resize();
+    initParticles();
+    drawParticles();
+
+    window.addEventListener('resize', () => {
+      resize();
+      initParticles();
+    });
+
+    window.addEventListener('beforeunload', () => {
+      cancelAnimationFrame(animId);
+    });
+  }
+
+  // ============================================================
+  // 3. HERO PARALLAX — subtle movement on mouse
+  // ============================================================
+  const heroContent = document.querySelector('.hero__content');
+  if (heroContent) {
+    window.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 6;
+      const y = (e.clientY / window.innerHeight - 0.5) * 6;
+      heroContent.style.transform = `translate(${x}px, ${y}px)`;
+    }, { passive: true });
+  }
+
+  // ============================================================
+  // 4. CURSOR GLOW
+  //    A warm, slow-moving light that follows the mouse.
+  // ============================================================
+  const cursorGlow = document.getElementById('cursorGlow');
+  let cursorX = -200, cursorY = -200;
+  let posX = -200, posY = -200;
+
+  if (cursorGlow) {
+    document.addEventListener('mousemove', (e) => {
+      cursorX = e.clientX;
+      cursorY = e.clientY;
+      cursorGlow.style.opacity = '1';
+    }, { passive: true });
+
+    document.addEventListener('mouseleave', () => {
+      cursorGlow.style.opacity = '0';
+    }, { passive: true });
+
+    // Smooth follow with requestAnimationFrame
+    const followCursor = () => {
+      posX += (cursorX - posX) * 0.08;
+      posY += (cursorY - posY) * 0.08;
+      cursorGlow.style.left = posX + 'px';
+      cursorGlow.style.top = posY + 'px';
+      requestAnimationFrame(followCursor);
+    };
+    followCursor();
+  }
+
+  // ============================================================
+  // 5. REVEAL ON SCROLL
+  // ============================================================
   const revealElements = document.querySelectorAll(
     '.story__grid, .product-card, .philosophy__item, .philosophy__quote, .contact__card'
   );
@@ -73,105 +198,123 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ---------- Product modal ----------
-  const modal = document.getElementById('productModal');
-  const modalOverlay = modal.querySelector('.modal__overlay');
-  const modalClose = modal.querySelector('.modal__close');
-  const modalTitle = modal.querySelector('.modal__title');
-  const modalDesc = modal.querySelector('.modal__desc');
-  const modalPrice = modal.querySelector('.modal__price');
+  // ============================================================
+  // 6. PHILOSOPHY SVG STROKE DRAW
+  // ============================================================
+  const svgIcons = document.querySelectorAll('.philosophy__icon');
 
-  const productData = {
-    'pocket-stone': {
-      title: 'Pocket Stone',
-      desc: 'A single amethyst or rose quartz crystal, polished smooth and ready to carry with you. Small enough to fit in any pocket, powerful enough to bring you back to the present moment. Each stone is naturally unique — no two are exactly alike.',
-      price: '$14.99'
-    },
-    'crystal-kit': {
-      title: 'Crystal Kit',
-      desc: 'Four crystals in harmony: Amethyst (calm), Rose Quartz (love), Citrine (abundance), and Black Obsidian (protection). Each with its own meaning and energy. Comes with a guide to help you work with each stone.',
-      price: '$34.99'
-    },
-    'moon-phase': {
-      title: 'Moon Phase Crystal',
-      desc: 'Your birth month\'s guardian crystal, displayed on a handcrafted wooden moon phase stand. A beautiful reminder of the cycles of nature — and your place within them. Twelve months, twelve stones, one journey.',
-      price: '$59.99'
-    }
-  };
-
-  const openModal = (productKey) => {
-    const data = productData[productKey];
-    if (!data) return;
-    modalTitle.textContent = data.title;
-    modalDesc.textContent = data.desc;
-    modalPrice.textContent = data.price;
-    modal.classList.add('modal--open');
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeModal = () => {
-    modal.classList.remove('modal--open');
-    document.body.style.overflow = '';
-  };
-
-  // Coming Soon buttons open modal
-  document.querySelectorAll('[data-product]').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      openModal(btn.dataset.product);
+  svgIcons.forEach((icon) => {
+    const paths = icon.querySelectorAll('path, circle, polygon');
+    paths.forEach((path) => {
+      const length = path.getTotalLength();
+      path.style.strokeDasharray = length;
+      path.style.strokeDashoffset = length;
+      path.dataset.length = length;
     });
   });
 
-  modalOverlay.addEventListener('click', closeModal);
-  modalClose.addEventListener('click', closeModal);
+  const svgObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('philosophy__icon--drawn');
+          svgObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.4 }
+  );
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-  });
+  svgIcons.forEach((icon) => svgObserver.observe(icon));
 
-  // ---------- Waitlist form ----------
-  const form = document.getElementById('waitlistForm');
-  const emailInput = document.getElementById('emailInput');
-  const successMsg = document.getElementById('successMsg');
+  // ============================================================
+  // 7. PRODUCT MODAL (legacy — Coming Soon products)
+  // ============================================================
+  const modal = document.getElementById('productModal');
+  if (modal) {
+    const modalOverlay = modal.querySelector('.modal__overlay');
+    const modalClose = modal.querySelector('.modal__close');
+    const modalTitle = modal.querySelector('.modal__title');
+    const modalDesc = modal.querySelector('.modal__desc');
+    const modalPrice = modal.querySelector('.modal__price');
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
+    const productData = {
+      'pocket-stone': {
+        title: 'Pocket Stone',
+        desc: 'A single amethyst or rose quartz crystal, polished smooth and ready to carry with you...',
+        price: '$14.99'
+      },
+      'crystal-kit': {
+        title: 'Crystal Kit',
+        desc: 'Four crystals in harmony: Amethyst (calm), Rose Quartz (love), Citrine (abundance)...',
+        price: '$34.99'
+      },
+      'moon-phase': {
+        title: 'Moon Phase Crystal',
+        desc: 'Your birth month\'s guardian crystal, displayed on a handcrafted wooden moon phase stand...',
+        price: '$59.99'
+      }
+    };
 
-    const email = emailInput.value.trim();
-    if (!email) return;
+    const openModal = (productKey) => {
+      const data = productData[productKey];
+      if (!data) return;
+      modalTitle.textContent = data.title;
+      modalDesc.textContent = data.desc;
+      modalPrice.textContent = data.price;
+      modal.classList.add('modal--open');
+      document.body.style.overflow = 'hidden';
+    };
 
-    // Basic email validation
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      alert('Please enter a valid email address.');
-      return;
-    }
+    const closeModal = () => {
+      modal.classList.remove('modal--open');
+      document.body.style.overflow = '';
+    };
 
-    // Here you would send to your backend / email service
-    // For now, we just show success
-    console.log('Waitlist signup:', email);
+    document.querySelectorAll('[data-product]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal(btn.dataset.product);
+      });
+    });
 
-    form.style.display = 'none';
-    successMsg.style.display = 'block';
+    modalOverlay.addEventListener('click', closeModal);
+    modalClose.addEventListener('click', closeModal);
 
-    // Reset if they come back
-    setTimeout(() => {
-      // In production, don't reset — they're already signed up
-    }, 1000);
-  });
-
-  // ---------- Parallax hero crystal ----------
-  const crystal = document.querySelector('.hero__crystal-icon');
-  if (crystal) {
-    window.addEventListener('mousemove', (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 10;
-      const y = (e.clientY / window.innerHeight - 0.5) * 10;
-      crystal.style.transform = `translate(${x}px, ${y}px)`;
-    }, { passive: true });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
   }
 
-  console.log('🐝 Timee — A billion years in the making.');
+  // ============================================================
+  // 8. WAITLIST FORM
+  // ============================================================
+  const form = document.getElementById('waitlistForm');
+  if (form) {
+    const emailInput = document.getElementById('emailInput');
+    const successMsg = document.getElementById('successMsg');
 
-  // ---------- Checkout Modal ----------
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const email = emailInput.value.trim();
+      if (!email) return;
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+
+      console.log('Waitlist signup:', email);
+
+      form.style.display = 'none';
+      successMsg.style.display = 'block';
+    });
+  }
+
+  // ============================================================
+  // 9. CHECKOUT MODAL
+  // ============================================================
   const productInfo = {
     'pink-elephant': { title: 'Pink Crystal Elephant', price: '$426', sold: true },
     'aquamarine-bracelet': { title: 'Aquamarine Bracelet', price: '$420' },
@@ -255,4 +398,6 @@ document.addEventListener('DOMContentLoaded', () => {
     this.style.display = 'none';
     coSuccess.style.display = 'block';
   });
+
+  console.log('🐝 Timee — A billion years in the making.');
 });
