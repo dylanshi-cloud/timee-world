@@ -126,14 +126,14 @@
   <script>
     // === TEMPLATES ===
     const T = [
-      {n:"Ethereal",t:["Warm","Gold","5 Themes"],url:"https://dylanshi-cloud.github.io/ethereal-template/",bg:"linear-gradient(135deg,#1E1E1E,#2D3436)",c:"#C8925A"},
-      {n:"Glass",t:["Glassmorphism","Dark Mode"],url:"https://dylanshi-cloud.github.io/glass-template/",bg:"linear-gradient(135deg,#0F1118,#16213e)",c:"#6366F1"},
-      {n:"Aurora",t:["Gradient","Vibrant","Neon"],url:"https://dylanshi-cloud.github.io/aurora-template/",bg:"linear-gradient(135deg,#0B0A1A,#1a0533)",c:"#7C3AED"},
-      {n:"Noir",t:["Dark","Gold","Luxury"],url:"https://dylanshi-cloud.github.io/noir-template/",bg:"linear-gradient(135deg,#0A0A0A,#1A1A1A)",c:"#C9A94E"},
-      {n:"Bento",t:["Grid","Modular","Portfolio"],url:"https://dylanshi-cloud.github.io/bento-template/",bg:"linear-gradient(135deg,#F5F5F0,#e8e8e0)",c:"#2563EB"},
-      {n:"Cinema",t:["Widescreen","Narrative"],url:"https://dylanshi-cloud.github.io/cinema-template/",bg:"linear-gradient(135deg,#0A0A0A,#1A1410)",c:"#D4A853"},
-      {n:"Cyber",t:["Tech","Neon","SaaS"],url:"https://dylanshi-cloud.github.io/cyber-template/",bg:"linear-gradient(135deg,#0A0E17,#1E293B)",c:"#22D3EE"},
-      {n:"Ember",t:["Warm","Terracotta","Artisan"],url:"https://dylanshi-cloud.github.io/ember-template/",bg:"linear-gradient(135deg,#FCF8F5,#F5EDE8)",c:"#C87A4A"}
+      {n:"Ethereal",t:["Warm","Gold","5 Themes"],url:"https://dylanshi-cloud.github.io/ethereal-template/",img:"images/thumb-ethereal.png"},
+      {n:"Glass",t:["Glassmorphism","Dark Mode"],url:"https://dylanshi-cloud.github.io/glass-template/",img:"images/thumb-glass.png"},
+      {n:"Aurora",t:["Gradient","Vibrant","Neon"],url:"https://dylanshi-cloud.github.io/aurora-template/",img:"images/thumb-aurora.png"},
+      {n:"Noir",t:["Dark","Gold","Luxury"],url:"https://dylanshi-cloud.github.io/noir-template/",img:"images/thumb-noir.png"},
+      {n:"Bento",t:["Grid","Modular","Portfolio"],url:"https://dylanshi-cloud.github.io/bento-template/",img:"images/thumb-bento.png"},
+      {n:"Cinema",t:["Widescreen","Narrative"],url:"https://dylanshi-cloud.github.io/cinema-template/",img:"images/thumb-cinema.png"},
+      {n:"Cyber",t:["Tech","Neon","SaaS"],url:"https://dylanshi-cloud.github.io/cyber-template/",img:"images/thumb-cyber.png"},
+      {n:"Ember",t:["Warm","Terracotta","Artisan"],url:"https://dylanshi-cloud.github.io/ember-template/",img:"images/thumb-ember.png"}
     ];
 
     const grid = document.getElementById('galleryGrid');
@@ -144,9 +144,9 @@
       card.style.transitionDelay = i * 0.08 + 's';
       card.className = 'tcard';
       card.innerHTML = `
-        <div class="tcard__preview" style="background:${t.bg}">
+        <div class="tcard__preview" style="background:url(${t.img}) center/cover">
           <div class="tcard__tags">${t.t.map(s=>'<span>'+s+'</span>').join('')}</div>
-          <span class="tcard__name" style="color:${t.c}">${t.n}</span>
+          <span class="tcard__name" >${t.n}</span>
           <span class="tcard__arrow">↗</span>
         </div>
         <div class="tcard__body">
