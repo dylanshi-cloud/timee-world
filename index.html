@@ -3,185 +3,150 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Timee — Premium HTML Templates</title>
+  <title>Timee — HTML Templates</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    :root{--bg:#FAF7F2;--bg-alt:#F3EDE4;--bg-dark:#1A1A1A;--text:#2D3436;--text-light:#7A7A7A;--accent:#C8925A;--accent-light:#E8D5B7;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
+    :root{--bg:#FAF7F2;--bg-dark:#1A1A1A;--text:#2D3436;--text-light:#7A7A7A;--accent:#C8925A;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
     html{scroll-behavior:smooth}
-    body{font-family:var(--sans);font-weight:300;color:var(--text);background:var(--bg);overflow-x:hidden}
-    .container{max-width:1100px;margin:0 auto;padding:0 1.5rem}
+    body{font-family:var(--sans);font-weight:300;color:var(--text);background:var(--bg)}
+    .container{max-width:1000px;margin:0 auto;padding:0 1.5rem}
     a{text-decoration:none;color:inherit}
 
-    /* NAV */
-    .nav{position:fixed;top:0;left:0;width:100%;z-index:100;padding:1.2rem 0;transition:all 0.4s var(--ease)}
-    .nav.scrolled{background:rgba(250,247,242,0.92);backdrop-filter:blur(12px);padding:0.8rem 0;border-bottom:1px solid rgba(0,0,0,0.04)}
-    .nav__inner{display:flex;align-items:center;justify-content:space-between}
-    .nav__logo{font-family:var(--serif);font-size:1.4rem;color:#fff;transition:color 0.4s}
-    .nav.scrolled .nav__logo{color:var(--text)}
-    .nav__right{font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;display:flex;gap:2rem}
-    .nav__right a{color:rgba(255,255,255,0.6);transition:color 0.3s}
-    .nav__right a:hover{color:#fff}
-    .nav.scrolled .nav__right a{color:var(--text-light)}
-    .nav.scrolled .nav__right a:hover{color:var(--text)}
-
-    /* HERO - Full ethereal style */
-    .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;overflow:hidden}
-    .hero__bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(200,146,90,0.12),transparent),radial-gradient(ellipse 60% 80% at 20% 80%,rgba(200,146,90,0.06),transparent),linear-gradient(135deg,#1A1A1A,#2D3436,#1A1A1A);z-index:0}
-    .hero__particles{position:absolute;inset:0;z-index:1;pointer-events:none}
-    .hero__content{position:relative;z-index:2;padding:6rem 0}
-    .hero__icon{font-size:clamp(1.5rem,2.5vw,2.5rem);margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.8s var(--ease) 0.1s forwards;display:inline-block;color:var(--accent)}
-    .hero h1{font-family:var(--serif);font-size:clamp(2.2rem,5vw,4.2rem);font-weight:400;line-height:1.08;margin-bottom:1rem;opacity:0;animation:fadeUp 0.9s var(--ease) 0.3s forwards}
+    /* HERO */
+    .hero{min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;position:relative;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(200,146,90,0.12),transparent),radial-gradient(ellipse 60% 80% at 20% 80%,rgba(200,146,90,0.06),transparent),linear-gradient(135deg,#1A1A1A,#2D3436,#1A1A1A)}
+    .hero__content{padding:5rem 0}
+    .hero__icon{font-size:2rem;color:var(--accent);margin-bottom:1rem}
+    .hero h1{font-family:var(--serif);font-size:clamp(2rem,4.5vw,3.5rem);font-weight:400;line-height:1.08;margin-bottom:0.8rem}
     .hero h1 em{font-style:italic;opacity:0.7}
-    .hero p{font-size:clamp(0.95rem,1.2vw,1.1rem);opacity:0.5;max-width:450px;margin:0 auto 2rem;opacity:0;animation:fadeUp 0.9s var(--ease) 0.6s forwards}
-    .hero__cta{display:inline-block;padding:0.9rem 2.5rem;border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.4s var(--ease);opacity:0;animation:fadeUp 0.9s var(--ease) 1s forwards}
-    .hero__cta:hover{background:#fff;color:var(--bg-dark)}
-    .hero__scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;opacity:0.25;animation:fadeIn 1s 2s forwards}
-    .hero__scroll-line{width:1px;height:32px;background:linear-gradient(to bottom,#fff,transparent);margin:0.5rem auto 0;animation:scrollPulse 2s ease-in-out infinite}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes fadeIn{to{opacity:1}}
-    @keyframes scrollPulse{0%,100%{opacity:1}50%{opacity:0.2}}
+    .hero p{color:rgba(255,255,255,0.45);max-width:420px;margin:0 auto 1.5rem;font-size:0.9rem}
+    .hero__scroll{font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-top:2rem}
+    .hero__scroll-line{width:1px;height:24px;background:linear-gradient(to bottom,var(--accent),transparent);margin:0.4rem auto}
+    .btn{display:inline-block;padding:0.8rem 2rem;border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.3s}
+    .btn:hover{background:#fff;color:#1A1A1A}
 
-    /* SECTION COMMON */
-    section{padding:clamp(4rem,6vw,6rem) 0}
-    .sec-title{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.4rem);font-weight:400;text-align:center;margin-bottom:0.8rem}
-    .sec-sub{text-align:center;color:var(--text-light);max-width:500px;margin:0 auto 3rem;font-size:0.9rem}
-
-    /* GALLERY GRID */
-    .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem}
-
-    .tcard{background:#fff;border:1px solid rgba(0,0,0,0.04);overflow:hidden;transition:all 0.6s var(--ease)}
-    .tcard:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(0,0,0,0.06)}
-    .tcard__preview{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-    .tcard__name{position:absolute;bottom:1rem;left:1rem;font-family:var(--serif);font-size:clamp(1rem,1.5vw,1.3rem);color:#fff;z-index:1}
-    .tcard__arrow{position:absolute;top:1rem;right:1rem;font-size:1.2rem;color:rgba(255,255,255,0.4);z-index:1;transition:all 0.4s var(--ease)}
-    .tcard:hover .tcard__arrow{color:#fff;transform:translate(3px,-3px)}
-    .tcard__tags{position:absolute;top:1rem;left:1rem;z-index:1;display:flex;gap:0.3rem}
-    .tcard__tags span{padding:0.2rem 0.5rem;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.05em;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);border-radius:2px;color:rgba(255,255,255,0.7)}
-    .tcard__body{padding:1.2rem 1.5rem 1.5rem}
-    .tcard__row{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem}
-    .tcard__row-name{font-family:var(--serif);font-size:1.1rem}
-    .tcard__row-price{font-family:var(--serif);font-size:1rem;color:var(--accent)}
-    .tcard__row-price small{font-size:0.65rem;color:var(--text-muted);font-family:var(--sans)}
-    .tcard__desc{font-size:0.8rem;color:var(--text-light);line-height:1.6;margin-bottom:0.8rem}
-    .tcard__footer{display:flex;gap:0.5rem}
-    .tcard__footer a{flex:1;text-align:center;padding:0.5rem;font-size:0.7rem;letter-spacing:0.05em;text-transform:uppercase;border:1px solid rgba(0,0,0,0.06);transition:all 0.3s;color:var(--text-light)}
-    .tcard__footer a:hover{border-color:var(--accent);color:var(--accent)}
-
-    /* CTA */
-    .cta{background:var(--bg-dark);color:#fff;text-align:center}
-    .cta p{opacity:0.4;max-width:450px;margin:0 auto 1.5rem;font-size:0.9rem}
+    /* SHOWCASE */
+    .showcase{}
+    .item{background:#fff;border-bottom:1px solid rgba(0,0,0,0.04)}
+    .item:last-child{border-bottom:none}
+    .item__inner{display:grid;grid-template-columns:1fr;gap:0}
+    .item__image{width:100%;display:block;aspect-ratio:16/10;overflow:hidden}
+    .item__image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s var(--ease)}
+    .item:hover .item__image img{transform:scale(1.02)}
+    .item__info{padding:clamp(1.5rem,3vw,3rem) clamp(1.5rem,4vw,4rem);text-align:center}
+    .item__name{font-family:var(--serif);font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:0.3rem}
+    .item__desc{font-size:0.85rem;color:var(--text-light);margin-bottom:1.2rem;max-width:500px;margin-left:auto;margin-right:auto}
+    .item__btn{display:inline-block;padding:0.6rem 1.8rem;border:1px solid var(--text);font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.3s;color:var(--text)}
+    .item__btn:hover{background:var(--text);color:#fff}
 
     .footer{padding:2.5rem 0;text-align:center;border-top:1px solid rgba(0,0,0,0.04);color:var(--text-muted);font-size:0.75rem}
   </style>
 </head>
 <body>
-  <nav class="nav" id="nav">
-    <div class="container nav__inner">
-      <a href="#" class="nav__logo">tim<span style="font-style:italic;opacity:0.7">ee</span></a>
-      <div class="nav__right">
-        <a href="#gallery">Templates</a>
-        <a href="mailto:dylan_shi@hotmail.com">Contact</a>
-      </div>
-    </div>
-  </nav>
-
   <section class="hero">
-    <div class="hero__bg"></div>
-    <canvas class="hero__particles" id="heroParticles"></canvas>
     <div class="hero__content container">
       <div class="hero__icon">✦</div>
       <h1>A website is a<br/><em>living thing.</em></h1>
-      <p>HTML templates that breathe. Pure craftsmanship, zero dependencies — each one a world of its own.</p>
-      <a href="#gallery" class="hero__cta">Explore the collection</a>
+      <p>HTML templates that breathe. Pure craftsmanship, zero dependencies.</p>
+      <a href="#list" class="btn">Explore</a>
       <div class="hero__scroll">Scroll<div class="hero__scroll-line"></div></div>
     </div>
   </section>
 
-  <section id="gallery">
-    <div class="container">
-      <h2 class="sec-title">✦ Choose a world</h2>
-      <p class="sec-sub">Click any template to see it live. More coming.</p>
-      <div class="gallery" id="galleryGrid"></div>
+  <section class="showcase" id="list">
+    <div class="item">
+      <a href="https://dylanshi-cloud.github.io/ethereal-template/" target="_blank" class="item__inner">
+        <div class="item__image"><img src="images/thumb-ethereal.png" alt="Ethereal" /></div>
+        <div class="item__info">
+          <div class="item__name">Ethereal</div>
+          <div class="item__desc">Warm gold on dark. Canvas particles, 5 color themes, cursor glow.</div>
+          <span class="item__btn">View Live →</span>
+        </div>
+      </a>
     </div>
-  </section>
 
-  <section class="cta">
-    <div class="container">
-      <h2 class="sec-title" style="color:#fff">✦ Need a custom template?</h2>
-      <p>Every template can be tailored to your brand. Get in touch and we'll build something unique.</p>
-      <a href="mailto:dylan_shi@hotmail.com" style="display:inline-block;padding:0.8rem 2rem;border:1px solid var(--accent);color:var(--accent);font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.3s">Contact us</a>
+    <div class="item">
+      <a href="https://dylanshi-cloud.github.io/glass-template/" target="_blank" class="item__inner">
+        <div class="item__image"><img src="images/thumb-glass.png" alt="Glass" /></div>
+        <div class="item__info">
+          <div class="item__name">Glass</div>
+          <div class="item__desc">Apple-inspired glassmorphism. Frosted cards, dark mode, fluid gradients.</div>
+          <span class="item__btn">View Live →</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="item">
+      <a href="https://dylanshi-cloud.github.io/aurora-template/" target="_blank" class="item__inner">
+        <div class="item__image"><img src="images/thumb-aurora.png" alt="Aurora" /></div>
+        <div class="item__info">
+          <div class="item__name">Aurora</div>
+          <div class="item__desc">Flowing aurora gradients. Purple-pink-cyan on a dark canvas.</div>
+          <span class="item__btn">View Live →</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="item">
+      <a href="https://dylanshi-cloud.github.io/noir-template/" target="_blank" class="item__inner">
+        <div class="item__image"><img src="images/thumb-noir.png" alt="Noir" /></div>
+        <div class="item__info">
+          <div class="item__name">Noir</div>
+          <div class="item__desc">Dark luxury with gold accents. Architectural grid, serif elegance.</div>
+          <span class="item__btn">View Live →</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="item">
+      <a href="https://dylanshi-cloud.github.io/bento-template/" target="_blank" class="item__inner">
+        <div class="item__image"><img src="images/thumb-bento.png" alt="Bento" /></div>
+        <div class="item__info">
+          <div class="item__name">Bento</div>
+          <div class="item__desc">Japanese bento-grid layout. Modular cards for portfolios.</div>
+          <span class="item__btn">View Live →</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="item">
+      <a href="https://dylanshi-cloud.github.io/cinema-template/" target="_blank" class="item__inner">
+        <div class="item__image"><img src="images/thumb-cinema.png" alt="Cinema" /></div>
+        <div class="item__info">
+          <div class="item__name">Cinema</div>
+          <div class="item__desc">Widescreen cinematic storytelling. Letterbox bars, narrative scroll.</div>
+          <span class="item__btn">View Live →</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="item">
+      <a href="https://dylanshi-cloud.github.io/cyber-template/" target="_blank" class="item__inner">
+        <div class="item__image"><img src="images/thumb-cyber.png" alt="Cyber" /></div>
+        <div class="item__info">
+          <div class="item__name">Cyber</div>
+          <div class="item__desc">Dark tech with neon cyan. Grid overlay, SaaS-ready.</div>
+          <span class="item__btn">View Live →</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="item">
+      <a href="https://dylanshi-cloud.github.io/ember-template/" target="_blank" class="item__inner">
+        <div class="item__image"><img src="images/thumb-ember.png" alt="Ember" /></div>
+        <div class="item__info">
+          <div class="item__name">Ember</div>
+          <div class="item__desc">Warm terracotta for artisan brands. Product grid, earthy palette.</div>
+          <span class="item__btn">View Live →</span>
+        </div>
+      </a>
     </div>
   </section>
 
   <footer class="footer">
-    <div class="container">
-      <p style="font-family:var(--serif);font-size:1.1rem;margin-bottom:0.2rem">tim<span style="font-style:italic;opacity:0.7">ee</span></p>
-      <p style="font-size:0.8rem">Premium HTML templates. Made with intention.</p>
-    </div>
+    <div class="container"><p>Timee — HTML Templates</p></div>
   </footer>
-
-  <script>
-    // === TEMPLATES ===
-    const T = [
-      {n:"Ethereal",t:["Warm","Gold","5 Themes"],url:"https://dylanshi-cloud.github.io/ethereal-template/",img:"images/thumb-ethereal.png"},
-      {n:"Glass",t:["Glassmorphism","Dark Mode"],url:"https://dylanshi-cloud.github.io/glass-template/",img:"images/thumb-glass.png"},
-      {n:"Aurora",t:["Gradient","Vibrant","Neon"],url:"https://dylanshi-cloud.github.io/aurora-template/",img:"images/thumb-aurora.png"},
-      {n:"Noir",t:["Dark","Gold","Luxury"],url:"https://dylanshi-cloud.github.io/noir-template/",img:"images/thumb-noir.png"},
-      {n:"Bento",t:["Grid","Modular","Portfolio"],url:"https://dylanshi-cloud.github.io/bento-template/",img:"images/thumb-bento.png"},
-      {n:"Cinema",t:["Widescreen","Narrative"],url:"https://dylanshi-cloud.github.io/cinema-template/",img:"images/thumb-cinema.png"},
-      {n:"Cyber",t:["Tech","Neon","SaaS"],url:"https://dylanshi-cloud.github.io/cyber-template/",img:"images/thumb-cyber.png"},
-      {n:"Ember",t:["Warm","Terracotta","Artisan"],url:"https://dylanshi-cloud.github.io/ember-template/",img:"images/thumb-ember.png"}
-    ];
-
-    const grid = document.getElementById('galleryGrid');
-    T.forEach((t,i) => {
-      const card = document.createElement('a');
-      card.href = t.url; card.target = '_blank';
-      card.style.cssText = 'opacity:0;transform:translateY(24px);transition:opacity 0.7s var(--ease),transform 0.7s var(--ease),box-shadow 0.3s';
-      card.style.transitionDelay = i * 0.08 + 's';
-      card.className = 'tcard';
-      card.innerHTML = `
-        <div class="tcard__preview" style="background:url(${t.img}) center/cover">
-          <div class="tcard__tags">${t.t.map(s=>'<span>'+s+'</span>').join('')}</div>
-          <span class="tcard__name" >${t.n}</span>
-          <span class="tcard__arrow">↗</span>
-        </div>
-        <div class="tcard__body">
-          <div class="tcard__row">
-            <span class="tcard__row-name">${t.n}</span>
-          </div>
-          <div class="tcard__desc">Click to view the live demo — experience the full design in your browser.</div>
-          <div class="tcard__footer"><a href="${t.url}" target="_blank">View Live Demo</a></div>
-        </div>
-      `;
-      grid.appendChild(card);
-      setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 100 + i * 80);
-    });
-
-    // === PARTICLES ===
-    (function(){
-      const c = document.getElementById('heroParticles'); if(!c) return;
-      const ctx = c.getContext('2d'); let p = [], a;
-      const r = () => { c.width = c.offsetWidth; c.height = c.offsetHeight; };
-      const i = () => { p = []; for(let i=0;i<Math.min(55,Math.floor(c.width/12));i++) p.push({x:Math.random()*c.width,y:Math.random()*c.height,s:Math.random()*2.5+0.5,vy:-(Math.random()*0.25+0.08),vx:(Math.random()-0.5)*0.15,o:Math.random()*0.35+0.06,g:Math.random()>0.6}); };
-      const d = () => {
-        ctx.clearRect(0,0,c.width,c.height);
-        for(const t of p){t.y+=t.vy;t.x+=t.vx;if(t.y<-10){t.y=c.height+10;t.x=Math.random()*c.width}if(t.x<-10)t.x=c.width+10;if(t.x>c.width+10)t.x=-10;
-          ctx.beginPath();ctx.arc(t.x,t.y,t.s,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${t.o})`;ctx.fill();
-          if(t.g&&t.s>1.2){ctx.beginPath();ctx.arc(t.x,t.y,t.s*4,0,Math.PI*2);ctx.fillStyle=`rgba(200,146,90,${t.o*0.12})`;ctx.fill()}}
-        a=requestAnimationFrame(d);
-      };
-      r();i();d();
-      window.addEventListener('resize',()=>{r();i()});
-      window.addEventListener('beforeunload',()=>cancelAnimationFrame(a));
-    })();
-
-    // NAV SCROLL
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll',()=>{if(window.scrollY>60)nav.classList.add('scrolled');else nav.classList.remove('scrolled')},{passive:true});
-  </script>
 </body>
 </html>
