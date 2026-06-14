@@ -179,18 +179,21 @@
     const modalClose = document.getElementById('modalClose');
     const modalOpen = document.getElementById('modalOpen');
 
-    document.querySelectorAll('[data-url]').forEach(el => {
-      el.addEventListener('click', e => {
+    // Preview modal - event delegation
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('[data-url]');
+      if (btn) {
         e.preventDefault();
-        const url = el.dataset.url;
-        const name = el.dataset.name;
+        const url = btn.dataset.url;
+        const name = btn.dataset.name;
+        if (!url) return;
         iframe.src = '';
         modal.classList.add('open');
         modalTitle.textContent = name;
         modalOpen.href = url;
         iframe.src = url;
         document.body.style.overflow = 'hidden';
-      });
+      }
     });
 
     modalClose.onclick = () => closeModal();
