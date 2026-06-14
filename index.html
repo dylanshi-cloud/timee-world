@@ -3,196 +3,288 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Ethereal — Premium HTML templates for conscious brands. Crystal shops, jewelry, wellness, and lifestyle." />
-  <title>Ethereal — Premium Brand Templates</title>
+  <meta name="description" content="Timee — Premium HTML templates for modern brands. Crystal shops, jewelry, wellness, tech startups, and lifestyle." />
+  <title>Timee — Premium HTML Templates</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    :root{--bg:#FAF7F2;--bg-alt:#F3EDE4;--bg-dark:#1E1E1E;--text:#2D3436;--text-light:#7A7A7A;--text-muted:#9E9E9E;--accent:#C8925A;--accent-light:#E8D5B7;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
+    :root{--bg:#FAF7F2;--bg-alt:#F3EDE4;--bg-dark:#1E1E1E;--text:#2D3436;--text-light:#7A7A7A;--text-muted:#9E9E9E;--accent:#C8925A;--accent-light:#E8D5B7;--accent-dark:#A67845;--border:rgba(45,52,54,0.06);--serif:'Playfair Display',Georgia,serif;--sans:'Inter',-apple-system,sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
     html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-    body{font-family:var(--sans);font-weight:300;font-size:1rem;line-height:1.75;color:var(--text);background:var(--bg);overflow-x:hidden}
+    body{font-family:var(--sans);font-weight:300;font-size:1rem;line-height:1.7;color:var(--text);background:var(--bg);overflow-x:hidden}
     .container{width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem)}
     img{max-width:100%;display:block}
     a{color:inherit;text-decoration:none}
     ul{list-style:none}
     ::selection{background:var(--accent-light);color:var(--text)}
 
-    /* Hero */
-    .hero{position:relative;height:80vh;min-height:500px;display:flex;align-items:center;justify-content:center;color:#fff;overflow:hidden;text-align:center}
-    .hero__bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(200,146,90,0.12) 0%,transparent 70%),radial-gradient(ellipse 60% 80% at 20% 80%,rgba(200,146,90,0.06) 0%,transparent 60%),linear-gradient(135deg,#1E1E1E,#2D3436,#1E1E1E);z-index:0}
-    .hero__content{position:relative;z-index:1}
-    .hero__logo{font-family:var(--serif);font-size:1.2rem;font-style:italic;opacity:0.5;letter-spacing:0.3em;margin-bottom:1.5rem}
-    .hero__logo em{font-style:italic;opacity:0.7}
-    .hero h1{font-family:var(--serif);font-size:clamp(2.2rem,5vw,4rem);font-weight:400;line-height:1.15;margin-bottom:1rem}
-    .hero p{font-size:clamp(1rem,1.3vw,1.2rem);opacity:0.6;max-width:600px;margin:0 auto 2rem}
-    .hero__scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;opacity:0.3}
-
-    /* Section */
-    .section{padding:clamp(3rem,8vw,6rem) 0}
-    .section__title{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.5rem);font-weight:400;text-align:center;margin-bottom:0.8rem}
-    .section__sub{text-align:center;color:var(--text-light);margin-bottom:3rem;max-width:600px;margin-left:auto;margin-right:auto}
-
-    /* Template Grid */
-    .template-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem}
-    .template-card{background:#fff;border:1px solid rgba(0,0,0,0.04);transition:transform 0.5s var(--ease),box-shadow 0.5s var(--ease);overflow:hidden;display:flex;flex-direction:column}
-    .template-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.06)}
-    .template-preview{position:relative;aspect-ratio:16/10;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#fff}
-    .template-preview span{font-size:2rem;opacity:0.5}
-    .template-info{padding:1.5rem;flex:1;display:flex;flex-direction:column}
-    .template-name{font-family:var(--serif);font-size:1.2rem;margin-bottom:0.3rem}
-    .template-desc{font-size:0.85rem;color:var(--text-light);line-height:1.6;margin-bottom:0.8rem;flex:1}
-    .template-tags{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1rem}
-    .tag{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.05em;padding:0.2rem 0.6rem;background:var(--bg-alt);color:var(--text-muted)}
-    .template-links{display:flex;gap:0.8rem}
-    .template-links a{padding:0.5rem 1.2rem;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;transition:all 0.3s}
-    .btn-demo{border:1px solid var(--text);color:var(--text)}
-    .btn-demo:hover{background:var(--text);color:#fff}
-    .btn-buy{background:var(--accent);color:#fff}
-    .btn-buy:hover{background:var(--accent-dark)}
-    .btn-buy--sold{background:var(--text-muted);cursor:default}
-
-    /* Nav */
-    .nav{position:fixed;top:0;left:0;width:100%;z-index:100;padding:1.2rem 0;background:rgba(250,247,242,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0.04)}
+    /* NAV */
+    .nav{position:fixed;top:0;left:0;width:100%;z-index:100;padding:1.2rem 0;background:rgba(250,247,242,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
     .nav__inner{display:flex;align-items:center;justify-content:space-between}
-    .nav__logo{font-family:var(--serif);font-size:1.3rem;color:var(--text)}
+    .nav__logo{font-family:var(--serif);font-size:1.4rem;color:var(--text)}
+    .nav__links{display:flex;gap:2rem;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase}
+    .nav__links a{color:var(--text-light);transition:color 0.3s}
+    .nav__links a:hover{color:var(--text)}
 
-    /* Footer */
-    .footer{padding:3rem 0;text-align:center;border-top:1px solid rgba(0,0,0,0.04);color:var(--text-muted);font-size:0.85rem}
+    /* HERO */
+    .hero{position:relative;min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;color:#fff}
+    .hero__bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(200,146,90,0.12) 0%,transparent 70%),radial-gradient(ellipse 60% 80% at 20% 80%,rgba(200,146,90,0.06) 0%,transparent 60%),linear-gradient(135deg,#1E1E1E,#2D3436,#1E1E1E);z-index:0}
+    .hero__content{position:relative;z-index:1;padding:6rem 0}
+    .hero__logo{font-family:var(--serif);font-size:1rem;font-style:italic;opacity:0.5;letter-spacing:0.4em;margin-bottom:1.5rem;text-transform:lowercase}
+    .hero h1{font-family:var(--serif);font-size:clamp(2.5rem,5.5vw,4.5rem);font-weight:400;line-height:1.08;margin-bottom:1.2rem}
+    .hero h1 em{font-style:italic;opacity:0.7}
+    .hero p{font-size:clamp(1rem,1.3vw,1.2rem);opacity:0.55;max-width:500px;margin:0 auto 2.5rem;font-weight:300}
+    .btn{display:inline-block;padding:0.9rem 2.5rem;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.4s var(--ease);cursor:pointer;text-decoration:none;border:none}
+    .btn--outline{border:1px solid rgba(255,255,255,0.3);color:#fff;background:transparent}
+    .btn--outline:hover{background:#fff;color:var(--bg-dark)}
+    .btn--primary{background:var(--accent);color:#fff}
+    .btn--primary:hover{background:var(--accent-dark)}
+    .btn--small{padding:0.5rem 1rem;font-size:0.7rem}
+    .hero__scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;opacity:0.3}
+    .hero__scroll-line{width:1px;height:32px;background:linear-gradient(to bottom,#fff,transparent);margin:0.4rem auto 0;animation:scroll 2s ease-in-out infinite}
+    @keyframes scroll{0%,100%{opacity:1}50%{opacity:0.2}}
 
-    /* Responsive */
-    @media(max-width:768px){.template-grid{grid-template-columns:1fr}}
+    /* SECTION */
+    section{padding:clamp(3rem,6vw,5rem) 0}
+    .section-header{text-align:center;margin-bottom:3rem}
+    .section-tag{display:inline-block;padding:0.3rem 0.8rem;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent-light);margin-bottom:1rem}
+    .section-title{font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,2.5rem);font-weight:400;margin-bottom:0.8rem}
+    .section-sub{color:var(--text-light);max-width:520px;margin:0 auto;font-size:0.95rem}
+
+    /* TEMPLATE GRID */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem}
+    .card{background:#fff;border:1px solid rgba(0,0,0,0.04);transition:all 0.5s var(--ease);overflow:hidden;display:flex;flex-direction:column}
+    .card:hover{transform:translateY(-6px);box-shadow:0 16px 48px rgba(0,0,0,0.06)}
+    .card__preview{position:relative;aspect-ratio:16/10;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#fff}
+    .card__preview .icon{font-size:2.5rem;opacity:0.4;transition:all 0.4s}
+    .card:hover .card__preview .icon{opacity:0.7;transform:scale(1.1)}
+    .card__badge{position:absolute;top:1rem;right:1rem;padding:0.2rem 0.6rem;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;background:rgba(255,255,255,0.12);backdrop-filter:blur(4px);border-radius:4px;color:rgba(255,255,255,0.8)}
+    .card__body{padding:1.5rem;flex:1;display:flex;flex-direction:column}
+    .card__name{font-family:var(--serif);font-size:1.2rem;margin-bottom:0.3rem}
+    .card__desc{font-size:0.85rem;color:var(--text-light);line-height:1.6;margin-bottom:0.8rem;flex:1}
+    .card__tags{display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:1rem}
+    .card__tags span{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.06em;padding:0.2rem 0.5rem;background:var(--bg);color:var(--text-muted);border-radius:3px}
+    .card__footer{display:flex;gap:0.6rem;align-items:center}
+    .card__footer .price{font-family:var(--serif);font-size:1rem;color:var(--accent);margin-right:auto}
+    .card__footer .price span{font-size:0.75rem;color:var(--text-muted);font-family:var(--sans)}
+
+    /* STYLES SHOWCASE */
+    .styles{background:var(--bg-alt);text-align:center}
+    .styles__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2.5rem}
+    .style-item{padding:1.5rem 0.8rem;background:#fff;border:1px solid rgba(0,0,0,0.03);transition:all 0.3s}
+    .style-item:hover{transform:translateY(-2px)}
+    .style-item__icon{font-size:1.5rem;margin-bottom:0.5rem}
+    .style-item__name{font-family:var(--serif);font-size:0.9rem;margin-bottom:0.3rem}
+    .style-item__count{font-size:0.75rem;color:var(--text-muted)}
+
+    /* SPECIAL */
+    .special{background:var(--bg-dark);color:#fff;text-align:center}
+    .special h2{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:400;margin-bottom:1rem}
+    .special p{color:rgba(255,255,255,0.5);max-width:480px;margin:0 auto 1.5rem}
+    .special .btn--outline{border-color:var(--accent);color:var(--accent)}
+    .special .btn--outline:hover{background:var(--accent);color:#fff}
+
+    /* FOOTER */
+    .footer{padding:3rem 0;text-align:center;border-top:1px solid var(--border);color:var(--text-muted);font-size:0.85rem}
+
+    @media(max-width:768px){.styles__grid{grid-template-columns:repeat(2,1fr)}}
   </style>
 </head>
 <body>
   <nav class="nav">
     <div class="container nav__inner">
-      <a href="#" class="nav__logo">ether<span style="font-style:italic;opacity:0.7">e</span>al</a>
-      <div style="display:flex;gap:1.5rem;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-light)">
-        <a href="#templates">Templates</a>
-        <a href="https://github.com/dylanshi-cloud/ethereal-template" target="_blank">GitHub</a>
-      </div>
+      <a href="#" class="nav__logo">tim<span style="font-style:italic;opacity:0.7">ee</span></a>
+      <ul class="nav__links">
+        <li><a href="#templates">Templates</a></li>
+        <li><a href="#styles">Styles</a></li>
+        <li><a href="mailto:dylan_shi@hotmail.com">Contact</a></li>
+      </ul>
     </div>
   </nav>
 
-  <!-- Hero -->
+  <!-- HERO -->
   <section class="hero">
     <div class="hero__bg"></div>
-    <div class="hero__content">
-      <p class="hero__logo">ether<em>e</em>al</p>
-      <h1>Premium templates<br/>for conscious brands.</h1>
-      <p>Zero-dependency HTML templates for crystal shops, jewelry, wellness, luxury, and lifestyle brands.</p>
-      <a href="#templates" style="display:inline-block;padding:0.9rem 2.5rem;border:1px solid #fff;color:#fff;text-transform:uppercase;letter-spacing:0.08em;font-size:0.8rem;transition:all 0.3s">Browse templates</a>
+    <div class="hero__content container">
+      <p class="hero__logo">premium html templates</p>
+      <h1>Beautiful websites.<br/>Zero <em>dependencies.</em></h1>
+      <p>8 premium templates, each crafted in a distinct style. Pure HTML + CSS + JS — no frameworks, no build tools, just clean code that deploys anywhere.</p>
+      <a href="#templates" class="btn btn--outline">Browse Collection</a>
+      <div class="hero__scroll">scroll<div class="hero__scroll-line"></div></div>
     </div>
-    <p class="hero__scroll">↓ Scroll</p>
   </section>
 
-  <!-- Template Gallery -->
-  <section class="section" id="templates">
+  <!-- TEMPLATES -->
+  <section id="templates">
     <div class="container">
-      <h2 class="section__title">✦ Template Collection</h2>
-      <p class="section__sub">Premium, zero-dependency HTML templates. Each comes with full documentation and 5 color themes.</p>
+      <div class="section-header">
+        <span class="section-tag">✦ 8 Templates</span>
+        <h2 class="section-title">The Collection</h2>
+        <p class="section-sub">Each template is a complete, ready-to-deploy brand site in its own style. Pick the one that speaks to you.</p>
+      </div>
+      <div class="grid">
 
-      <div class="template-grid">
-
-        <!-- 1. Ethereal (Done) -->
-        <div class="template-card">
-          <div class="template-preview" style="background:linear-gradient(135deg,#1E1E1E,#2D3436)"><span>✦</span></div>
-          <div class="template-info">
-            <div class="template-name">Ethereal</div>
-            <div class="template-desc">Warm gold on cream. Canvas particles, scroll reveals, cursor glow. Original ethereal style.</div>
-            <div class="template-tags"><span class="tag">Warm</span><span class="tag">Gold</span><span class="tag">Premium</span><span class="tag">5 Themes</span></div>
-            <div class="template-links">
-              <a href="https://dylanshi-cloud.github.io/ethereal-template/" class="btn-demo" target="_blank">Live Demo</a>
-              <a href="https://github.com/dylanshi-cloud/ethereal-template#-pricing" class="btn-buy" target="_blank">¥299</a>
+        <!-- 1. Ethereal -->
+        <div class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#1E1E1E,#2D3436)"><span class="icon">✦</span><span class="card__badge">5 Themes</span></div>
+          <div class="card__body">
+            <div class="card__name">Ethereal</div>
+            <div class="card__desc">Warm gold on cream. Canvas particles, scroll reveals, cursor glow, and 5 color themes included.</div>
+            <div class="card__tags"><span>Warm</span><span>Gold</span><span>Particles</span><span>5-in-1</span></div>
+            <div class="card__footer">
+              <span class="price">¥299 <span>$39</span></span>
+              <a href="https://dylanshi-cloud.github.io/ethereal-template/" class="btn btn--small btn--outline" style="border-color:var(--text);color:var(--text)">Demo</a>
+              <a href="https://github.com/dylanshi-cloud/ethereal-template#-pricing" class="btn btn--small btn--primary">Buy</a>
             </div>
           </div>
         </div>
 
-        <!-- 2. Glass (Coming Soon) -->
-        <div class="template-card" style="opacity:0.5">
-          <div class="template-preview" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)"><span>◆</span></div>
-          <div class="template-info">
-            <div class="template-name">Glass</div>
-            <div class="template-desc">Apple-style glassmorphism. Frosted cards, blur overlays, ultra-clean typography.</div>
-            <div class="template-tags"><span class="tag">Glassmorphism</span><span class="tag">Modern</span><span class="tag">Clean</span></div>
-            <div class="template-links">
-              <span class="btn-demo" style="opacity:0.5;cursor:default">Coming Soon</span>
+        <!-- 2. Glass -->
+        <div class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#0F1118,#1A1D2E,#16213e)"><span class="icon">◆</span><span class="card__badge">Dark Mode</span></div>
+          <div class="card__body">
+            <div class="card__name">Glass</div>
+            <div class="card__desc">Apple-inspired glassmorphism. Frosted cards, fluid gradients, floating orbs, and built-in dark mode.</div>
+            <div class="card__tags"><span>Glassmorphism</span><span>Frosted</span><span>Dark Mode</span></div>
+            <div class="card__footer">
+              <span class="price">¥199 <span>$29</span></span>
+              <a href="https://dylanshi-cloud.github.io/glass-template/" class="btn btn--small btn--outline" style="border-color:var(--text);color:var(--text)">Demo</a>
+              <a href="https://github.com/dylanshi-cloud/glass-template#-pricing" class="btn btn--small btn--primary">Buy</a>
             </div>
           </div>
         </div>
 
-        <!-- 3. Aurora (Coming Soon) -->
-        <div class="template-card" style="opacity:0.5">
-          <div class="template-preview" style="background:linear-gradient(135deg,#667eea,#764ba2,#f093fb)"><span>~</span></div>
-          <div class="template-info">
-            <div class="template-name">Aurora</div>
-            <div class="template-desc">Flowing gradient landscapes. Vibrant aurora effects, smooth color transitions.</div>
-            <div class="template-tags"><span class="tag">Gradient</span><span class="tag">Vibrant</span><span class="tag">Colorful</span></div>
-            <div class="template-links">
-              <span class="btn-demo" style="opacity:0.5;cursor:default">Coming Soon</span>
+        <!-- 3. Aurora -->
+        <div class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#0B0A1A,#1a0533,#2d1b69)"><span class="icon">✦</span><span class="card__badge">Gradient</span></div>
+          <div class="card__body">
+            <div class="card__name">Aurora</div>
+            <div class="card__desc">Flowing conic aurora gradients. Purple, pink, cyan — a vibrant dark-first canvas for creative brands.</div>
+            <div class="card__tags"><span>Gradient</span><span>Dark</span><span>Vibrant</span><span>Neon</span></div>
+            <div class="card__footer">
+              <span class="price">¥199 <span>$29</span></span>
+              <a href="https://dylanshi-cloud.github.io/aurora-template/" class="btn btn--small btn--outline" style="border-color:var(--text);color:var(--text)">Demo</a>
+              <a href="https://github.com/dylanshi-cloud/aurora-template#-pricing" class="btn btn--small btn--primary">Buy</a>
             </div>
           </div>
         </div>
 
-        <!-- 4. Noir (Coming Soon) -->
-        <div class="template-card" style="opacity:0.5">
-          <div class="template-preview" style="background:linear-gradient(135deg,#0D0D0D,#1A1A1A)"><span>▲</span></div>
-          <div class="template-info">
-            <div class="template-name">Noir</div>
-            <div class="template-desc">Dark luxury with gold accents. Bold typography, premium feel, high contrast.</div>
-            <div class="template-tags"><span class="tag">Dark</span><span class="tag">Luxury</span><span class="tag">Bold</span></div>
-            <div class="template-links">
-              <span class="btn-demo" style="opacity:0.5;cursor:default">Coming Soon</span>
+        <!-- 4. Noir -->
+        <div class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#0A0A0A,#111111,#1A1A1A)"><span class="icon">▲</span><span class="card__badge">Luxury</span></div>
+          <div class="card__body">
+            <div class="card__name">Noir</div>
+            <div class="card__desc">Dark luxury with warm gold accents. Architectural grid, serif typography, high-contrast editorial feel.</div>
+            <div class="card__tags"><span>Dark</span><span>Gold</span><span>Luxury</span><span>Grid</span></div>
+            <div class="card__footer">
+              <span class="price">¥199 <span>$29</span></span>
+              <a href="https://dylanshi-cloud.github.io/noir-template/" class="btn btn--small btn--outline" style="border-color:var(--text);color:var(--text)">Demo</a>
+              <a href="https://github.com/dylanshi-cloud/noir-template#-pricing" class="btn btn--small btn--primary">Buy</a>
             </div>
           </div>
         </div>
 
-        <!-- 5. Bento (Coming Soon) -->
-        <div class="template-card" style="opacity:0.5">
-          <div class="template-preview" style="background:linear-gradient(135deg,#2C3E50,#4CA1AF)"><span>▣</span></div>
-          <div class="template-info">
-            <div class="template-name">Bento</div>
-            <div class="template-desc">Japanese bento-grid layout. Modular cards, asymmetric grid, information-dense.</div>
-            <div class="template-tags"><span class="tag">Grid</span><span class="tag">Modern</span><span class="tag">Clean</span></div>
-            <div class="template-links">
-              <span class="btn-demo" style="opacity:0.5;cursor:default">Coming Soon</span>
+        <!-- 5. Bento -->
+        <div class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#1a202c,#2d3748,#4a5568)"><span class="icon">▣</span><span class="card__badge">Grid</span></div>
+          <div class="card__body">
+            <div class="card__name">Bento</div>
+            <div class="card__desc">Japanese bento-grid layout. Modular asymmetric cards, information-dense, perfect for portfolios.</div>
+            <div class="card__tags"><span>Grid</span><span>Modular</span><span>Portfolio</span><span>Clean</span></div>
+            <div class="card__footer">
+              <span class="price">¥199 <span>$29</span></span>
+              <a href="https://dylanshi-cloud.github.io/bento-template/" class="btn btn--small btn--outline" style="border-color:var(--text);color:var(--text)">Demo</a>
+              <a href="https://github.com/dylanshi-cloud/bento-template#-pricing" class="btn btn--small btn--primary">Buy</a>
             </div>
           </div>
         </div>
 
-        <!-- 6. Ember (Coming Soon) -->
-        <div class="template-card" style="opacity:0.5">
-          <div class="template-preview" style="background:linear-gradient(135deg,#2A1E18,#3D2B20)"><span>🔥</span></div>
-          <div class="template-info">
-            <div class="template-name">Ember</div>
-            <div class="template-desc">Warm terracotta for home decor, candles, artisan brands. Cozy and earthy.</div>
-            <div class="template-tags"><span class="tag">Warm</span><span class="tag">Earthy</span><span class="tag">Cozy</span></div>
-            <div class="template-links">
-              <span class="btn-demo" style="opacity:0.5;cursor:default">Coming Soon</span>
+        <!-- 6. Cinema -->
+        <div class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#0A0A0A,#1A1410,#2A1E18)"><span class="icon">🎬</span><span class="card__badge">Widescreen</span></div>
+          <div class="card__body">
+            <div class="card__name">Cinema</div>
+            <div class="card__desc">Cinematic storytelling with widescreen letterbox bars. Narrative scroll, warm golden hour light.</div>
+            <div class="card__tags"><span>Cinematic</span><span>Story</span><span>Dark</span><span>Narrative</span></div>
+            <div class="card__footer">
+              <span class="price">¥199 <span>$29</span></span>
+              <a href="https://dylanshi-cloud.github.io/cinema-template/" class="btn btn--small btn--outline" style="border-color:var(--text);color:var(--text)">Demo</a>
+              <a href="https://github.com/dylanshi-cloud/cinema-template#-pricing" class="btn btn--small btn--primary">Buy</a>
             </div>
           </div>
         </div>
 
+        <!-- 7. Cyber -->
+        <div class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#0A0E17,#0F172A,#1E293B)"><span class="icon">⚡</span><span class="card__badge">SaaS</span></div>
+          <div class="card__body">
+            <div class="card__name">Cyber</div>
+            <div class="card__desc">Dark tech with neon cyan accents. Grid overlay, glowing stats, built for startups and SaaS products.</div>
+            <div class="card__tags"><span>Tech</span><span>Neon</span><span>SaaS</span><span>Dark</span></div>
+            <div class="card__footer">
+              <span class="price">¥199 <span>$29</span></span>
+              <a href="https://dylanshi-cloud.github.io/cyber-template/" class="btn btn--small btn--outline" style="border-color:var(--text);color:var(--text)">Demo</a>
+              <a href="https://github.com/dylanshi-cloud/cyber-template#-pricing" class="btn btn--small btn--primary">Buy</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. Ember -->
+        <div class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#2A1E18,#3D2B20,#5C4030)"><span class="icon">🔥</span><span class="card__badge">Artisan</span></div>
+          <div class="card__body">
+            <div class="card__name">Ember</div>
+            <div class="card__desc">Warm terracotta for artisan brands. Product catalog grid, story section, organic earthy feel.</div>
+            <div class="card__tags"><span>Warm</span><span>Terracotta</span><span>Product</span><span>Earthy</span></div>
+            <div class="card__footer">
+              <span class="price">¥199 <span>$29</span></span>
+              <a href="https://dylanshi-cloud.github.io/ember-template/" class="btn btn--small btn--outline" style="border-color:var(--text);color:var(--text)">Demo</a>
+              <a href="https://github.com/dylanshi-cloud/ember-template#-pricing" class="btn btn--small btn--primary">Buy</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- STYLES OVERVIEW -->
+  <section class="styles" id="styles">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">✦ Design Spectrum</span>
+        <h2 class="section-title">From warm to bold.</h2>
+        <p class="section-sub">One collection covering the full range of modern brand aesthetics.</p>
+      </div>
+      <div class="styles__grid">
+        <div class="style-item"><div class="style-item__icon">✦</div><div class="style-item__name">Ethereal Classic</div><div class="style-item__count">Warm · Gold · 5 Themes</div></div>
+        <div class="style-item"><div class="style-item__icon">◆</div><div class="style-item__name">Glassmorphism</div><div class="style-item__count">Modern · Frosted · Dark Mode</div></div>
+        <div class="style-item"><div class="style-item__icon">~</div><div class="style-item__name">Aurora Gradient</div><div class="style-item__count">Vibrant · Flowing · Neon</div></div>
+        <div class="style-item"><div class="style-item__icon">▲</div><div class="style-item__name">Noir Luxury</div><div class="style-item__count">Dark · Gold · Editorial</div></div>
+        <div class="style-item"><div class="style-item__icon">▣</div><div class="style-item__name">Bento Grid</div><div class="style-item__count">Modular · Clean · Portfolio</div></div>
+        <div class="style-item"><div class="style-item__icon">🎬</div><div class="style-item__name">Cinematic</div><div class="style-item__count">Widescreen · Story · Film</div></div>
+        <div class="style-item"><div class="style-item__icon">⚡</div><div class="style-item__name">Cyber Tech</div><div class="style-item__count">Neon · SaaS · Dark</div></div>
+        <div class="style-item"><div class="style-item__icon">🔥</div><div class="style-item__name">Ember Artisan</div><div class="style-item__count">Terracotta · Organic · Warm</div></div>
       </div>
     </div>
   </section>
 
   <!-- CTA -->
-  <section class="section" style="background:var(--bg-alt);text-align:center">
+  <section class="special">
     <div class="container">
-      <h2 class="section__title">✦ Want a custom template?</h2>
-      <p style="color:var(--text-light);margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto">Every template can be customized to your brand. Need something unique? Let's talk.</p>
-      <a href="mailto:dylan_shi@hotmail.com" style="display:inline-block;padding:0.9rem 2.5rem;background:var(--accent);color:#fff;text-transform:uppercase;letter-spacing:0.08em;font-size:0.8rem;transition:background 0.3s">Contact</a>
+      <span class="section-tag" style="border-color:rgba(200,146,90,0.2);color:var(--accent)">✦ Why Timee</span>
+      <h2>Zero dependencies. Unlimited possibilities.</h2>
+      <p>Every template is pure HTML + CSS + JavaScript. No React, no Vue, no build tools — just clean, hand-crafted code that you can deploy on GitHub Pages, Netlify, or any static host in under a minute.</p>
+      <a href="mailto:dylan_shi@hotmail.com" class="btn btn--outline">Questions? Email us</a>
     </div>
   </section>
 
   <footer class="footer">
     <div class="container">
-      <p style="font-family:var(--serif);font-size:1.2rem;margin-bottom:0.5rem">ether<span style="font-style:italic;opacity:0.7">e</span>al</p>
-      <p>Premium HTML templates for mindful brands.</p>
-      <p style="margin-top:1rem;font-size:0.75rem">&copy; 2026 Ethereal Templates. Made with intention.</p>
+      <p style="font-family:var(--serif);font-size:1.3rem;margin-bottom:0.3rem">tim<span style="font-style:italic;opacity:0.7">ee</span></p>
+      <p>Premium HTML templates for modern brands.</p>
+      <p style="margin-top:1rem;font-size:0.75rem">&copy; 2026 Timee. Made with intention.</p>
     </div>
   </footer>
 </body>
