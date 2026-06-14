@@ -93,8 +93,8 @@
     <canvas class="hero__particles" id="heroParticles"></canvas>
     <div class="hero__content container">
       <div class="hero__icon">✦</div>
-      <h1>Premium templates.<br/>Crafted with <em>intention.</em></h1>
-      <p>8 distinct HTML templates — each with its own personality. Pure CSS, zero dependencies.</p>
+      <h1>A website is a<br/><em>living thing.</em></h1>
+      <p>HTML templates that breathe. Pure craftsmanship, zero dependencies — each one a world of its own.</p>
       <a href="#gallery" class="hero__cta">Explore the collection</a>
       <div class="hero__scroll">Scroll<div class="hero__scroll-line"></div></div>
     </div>
@@ -102,8 +102,8 @@
 
   <section id="gallery">
     <div class="container">
-      <h2 class="sec-title">✦ The Collection</h2>
-      <p class="sec-sub">Click any template to see it live. Each one is a complete, ready-to-deploy brand site.</p>
+      <h2 class="sec-title">✦ Choose a world</h2>
+      <p class="sec-sub">Click any template to see it live. More coming.</p>
       <div class="gallery" id="galleryGrid"></div>
     </div>
   </section>
@@ -126,14 +126,14 @@
   <script>
     // === TEMPLATES ===
     const T = [
-      {n:"Ethereal",p:"¥299",usd:"$39",t:["Warm","Gold","5 Themes"],url:"https://dylanshi-cloud.github.io/ethereal-template/",bg:"linear-gradient(135deg,#1E1E1E,#2D3436)",c:"#C8925A"},
-      {n:"Glass",p:"¥199",usd:"$29",t:["Glassmorphism","Dark Mode"],url:"https://dylanshi-cloud.github.io/glass-template/",bg:"linear-gradient(135deg,#0F1118,#16213e)",c:"#6366F1"},
-      {n:"Aurora",p:"¥199",usd:"$29",t:["Gradient","Vibrant","Neon"],url:"https://dylanshi-cloud.github.io/aurora-template/",bg:"linear-gradient(135deg,#0B0A1A,#1a0533)",c:"#7C3AED"},
-      {n:"Noir",p:"¥199",usd:"$29",t:["Dark","Gold","Luxury"],url:"https://dylanshi-cloud.github.io/noir-template/",bg:"linear-gradient(135deg,#0A0A0A,#1A1A1A)",c:"#C9A94E"},
-      {n:"Bento",p:"¥199",usd:"$29",t:["Grid","Modular","Portfolio"],url:"https://dylanshi-cloud.github.io/bento-template/",bg:"linear-gradient(135deg,#F5F5F0,#e8e8e0)",c:"#2563EB"},
-      {n:"Cinema",p:"¥199",usd:"$29",t:["Widescreen","Narrative"],url:"https://dylanshi-cloud.github.io/cinema-template/",bg:"linear-gradient(135deg,#0A0A0A,#1A1410)",c:"#D4A853"},
-      {n:"Cyber",p:"¥199",usd:"$29",t:["Tech","Neon","SaaS"],url:"https://dylanshi-cloud.github.io/cyber-template/",bg:"linear-gradient(135deg,#0A0E17,#1E293B)",c:"#22D3EE"},
-      {n:"Ember",p:"¥199",usd:"$29",t:["Warm","Terracotta","Artisan"],url:"https://dylanshi-cloud.github.io/ember-template/",bg:"linear-gradient(135deg,#FCF8F5,#F5EDE8)",c:"#C87A4A"}
+      {n:"Ethereal",t:["Warm","Gold","5 Themes"],url:"https://dylanshi-cloud.github.io/ethereal-template/",bg:"linear-gradient(135deg,#1E1E1E,#2D3436)",c:"#C8925A"},
+      {n:"Glass",t:["Glassmorphism","Dark Mode"],url:"https://dylanshi-cloud.github.io/glass-template/",bg:"linear-gradient(135deg,#0F1118,#16213e)",c:"#6366F1"},
+      {n:"Aurora",t:["Gradient","Vibrant","Neon"],url:"https://dylanshi-cloud.github.io/aurora-template/",bg:"linear-gradient(135deg,#0B0A1A,#1a0533)",c:"#7C3AED"},
+      {n:"Noir",t:["Dark","Gold","Luxury"],url:"https://dylanshi-cloud.github.io/noir-template/",bg:"linear-gradient(135deg,#0A0A0A,#1A1A1A)",c:"#C9A94E"},
+      {n:"Bento",t:["Grid","Modular","Portfolio"],url:"https://dylanshi-cloud.github.io/bento-template/",bg:"linear-gradient(135deg,#F5F5F0,#e8e8e0)",c:"#2563EB"},
+      {n:"Cinema",t:["Widescreen","Narrative"],url:"https://dylanshi-cloud.github.io/cinema-template/",bg:"linear-gradient(135deg,#0A0A0A,#1A1410)",c:"#D4A853"},
+      {n:"Cyber",t:["Tech","Neon","SaaS"],url:"https://dylanshi-cloud.github.io/cyber-template/",bg:"linear-gradient(135deg,#0A0E17,#1E293B)",c:"#22D3EE"},
+      {n:"Ember",t:["Warm","Terracotta","Artisan"],url:"https://dylanshi-cloud.github.io/ember-template/",bg:"linear-gradient(135deg,#FCF8F5,#F5EDE8)",c:"#C87A4A"}
     ];
 
     const grid = document.getElementById('galleryGrid');
@@ -152,7 +152,6 @@
         <div class="tcard__body">
           <div class="tcard__row">
             <span class="tcard__row-name">${t.n}</span>
-            <span class="tcard__row-price">${t.p} <small>${t.usd}</small></span>
           </div>
           <div class="tcard__desc">Click to view the live demo — experience the full design in your browser.</div>
           <div class="tcard__footer"><a href="${t.url}" target="_blank">View Live Demo</a></div>
