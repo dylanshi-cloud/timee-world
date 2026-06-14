@@ -9,178 +9,74 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    :root{--bg:#0D0D0D;--text:#E8E4DE;--text-muted:#6B6560;--gold:#C9A94E;--cream:#E8D5B7;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
+    :root{--bg:#FAF7F2;--text:#2D3436;--text-light:#7A7A7A;--accent:#C8925A;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
     html{scroll-behavior:smooth}
-    body{font-family:var(--sans);font-weight:300;color:var(--text);background:var(--bg);overflow-x:hidden}
+    body{font-family:var(--sans);font-weight:300;color:var(--text);background:var(--bg)}
+    .container{max-width:1200px;margin:0 auto;padding:0 2rem}
+    a{text-decoration:none;color:inherit}
 
-    /* ===== HERO ===== */
-    .hero{position:relative;min-height:80vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
-    .hero__bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 30%,rgba(201,169,78,0.06),transparent),radial-gradient(ellipse 60% 80% at 80% 80%,rgba(201,169,78,0.03),transparent),linear-gradient(135deg,#0D0D0D,#1A1A1A,#0D0D0D)}
-    .hero__grain{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.015) 1px,transparent 0);background-size:24px 24px}
-    .hero__content{position:relative;z-index:1;text-align:center;padding:4rem 1.5rem;max-width:600px}
-    .hero__mark{font-family:var(--serif);font-size:0.8rem;font-style:italic;color:var(--gold);letter-spacing:0.3em;margin-bottom:2rem;opacity:0.6}
-    .hero h1{font-family:var(--serif);font-size:clamp(2.5rem,6vw,5rem);font-weight:400;line-height:1.05;margin-bottom:1rem;letter-spacing:-0.02em}
-    .hero h1 span{font-style:italic;color:var(--gold)}
-    .hero p{color:var(--text-muted);font-size:clamp(0.9rem,1.1vw,1.05rem);margin-bottom:2.5rem;line-height:1.7;max-width:420px;margin-left:auto;margin-right:auto}
-    .hero__btn{display:inline-block;padding:0.8rem 2.5rem;border:1px solid var(--gold);color:var(--gold);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.4s var(--ease);text-decoration:none}
-    .hero__btn:hover{background:var(--gold);color:var(--bg)}
-    .hero__scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted)}
+    .hero{text-align:center;padding:6rem 0 3rem}
+    .hero__mark{font-family:var(--serif);font-size:0.8rem;font-style:italic;color:var(--accent);letter-spacing:0.3em;margin-bottom:1.5rem}
+    .hero h1{font-family:var(--serif);font-size:clamp(2.2rem,4vw,3.2rem);font-weight:400;margin-bottom:0.5rem}
+    .hero p{color:var(--text-light);max-width:420px;margin:0 auto;font-size:0.9rem;line-height:1.6}
 
-    /* ===== TEMPLATES ===== */
-    .templates{}
-    .t{min-height:70vh;position:relative;display:flex;align-items:center;overflow:hidden;padding:3rem 0}
-    .t:nth-child(even){justify-content:flex-end}
-    .t__bg{position:absolute;inset:0}
-    .t__content{position:relative;z-index:1;max-width:480px;padding:3rem}
-    .t__num{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:0.8rem;letter-spacing:0.15em;margin-bottom:0.5rem}
-    .t__name{font-family:var(--serif);font-size:clamp(2rem,3.5vw,3rem);font-weight:400;margin-bottom:0.5rem}
-    .t__desc{font-size:0.85rem;color:var(--text-muted);line-height:1.7;margin-bottom:1.5rem}
-    .t__link{display:inline-block;padding:0.6rem 1.8rem;border:1px solid var(--gold);color:var(--gold);font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.3s;text-decoration:none}
-    .t__link:hover{background:var(--gold);color:var(--bg)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:1.5rem;padding-bottom:4rem}
+    .card{background:#fff;border:1px solid rgba(0,0,0,0.04);overflow:hidden;transition:all 0.4s var(--ease)}
+    .card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.04)}
+    .card__img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;transition:transform 0.5s var(--ease)}
+    .card:hover .card__img{transform:scale(1.02)}
+    .card__body{padding:1.2rem 1.5rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+    .card__name{font-family:var(--serif);font-size:1.1rem}
+    .card__arrow{font-size:1rem;color:var(--text-light);transition:all 0.3s}
+    .card:hover .card__arrow{color:var(--accent);transform:translateX(4px)}
 
-    /* Individual template backgrounds - each one unique */
-    .t1 .t__bg{background:radial-gradient(ellipse at 30% 50%,rgba(201,169,78,0.08),transparent 60%),linear-gradient(135deg,#0D0D0D,#1A1A1A)}
-    .t1::after{content:'✦';position:absolute;font-size:25vw;color:rgba(201,169,78,0.025);right:-5%;top:50%;transform:translateY(-50%);pointer-events:none;animation:float1 6s ease-in-out infinite}
-    @keyframes float1{0%,100%{transform:translateY(-50%)}50%{transform:translateY(-55%)}}
-    .t1 .t__link{border-color:rgba(201,169,78,0.4);color:#C9A94E}
-    .t1 .t__link:hover{background:#C9A94E;color:#0D0D0D}
-
-    .t2 .t__bg{background:radial-gradient(ellipse at 70% 50%,rgba(99,102,241,0.06),transparent 60%),radial-gradient(ellipse at 30% 50%,rgba(99,102,241,0.03),transparent 60%),linear-gradient(135deg,#0F1118,#1A1D2E)}
-    .t2::after{content:'◆';position:absolute;font-size:22vw;color:rgba(99,102,241,0.025);left:-5%;top:50%;transform:translateY(-50%);pointer-events:none;animation:float2 8s ease-in-out infinite}
-    @keyframes float2{0%,100%{transform:translateY(-50%)}50%{transform:translateY(-58%)}}
-    .t2 .t__link{border-color:rgba(99,102,241,0.4);color:#818CF8}
-    .t2 .t__link:hover{background:#6366F1;color:#fff}
-
-    .t3 .t__bg{background:radial-gradient(ellipse at 50% 30%,rgba(124,58,237,0.08),transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(236,72,153,0.05),transparent 50%),linear-gradient(135deg,#0B0A1A,#1a0533)}
-    .t3::after{content:'~';position:absolute;font-size:30vw;color:rgba(124,58,237,0.02);right:-5%;top:50%;transform:translateY(-50%);pointer-events:none;animation:aurora 4s ease-in-out infinite}
-    @keyframes aurora{0%,100%{opacity:0.5;transform:translateY(-50%) scale(1)}50%{opacity:1;transform:translateY(-55%) scale(1.05)}}
-    .t3 .t__link{border-color:rgba(124,58,237,0.4);color:#A78BFA}
-    .t3 .t__link:hover{background:#7C3AED;color:#fff}
-
-    .t4 .t__bg{background:radial-gradient(ellipse at 50% 50%,rgba(201,169,78,0.03),transparent 70%),#0A0A0A;background-image:linear-gradient(rgba(201,169,78,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,169,78,0.04) 1px,transparent 1px);background-size:clamp(20px,3vw,50px) clamp(20px,3vw,50px)}
-    .t4::after{content:'▲';position:absolute;font-size:18vw;color:rgba(201,169,78,0.025);left:-3%;top:50%;transform:translateY(-50%);pointer-events:none}
-    .t4 .t__link{border-color:rgba(201,169,78,0.4);color:#C9A94E}
-    .t4 .t__link:hover{background:#C9A94E;color:#0A0A0A}
-
-    .t5 .t__bg{background:radial-gradient(ellipse at 30% 50%,rgba(37,99,235,0.04),transparent 60%),linear-gradient(135deg,#F5F5F0,#E8E8E0)}
-    .t5{color:#1A1A1A}.t5 .t__desc{color:#6B6B6B}
-    .t5::after{content:'▣';position:absolute;font-size:20vw;color:rgba(37,99,235,0.02);right:-5%;top:50%;transform:translateY(-50%);pointer-events:none}
-    .t5 .t__link{border-color:rgba(37,99,235,0.3);color:#2563EB}
-    .t5 .t__link:hover{background:#2563EB;color:#fff}
-
-    .t6 .t__bg{background:radial-gradient(ellipse at 50% 50%,rgba(212,168,83,0.04),transparent 60%),linear-gradient(135deg,#0D0D0D,#1A1410)}
-    .t6::after{content:'🎬';position:absolute;font-size:12vw;color:rgba(212,168,83,0.02);left:-3%;top:50%;transform:translateY(-50%);pointer-events:none}
-    .t6 .t__link{border-color:rgba(212,168,83,0.4);color:#D4A853}
-    .t6 .t__link:hover{background:#D4A853;color:#0D0D0D}
-
-    .t7 .t__bg{background:radial-gradient(ellipse at 50% 50%,rgba(34,211,238,0.04),transparent 70%),#0A0E17;background-image:linear-gradient(rgba(34,211,238,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,0.025) 1px,transparent 1px);background-size:clamp(15px,2vw,30px) clamp(15px,2vw,30px)}
-    .t7::after{content:'⚡';position:absolute;font-size:15vw;color:rgba(34,211,238,0.02);right:-3%;top:50%;transform:translateY(-50%);pointer-events:none;animation:pulse2 2s ease-in-out infinite}
-    @keyframes pulse2{0%,100%{opacity:0.3}50%{opacity:0.6}}
-    .t7 .t__link{border-color:rgba(34,211,238,0.4);color:#22D3EE}
-    .t7 .t__link:hover{background:#22D3EE;color:#0A0E17}
-
-    .t8 .t__bg{background:radial-gradient(ellipse at 50% 50%,rgba(200,122,74,0.04),transparent 70%),linear-gradient(135deg,#FCF8F5,#F5EDE8)}
-    .t8{color:#3D2B20}.t8 .t__desc{color:#8A7060}
-    .t8::after{content:'🔥';position:absolute;font-size:14vw;color:rgba(200,122,74,0.02);left:-3%;top:50%;transform:translateY(-50%);pointer-events:none;animation:float1 7s ease-in-out infinite}
-    .t8 .t__link{border-color:rgba(200,122,74,0.3);color:#C87A4A}
-    .t8 .t__link:hover{background:#C87A4A;color:#fff}
-
-    @media(max-width:768px){.t__content{padding:2rem}.t:nth-child(even){justify-content:flex-start}}
+    .footer{padding:2rem 0;text-align:center;border-top:1px solid rgba(0,0,0,0.04);color:var(--text-muted);font-size:0.75rem}
   </style>
 </head>
 <body>
-  <section class="hero">
-    <div class="hero__bg"></div>
-    <div class="hero__grain"></div>
-    <div class="hero__content">
-      <p class="hero__mark">tim<span style="font-style:italic;opacity:0.7">ee</span></p>
-      <h1>A website is a <span>living thing.</span></h1>
-      <p>HTML templates built with patience and intention. Each one a complete world — yours to inhabit.</p>
-      <a href="#t1" class="hero__btn">See the collection</a>
-    </div>
-    <p class="hero__scroll">↓ Scroll to explore</p>
-  </section>
+  <div class="hero">
+    <div class="hero__mark">timee</div>
+    <h1>✦ HTML Templates</h1>
+    <p>Click any template to see it live. Each one is a complete, ready-to-use brand site.</p>
+  </div>
 
-  <div class="templates">
-    <div class="t t1" id="t1">
-      <div class="t__bg"></div>
-      <div class="t__content">
-        <p class="t__num">01</p>
-        <h2 class="t__name">Ethereal</h2>
-        <p class="t__desc">Warm gold on dark. Floating particles, scroll-triggered animations, 5 color themes. The original Timee template.</p>
-        <a href="https://dylanshi-cloud.github.io/ethereal-template/" target="_blank" class="t__link">View Live →</a>
-      </div>
-    </div>
-
-    <div class="t t2">
-      <div class="t__bg"></div>
-      <div class="t__content">
-        <p class="t__num">02</p>
-        <h2 class="t__name">Glass</h2>
-        <p class="t__desc">Apple-inspired glassmorphism. Frosted cards with backdrop-filter, floating orbs, fluid gradients, and a built-in dark mode.</p>
-        <a href="https://dylanshi-cloud.github.io/glass-template/" target="_blank" class="t__link">View Live →</a>
-      </div>
-    </div>
-
-    <div class="t t3">
-      <div class="t__bg"></div>
-      <div class="t__content">
-        <p class="t__num">03</p>
-        <h2 class="t__name">Aurora</h2>
-        <p class="t__desc">Flowing gradients that never repeat. Purple, pink, and cyan on a deep dark canvas. For brands that live in color.</p>
-        <a href="https://dylanshi-cloud.github.io/aurora-template/" target="_blank" class="t__link">View Live →</a>
-      </div>
-    </div>
-
-    <div class="t t4">
-      <div class="t__bg"></div>
-      <div class="t__content">
-        <p class="t__num">04</p>
-        <h2 class="t__name">Noir</h2>
-        <p class="t__desc">Black and gold. Architectural grids, italic serif headlines, and the restrained elegance of something built to last.</p>
-        <a href="https://dylanshi-cloud.github.io/noir-template/" target="_blank" class="t__link">View Live →</a>
-      </div>
-    </div>
-
-    <div class="t t5">
-      <div class="t__bg"></div>
-      <div class="t__content">
-        <p class="t__num">05</p>
-        <h2 class="t__name">Bento</h2>
-        <p class="t__desc">A modular grid inspired by Japanese bento boxes. Clean, organized, and information-rich. Perfect for portfolios.</p>
-        <a href="https://dylanshi-cloud.github.io/bento-template/" target="_blank" class="t__link">View Live →</a>
-      </div>
-    </div>
-
-    <div class="t t6">
-      <div class="t__bg"></div>
-      <div class="t__content">
-        <p class="t__num">06</p>
-        <h2 class="t__name">Cinema</h2>
-        <p class="t__desc">Widescreen storytelling. Letterbox bars, chaptered narrative, and the warm glow of golden hour — for brands with a story.</p>
-        <a href="https://dylanshi-cloud.github.io/cinema-template/" target="_blank" class="t__link">View Live →</a>
-      </div>
-    </div>
-
-    <div class="t t7">
-      <div class="t__bg"></div>
-      <div class="t__content">
-        <p class="t__num">07</p>
-        <h2 class="t__name">Cyber</h2>
-        <p class="t__desc">Dark tech with neon cyan. A precise grid, glowing accents, and the clean geometry of modern infrastructure.</p>
-        <a href="https://dylanshi-cloud.github.io/cyber-template/" target="_blank" class="t__link">View Live →</a>
-      </div>
-    </div>
-
-    <div class="t t8">
-      <div class="t__bg"></div>
-      <div class="t__content">
-        <p class="t__num">08</p>
-        <h2 class="t__name">Ember</h2>
-        <p class="t__desc">Warm terracotta for the makers and the makers' markets. Product catalogs, story sections, and the texture of honest materials.</p>
-        <a href="https://dylanshi-cloud.github.io/ember-template/" target="_blank" class="t__link">View Live →</a>
-      </div>
+  <div class="container">
+    <div class="grid">
+      <a href="https://dylanshi-cloud.github.io/ethereal-template/" target="_blank" class="card">
+        <img class="card__img" src="images/thumb-ethereal.png" alt="Ethereal" loading="lazy" />
+        <div class="card__body"><span class="card__name">Ethereal</span><span class="card__arrow">→</span></div>
+      </a>
+      <a href="https://dylanshi-cloud.github.io/glass-template/" target="_blank" class="card">
+        <img class="card__img" src="images/thumb-glass.png" alt="Glass" loading="lazy" />
+        <div class="card__body"><span class="card__name">Glass</span><span class="card__arrow">→</span></div>
+      </a>
+      <a href="https://dylanshi-cloud.github.io/aurora-template/" target="_blank" class="card">
+        <img class="card__img" src="images/thumb-aurora.png" alt="Aurora" loading="lazy" />
+        <div class="card__body"><span class="card__name">Aurora</span><span class="card__arrow">→</span></div>
+      </a>
+      <a href="https://dylanshi-cloud.github.io/noir-template/" target="_blank" class="card">
+        <img class="card__img" src="images/thumb-noir.png" alt="Noir" loading="lazy" />
+        <div class="card__body"><span class="card__name">Noir</span><span class="card__arrow">→</span></div>
+      </a>
+      <a href="https://dylanshi-cloud.github.io/bento-template/" target="_blank" class="card">
+        <img class="card__img" src="images/thumb-bento.png" alt="Bento" loading="lazy" />
+        <div class="card__body"><span class="card__name">Bento</span><span class="card__arrow">→</span></div>
+      </a>
+      <a href="https://dylanshi-cloud.github.io/cinema-template/" target="_blank" class="card">
+        <img class="card__img" src="images/thumb-cinema.png" alt="Cinema" loading="lazy" />
+        <div class="card__body"><span class="card__name">Cinema</span><span class="card__arrow">→</span></div>
+      </a>
+      <a href="https://dylanshi-cloud.github.io/cyber-template/" target="_blank" class="card">
+        <img class="card__img" src="images/thumb-cyber.png" alt="Cyber" loading="lazy" />
+        <div class="card__body"><span class="card__name">Cyber</span><span class="card__arrow">→</span></div>
+      </a>
+      <a href="https://dylanshi-cloud.github.io/ember-template/" target="_blank" class="card">
+        <img class="card__img" src="images/thumb-ember.png" alt="Ember" loading="lazy" />
+        <div class="card__body"><span class="card__name">Ember</span><span class="card__arrow">→</span></div>
+      </a>
     </div>
   </div>
+
+  <footer class="footer"><div class="container"><p>Timee — Premium HTML Templates</p></div></footer>
 </body>
 </html>
