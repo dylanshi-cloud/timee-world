@@ -6,190 +6,183 @@
   <title>Timee — Premium HTML Templates</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600&family=DM+Serif+Display:ital@0;1&family=Satoshi:wght@400;500;700&family=Work+Sans:wght@300;400;500&family=Fraunces:opsz,wght@9..144,300;9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    :root{--bg:#FAF7F2;--text:#2D3436;--text-light:#7A7A7A;--accent:#C8925A;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
+    :root{--bg:#FAF7F2;--bg-alt:#F3EDE4;--bg-dark:#1A1A1A;--text:#2D3436;--text-light:#7A7A7A;--accent:#C8925A;--accent-light:#E8D5B7;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
     html{scroll-behavior:smooth}
-    body{font-family:var(--sans);font-weight:300;color:var(--text);background:var(--bg)}
-    .container{max-width:1000px;margin:0 auto;padding:0 1.5rem}
+    body{font-family:var(--sans);font-weight:300;color:var(--text);background:var(--bg);overflow-x:hidden}
+    .container{max-width:1100px;margin:0 auto;padding:0 1.5rem}
     a{text-decoration:none;color:inherit}
 
-    .nav{padding:1.2rem 0;border-bottom:1px solid rgba(0,0,0,0.04);background:#fff;position:sticky;top:0;z-index:10}
+    /* NAV */
+    .nav{position:fixed;top:0;left:0;width:100%;z-index:100;padding:1.2rem 0;transition:all 0.4s var(--ease)}
+    .nav.scrolled{background:rgba(250,247,242,0.92);backdrop-filter:blur(12px);padding:0.8rem 0;border-bottom:1px solid rgba(0,0,0,0.04)}
     .nav__inner{display:flex;align-items:center;justify-content:space-between}
-    .nav__logo{font-family:var(--serif);font-size:1.3rem}
+    .nav__logo{font-family:var(--serif);font-size:1.4rem;color:#fff;transition:color 0.4s}
+    .nav.scrolled .nav__logo{color:var(--text)}
+    .nav__right{font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;display:flex;gap:2rem}
+    .nav__right a{color:rgba(255,255,255,0.6);transition:color 0.3s}
+    .nav__right a:hover{color:#fff}
+    .nav.scrolled .nav__right a{color:var(--text-light)}
+    .nav.scrolled .nav__right a:hover{color:var(--text)}
 
-    .hero{text-align:center;padding:4rem 0 2rem}
-    .hero h1{font-family:var(--serif);font-size:clamp(1.8rem,4vw,3rem);font-weight:400;margin-bottom:0.5rem}
-    .hero p{color:var(--text-light);max-width:500px;margin:0 auto;font-size:0.9rem}
+    /* HERO - Full ethereal style */
+    .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;overflow:hidden}
+    .hero__bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(200,146,90,0.12),transparent),radial-gradient(ellipse 60% 80% at 20% 80%,rgba(200,146,90,0.06),transparent),linear-gradient(135deg,#1A1A1A,#2D3436,#1A1A1A);z-index:0}
+    .hero__particles{position:absolute;inset:0;z-index:1;pointer-events:none}
+    .hero__content{position:relative;z-index:2;padding:6rem 0}
+    .hero__icon{font-size:clamp(1.5rem,2.5vw,2.5rem);margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.8s var(--ease) 0.1s forwards;display:inline-block;color:var(--accent)}
+    .hero h1{font-family:var(--serif);font-size:clamp(2.2rem,5vw,4.2rem);font-weight:400;line-height:1.08;margin-bottom:1rem;opacity:0;animation:fadeUp 0.9s var(--ease) 0.3s forwards}
+    .hero h1 em{font-style:italic;opacity:0.7}
+    .hero p{font-size:clamp(0.95rem,1.2vw,1.1rem);opacity:0.5;max-width:450px;margin:0 auto 2rem;opacity:0;animation:fadeUp 0.9s var(--ease) 0.6s forwards}
+    .hero__cta{display:inline-block;padding:0.9rem 2.5rem;border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.4s var(--ease);opacity:0;animation:fadeUp 0.9s var(--ease) 1s forwards}
+    .hero__cta:hover{background:#fff;color:var(--bg-dark)}
+    .hero__scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;opacity:0.25;animation:fadeIn 1s 2s forwards}
+    .hero__scroll-line{width:1px;height:32px;background:linear-gradient(to bottom,#fff,transparent);margin:0.5rem auto 0;animation:scrollPulse 2s ease-in-out infinite}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{to{opacity:1}}
+    @keyframes scrollPulse{0%,100%{opacity:1}50%{opacity:0.2}}
 
-    /* ===== TEMPLATE SHOWCASE ===== */
-    .showcase{padding-bottom:3rem}
+    /* SECTION COMMON */
+    section{padding:clamp(4rem,6vw,6rem) 0}
+    .sec-title{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.4rem);font-weight:400;text-align:center;margin-bottom:0.8rem}
+    .sec-sub{text-align:center;color:var(--text-light);max-width:500px;margin:0 auto 3rem;font-size:0.9rem}
 
-    .tblock{background:#fff;border:1px solid rgba(0,0,0,0.04);margin-bottom:2rem;overflow:hidden}
-    .tblock:last-child{margin-bottom:0}
+    /* GALLERY GRID */
+    .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem}
 
-    /* Preview area - large visual showcase */
-    .tblock__preview{aspect-ratio:16/9;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}
-    .tblock__preview:hover .tblock__overlay{opacity:1}
-    .tblock__overlay{position:absolute;inset:0;background:rgba(0,0,0,0.4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;opacity:0;transition:opacity 0.3s;color:#fff;backdrop-filter:blur(2px)}
-    .tblock__overlay span{border:1px solid rgba(255,255,255,0.3);padding:0.6rem 1.5rem;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase}
-    .tblock__overlay small{opacity:0.6;font-size:0.75rem}
+    .tcard{background:#fff;border:1px solid rgba(0,0,0,0.04);overflow:hidden;transition:all 0.6s var(--ease)}
+    .tcard:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(0,0,0,0.06)}
+    .tcard__preview{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .tcard__name{position:absolute;bottom:1rem;left:1rem;font-family:var(--serif);font-size:clamp(1rem,1.5vw,1.3rem);color:#fff;z-index:1}
+    .tcard__arrow{position:absolute;top:1rem;right:1rem;font-size:1.2rem;color:rgba(255,255,255,0.4);z-index:1;transition:all 0.4s var(--ease)}
+    .tcard:hover .tcard__arrow{color:#fff;transform:translate(3px,-3px)}
+    .tcard__tags{position:absolute;top:1rem;left:1rem;z-index:1;display:flex;gap:0.3rem}
+    .tcard__tags span{padding:0.2rem 0.5rem;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.05em;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);border-radius:2px;color:rgba(255,255,255,0.7)}
+    .tcard__body{padding:1.2rem 1.5rem 1.5rem}
+    .tcard__row{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem}
+    .tcard__row-name{font-family:var(--serif);font-size:1.1rem}
+    .tcard__row-price{font-family:var(--serif);font-size:1rem;color:var(--accent)}
+    .tcard__row-price small{font-size:0.65rem;color:var(--text-muted);font-family:var(--sans)}
+    .tcard__desc{font-size:0.8rem;color:var(--text-light);line-height:1.6;margin-bottom:0.8rem}
+    .tcard__footer{display:flex;gap:0.5rem}
+    .tcard__footer a{flex:1;text-align:center;padding:0.5rem;font-size:0.7rem;letter-spacing:0.05em;text-transform:uppercase;border:1px solid rgba(0,0,0,0.06);transition:all 0.3s;color:var(--text-light)}
+    .tcard__footer a:hover{border-color:var(--accent);color:var(--accent)}
 
-    /* Info area */
-    .tblock__body{padding:1.5rem 2rem 2rem}
-    .tblock__row{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem}
-    .tblock__name{font-family:var(--serif);font-size:1.4rem}
-    .tblock__price{font-family:var(--serif);font-size:1.2rem;color:var(--accent)}
-    .tblock__price small{font-size:0.7rem;color:var(--text-light);font-family:var(--sans)}
-    .tblock__desc{font-size:0.85rem;color:var(--text-light);line-height:1.7;margin-bottom:1rem}
-    .tblock__features{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1.2rem}
-    .tblock__features span{font-size:0.65rem;padding:0.25rem 0.7rem;background:var(--bg);border:1px solid rgba(0,0,0,0.04);border-radius:20px;color:var(--text-light)}
-    .tblock__btn{display:inline-block;padding:0.6rem 1.8rem;border:1px solid var(--text);font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.3s}
-    .tblock__btn:hover{background:var(--text);color:#fff}
+    /* CTA */
+    .cta{background:var(--bg-dark);color:#fff;text-align:center}
+    .cta p{opacity:0.4;max-width:450px;margin:0 auto 1.5rem;font-size:0.9rem}
 
-    /* ===== VISUAL PREVIEW STYLES ===== */
-    .vp{width:100%;height:100%;display:flex;flex-direction:column}
-    .vp__inner{flex:1;display:flex;flex-direction:column}
-    /* Ethereal */
-    .vp-ethereal{background:linear-gradient(135deg,#1E1E1E,#2D3436);padding:clamp(12px,2vw,24px)}
-    .vp-ethereal .vp__nav{display:flex;justify-content:space-between;margin-bottom:auto;align-items:center}
-    .vp-ethereal .vp__nav span{font-family:'Playfair Display',serif;color:#C8925A;font-size:clamp(10px,1.2vw,18px)}
-    .vp-ethereal .vp__nav i{display:flex;gap:clamp(8px,1.2vw,20px)}
-    .vp-ethereal .vp__nav i b{width:clamp(16px,2.5vw,40px);height:2px;background:rgba(255,255,255,0.08);display:block}
-    .vp-ethereal .vp__hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-    .vp-ethereal .vp__hero h2{font-family:'Playfair Display',serif;color:#fff;font-size:clamp(14px,2vw,32px);font-weight:400;line-height:1.2}
-    .vp-ethereal .vp__hero p{color:rgba(255,255,255,0.2);font-size:clamp(7px,0.9vw,14px);margin-top:clamp(4px,0.5vw,8px)}
-    .vp-ethereal .vp__hero div{border:1px solid rgba(255,255,255,0.1);padding:clamp(4px,0.5vw,8px) clamp(10px,1.5vw,24px);font-size:clamp(6px,0.7vw,11px);color:rgba(255,255,255,0.3);margin-top:clamp(12px,1.5vw,24px)}
-
-    /* Glass */
-    .vp-glass{background:linear-gradient(135deg,#0F1118,#1a1d2e);padding:clamp(10px,1.5vw,20px)}
-    .vp-glass .vp__bar{height:clamp(10px,1.2vw,18px);background:rgba(255,255,255,0.03);backdrop-filter:blur(4px);border-radius:4px;margin-bottom:clamp(6px,0.8vw,12px);display:flex;align-items:center;padding:0 clamp(6px,0.8vw,12px);gap:clamp(3px,0.4vw,6px)}
-    .vp-glass .vp__bar d{width:clamp(4px,0.5vw,7px);height:clamp(4px,0.5vw,7px);border-radius:50%;display:block}
-    .vp-glass .vp__bar l{height:2px;background:rgba(255,255,255,0.04);flex:1;border-radius:2px}
-    .vp-glass .vp__grid{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(4px,0.6vw,10px)}
-    .vp-glass .vp__grid div{background:rgba(255,255,255,0.03);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.04);border-radius:clamp(4px,0.5vw,8px);display:flex;align-items:center;justify-content:center;font-size:clamp(6px,0.8vw,12px);color:rgba(255,255,255,0.15)}
-
-    /* Aurora */
-    .vp-aurora{background:#0B0A1A;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-    .vp-aurora::before{content:'';position:absolute;width:200%;height:200%;top:-50%;left:-50%;background:conic-gradient(from 0deg,#7C3AED,#EC4899,#06B6D4,#7C3AED);opacity:0.15;animation:spin 8s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .vp-aurora .vp__c{position:relative;z-index:1;text-align:center}
-    .vp-aurora .vp__c h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(14px,2vw,30px);background:linear-gradient(135deg,#7C3AED,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .vp-aurora .vp__c p{font-size:clamp(6px,0.8vw,12px);color:rgba(255,255,255,0.2);margin-top:clamp(4px,0.4vw,8px)}
-
-    /* Noir */
-    .vp-noir{background:#0A0A0A;position:relative;display:flex;align-items:center;justify-content:center}
-    .vp-noir::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(201,169,78,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,169,78,0.04) 1px,transparent 1px);background-size:clamp(10px,1.5vw,24px) clamp(10px,1.5vw,24px)}
-    .vp-noir .vp__c{position:relative;z-index:1;text-align:center}
-    .vp-noir .vp__c h3{font-family:'DM Serif Display',serif;font-size:clamp(16px,2.5vw,40px);font-style:italic;color:#C9A94E;font-weight:400}
-    .vp-noir .vp__c p{font-size:clamp(5px,0.6vw,10px);color:rgba(255,255,255,0.15);letter-spacing:0.2em;text-transform:uppercase}
-
-    /* Bento */
-    .vp-bento{background:#F5F5F0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:clamp(3px,0.4vw,8px);padding:clamp(8px,1vw,16px)}
-    .vp-bento div{background:#fff;border-radius:clamp(4px,0.5vw,8px);display:flex;align-items:center;justify-content:center;font-size:clamp(6px,0.8vw,12px);border:1px solid rgba(0,0,0,0.03)}
-    .vp-bento div:nth-child(1){grid-column:span 2;grid-row:span 2;background:linear-gradient(135deg,#DBEAFE,#fff);font-family:'Satoshi',sans-serif;font-weight:700;font-size:clamp(10px,1.5vw,24px);color:#2563EB}
-
-    /* Cinema */
-    .vp-cinema{background:#0A0A0A;position:relative;display:flex;align-items:center;justify-content:center}
-    .vp-cinema::before,.vp-cinema::after{content:'';position:absolute;left:0;right:0;height:clamp(4px,0.5vw,10px);background:#000;z-index:1}
-    .vp-cinema::before{top:0}.vp-cinema::after{bottom:0}
-    .vp-cinema .vp__c{text-align:center}
-    .vp-cinema .vp__c h3{font-family:'Work Sans',sans-serif;font-weight:300;font-size:clamp(10px,1.5vw,24px);color:#fff}
-    .vp-cinema .vp__c em{color:#D4A853;font-style:normal}
-    .vp-cinema .vp__c p{font-size:clamp(4px,0.5vw,8px);color:rgba(255,255,255,0.15);letter-spacing:0.3em;text-transform:uppercase;margin-top:clamp(4px,0.4vw,8px)}
-
-    /* Cyber */
-    .vp-cyber{background:#0A0E17;position:relative;display:flex;align-items:center;justify-content:center}
-    .vp-cyber::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(34,211,238,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,0.03) 1px,transparent 1px);background-size:clamp(8px,1vw,16px) clamp(8px,1vw,16px)}
-    .vp-cyber .vp__c{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:clamp(4px,0.5vw,8px)}
-    .vp-cyber .vp__c dot{width:clamp(5px,0.6vw,9px);height:clamp(5px,0.6vw,9px);border-radius:50%;background:#22D3EE;animation:pulse 1.5s infinite}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.2}}
-    .vp-cyber .vp__c h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(12px,1.8vw,28px);background:linear-gradient(135deg,#22D3EE,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .vp-cyber .vp__c p{font-size:clamp(5px,0.6vw,9px);color:rgba(255,255,255,0.15)}
-
-    /* Ember */
-    .vp-ember{background:#FCF8F5;display:flex;align-items:center;justify-content:center}
-    .vp-ember .vp__c{text-align:center}
-    .vp-ember .vp__c h3{font-family:'Fraunces',Georgia,serif;font-size:clamp(14px,2vw,32px);font-weight:300;color:#C87A4A}
-    .vp-ember .vp__c p{font-size:clamp(5px,0.6vw,9px);color:rgba(0,0,0,0.1);letter-spacing:0.15em;text-transform:uppercase;margin-top:clamp(4px,0.5vw,8px)}
-
-    .footer{padding:2rem 0;text-align:center;border-top:1px solid rgba(0,0,0,0.04);color:var(--text-muted);font-size:0.75rem}
+    .footer{padding:2.5rem 0;text-align:center;border-top:1px solid rgba(0,0,0,0.04);color:var(--text-muted);font-size:0.75rem}
   </style>
 </head>
 <body>
-  <nav class="nav">
+  <nav class="nav" id="nav">
     <div class="container nav__inner">
       <a href="#" class="nav__logo">tim<span style="font-style:italic;opacity:0.7">ee</span></a>
-      <div style="font-size:0.8rem;color:var(--text-light)">Premium HTML Templates</div>
+      <div class="nav__right">
+        <a href="#gallery">Templates</a>
+        <a href="mailto:dylan_shi@hotmail.com">Contact</a>
+      </div>
     </div>
   </nav>
 
   <section class="hero">
-    <div class="container">
-      <h1>✦ 8 templates, 8 styles</h1>
-      <p>Click the preview or "View Live" to see each template in action.</p>
+    <div class="hero__bg"></div>
+    <canvas class="hero__particles" id="heroParticles"></canvas>
+    <div class="hero__content container">
+      <div class="hero__icon">✦</div>
+      <h1>Premium templates.<br/>Crafted with <em>intention.</em></h1>
+      <p>8 distinct HTML templates — each with its own personality. Pure CSS, zero dependencies.</p>
+      <a href="#gallery" class="hero__cta">Explore the collection</a>
+      <div class="hero__scroll">Scroll<div class="hero__scroll-line"></div></div>
     </div>
   </section>
 
-  <section class="showcase" id="showcase">
-    <div class="container" id="showcaseList"></div>
+  <section id="gallery">
+    <div class="container">
+      <h2 class="sec-title">✦ The Collection</h2>
+      <p class="sec-sub">Click any template to see it live. Each one is a complete, ready-to-deploy brand site.</p>
+      <div class="gallery" id="galleryGrid"></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <h2 class="sec-title" style="color:#fff">✦ Need a custom template?</h2>
+      <p>Every template can be tailored to your brand. Get in touch and we'll build something unique.</p>
+      <a href="mailto:dylan_shi@hotmail.com" style="display:inline-block;padding:0.8rem 2rem;border:1px solid var(--accent);color:var(--accent);font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.3s">Contact us</a>
+    </div>
   </section>
 
   <footer class="footer">
     <div class="container">
-      <p style="font-family:var(--serif);font-size:1.1rem">tim<span style="font-style:italic;opacity:0.7">ee</span></p>
-      <p style="margin-top:0.2rem">Premium HTML templates. Click to preview.</p>
+      <p style="font-family:var(--serif);font-size:1.1rem;margin-bottom:0.2rem">tim<span style="font-style:italic;opacity:0.7">ee</span></p>
+      <p style="font-size:0.8rem">Premium HTML templates. Made with intention.</p>
     </div>
   </footer>
 
   <script>
+    // === TEMPLATES ===
     const T = [
-      {n:"Ethereal",price:"¥299",usd:"$39",desc:"Warm gold on dark. Canvas particles system, scroll-triggered reveals, warm cursor glow, and 5 complete color themes included.",feat:["Canvas Particles","Scroll Reveals","5 Color Themes","Cursor Glow","Zero Dependencies"],url:"https://dylanshi-cloud.github.io/ethereal-template/",bg:"linear-gradient(135deg,#1E1E1E,#2D3436)",c:"#C8925A",vp:"vp-ethereal"},
-      {n:"Glass",price:"¥199",usd:"$29",desc:"Apple-inspired glassmorphism. Frosted backdrop-filter cards, fluid animated gradients, floating glass orbs with mouse parallax, built-in dark mode with persistence.",feat:["Glassmorphism","Fluid Gradients","Dark Mode","Orb Parallax","Mobile Responsive"],url:"https://dylanshi-cloud.github.io/glass-template/",bg:"linear-gradient(135deg,#0F1118,#1a1d2e)",c:"#6366F1",vp:"vp-glass"},
-      {n:"Aurora",price:"¥199",usd:"$29",desc:"Flowing conic aurora gradients on a dark canvas. Purple, pink, and cyan — a vibrant, immersive canvas for creative and bold brands.",feat:["Conic Gradients","Dark-first","Vibrant Colors","CSS Only","Pure HTML+CSS"],url:"https://dylanshi-cloud.github.io/aurora-template/",bg:"linear-gradient(135deg,#0B0A1A,#1a0533)",c:"#7C3AED",vp:"vp-aurora"},
-      {n:"Noir",price:"¥199",usd:"$29",desc:"Dark luxury with warm gold accents. Architectural grid, DM Serif Display typography, high-contrast editorial elegance for premium brands.",feat:["Dark Luxury","Gold Accents","Grid Pattern","Serif Typography","Editorial"],url:"https://dylanshi-cloud.github.io/noir-template/",bg:"linear-gradient(135deg,#0A0A0A,#1A1A1A)",c:"#C9A94E",vp:"vp-noir"},
-      {n:"Bento",price:"¥199",usd:"$29",desc:"Japanese bento-grid layout. Modular asymmetric cards, information-dense layout, perfect for portfolios and content-rich brand sites.",feat:["Bento Grid","Modular Cards","Clean Layout","Portfolio Ready","Light Theme"],url:"https://dylanshi-cloud.github.io/bento-template/",bg:"linear-gradient(135deg,#F5F5F0,#e8e8e0)",c:"#2563EB",vp:"vp-bento"},
-      {n:"Cinema",price:"¥199",usd:"$29",desc:"Widescreen cinematic storytelling. Letterbox bars, golden hour lighting, narrative scroll sections — for brands with a story to tell.",feat:["Widescreen","Narrative Scroll","Dark Theme","Warm Light","Film Style"],url:"https://dylanshi-cloud.github.io/cinema-template/",bg:"linear-gradient(135deg,#0A0A0A,#1A1410)",c:"#D4A853",vp:"vp-cinema"},
-      {n:"Cyber",price:"¥199",usd:"$29",desc:"Dark tech with neon cyan accents. Grid overlay, glowing stats, architecture-grade design for SaaS and digital-first companies.",feat:["Neon Accents","Grid Overlay","Dark Theme","SaaS Ready","Stats Display"],url:"https://dylanshi-cloud.github.io/cyber-template/",bg:"linear-gradient(135deg,#0A0E17,#1E293B)",c:"#22D3EE",vp:"vp-cyber"},
-      {n:"Ember",price:"¥199",usd:"$29",desc:"Warm terracotta for artisan and home decor brands. Product catalog grid, story sections, Fraunces serif typography with a cozy, earthy feel.",feat:["Terracotta","Product Grid","Warm Theme","Story Sections","Earthy"],url:"https://dylanshi-cloud.github.io/ember-template/",bg:"linear-gradient(135deg,#FCF8F5,#F5EDE8)",c:"#C87A4A",vp:"vp-ember"}
+      {n:"Ethereal",p:"¥299",usd:"$39",t:["Warm","Gold","5 Themes"],url:"https://dylanshi-cloud.github.io/ethereal-template/",bg:"linear-gradient(135deg,#1E1E1E,#2D3436)",c:"#C8925A"},
+      {n:"Glass",p:"¥199",usd:"$29",t:["Glassmorphism","Dark Mode"],url:"https://dylanshi-cloud.github.io/glass-template/",bg:"linear-gradient(135deg,#0F1118,#16213e)",c:"#6366F1"},
+      {n:"Aurora",p:"¥199",usd:"$29",t:["Gradient","Vibrant","Neon"],url:"https://dylanshi-cloud.github.io/aurora-template/",bg:"linear-gradient(135deg,#0B0A1A,#1a0533)",c:"#7C3AED"},
+      {n:"Noir",p:"¥199",usd:"$29",t:["Dark","Gold","Luxury"],url:"https://dylanshi-cloud.github.io/noir-template/",bg:"linear-gradient(135deg,#0A0A0A,#1A1A1A)",c:"#C9A94E"},
+      {n:"Bento",p:"¥199",usd:"$29",t:["Grid","Modular","Portfolio"],url:"https://dylanshi-cloud.github.io/bento-template/",bg:"linear-gradient(135deg,#F5F5F0,#e8e8e0)",c:"#2563EB"},
+      {n:"Cinema",p:"¥199",usd:"$29",t:["Widescreen","Narrative"],url:"https://dylanshi-cloud.github.io/cinema-template/",bg:"linear-gradient(135deg,#0A0A0A,#1A1410)",c:"#D4A853"},
+      {n:"Cyber",p:"¥199",usd:"$29",t:["Tech","Neon","SaaS"],url:"https://dylanshi-cloud.github.io/cyber-template/",bg:"linear-gradient(135deg,#0A0E17,#1E293B)",c:"#22D3EE"},
+      {n:"Ember",p:"¥199",usd:"$29",t:["Warm","Terracotta","Artisan"],url:"https://dylanshi-cloud.github.io/ember-template/",bg:"linear-gradient(135deg,#FCF8F5,#F5EDE8)",c:"#C87A4A"}
     ];
 
-    const list = document.getElementById('showcaseList');
-    T.forEach(t => {
-      const block = document.createElement('div');
-      block.className = 'tblock';
-      block.innerHTML = `
-        <a href="${t.url}" target="_blank" class="tblock__preview" style="background:${t.bg}">
-          <div class="vp ${t.vp}">${previewHTML(t.vp)}</div>
-          <div class="tblock__overlay"><span>View Live Demo</span><small>Click to open in new tab</small></div>
-        </a>
-        <div class="tblock__body">
-          <div class="tblock__row">
-            <span class="tblock__name">${t.n}</span>
-            <span class="tblock__price">${t.price} <small>${t.usd}</small></span>
+    const grid = document.getElementById('galleryGrid');
+    T.forEach((t,i) => {
+      const card = document.createElement('a');
+      card.href = t.url; card.target = '_blank';
+      card.style.cssText = 'opacity:0;transform:translateY(24px);transition:opacity 0.7s var(--ease),transform 0.7s var(--ease),box-shadow 0.3s';
+      card.style.transitionDelay = i * 0.08 + 's';
+      card.className = 'tcard';
+      card.innerHTML = `
+        <div class="tcard__preview" style="background:${t.bg}">
+          <div class="tcard__tags">${t.t.map(s=>'<span>'+s+'</span>').join('')}</div>
+          <span class="tcard__name" style="color:${t.c}">${t.n}</span>
+          <span class="tcard__arrow">↗</span>
+        </div>
+        <div class="tcard__body">
+          <div class="tcard__row">
+            <span class="tcard__row-name">${t.n}</span>
+            <span class="tcard__row-price">${t.p} <small>${t.usd}</small></span>
           </div>
-          <div class="tblock__desc">${t.desc}</div>
-          <div class="tblock__features">${t.feat.map(f=>'<span>'+f+'</span>').join('')}</div>
-          <a href="${t.url}" target="_blank" class="tblock__btn">View Live Demo →</a>
+          <div class="tcard__desc">Click to view the live demo — experience the full design in your browser.</div>
+          <div class="tcard__footer"><a href="${t.url}" target="_blank">View Live Demo</a></div>
         </div>
       `;
-      list.appendChild(block);
+      grid.appendChild(card);
+      setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 100 + i * 80);
     });
 
-    function previewHTML(cls) {
-      const map = {
-        'vp-ethereal':'<div class="vp__inner"><div class="vp__nav"><span>ethereal</span><i><b></b><b></b><b></b></i></div><div class="vp__hero"><h2>Timeless beauty</h2><p>Crafted for those who appreciate the finer details.</p><div>Explore the collection</div></div></div>',
-        'vp-glass':'<div class="vp__inner"><div class="vp__bar"><d style="background:#ff5f57"></d><d style="background:#ffbd2e"></d><d style="background:#28c840"></d><l></l></div><div class="vp__grid"><div>✦</div><div>◆</div><div>◇</div></div></div>',
-        'vp-aurora':'<div class="vp__c"><h3>Aurora</h3><p>Colors that flow like light</p></div>',
-        'vp-noir':'<div class="vp__c"><h3>Noir</h3><p>Luxury lives in the dark</p></div>',
-        'vp-bento':'<div>✦</div><div>01</div><div>02</div><div>03</div>',
-        'vp-cinema':'<div class="vp__c"><h3>Every brand has a story worth <em>telling</em></h3><p>A cinematic html template</p></div>',
-        'vp-cyber':'<div class="vp__c"><dot></dot><h3>Built for the future</h3><p>Dark tech template / SaaS ready</p></div>',
-        'vp-ember':'<div class="vp__c"><h3>Ember</h3><p>Warmth that lingers / artisan collection</p></div>'
+    // === PARTICLES ===
+    (function(){
+      const c = document.getElementById('heroParticles'); if(!c) return;
+      const ctx = c.getContext('2d'); let p = [], a;
+      const r = () => { c.width = c.offsetWidth; c.height = c.offsetHeight; };
+      const i = () => { p = []; for(let i=0;i<Math.min(55,Math.floor(c.width/12));i++) p.push({x:Math.random()*c.width,y:Math.random()*c.height,s:Math.random()*2.5+0.5,vy:-(Math.random()*0.25+0.08),vx:(Math.random()-0.5)*0.15,o:Math.random()*0.35+0.06,g:Math.random()>0.6}); };
+      const d = () => {
+        ctx.clearRect(0,0,c.width,c.height);
+        for(const t of p){t.y+=t.vy;t.x+=t.vx;if(t.y<-10){t.y=c.height+10;t.x=Math.random()*c.width}if(t.x<-10)t.x=c.width+10;if(t.x>c.width+10)t.x=-10;
+          ctx.beginPath();ctx.arc(t.x,t.y,t.s,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${t.o})`;ctx.fill();
+          if(t.g&&t.s>1.2){ctx.beginPath();ctx.arc(t.x,t.y,t.s*4,0,Math.PI*2);ctx.fillStyle=`rgba(200,146,90,${t.o*0.12})`;ctx.fill()}}
+        a=requestAnimationFrame(d);
       };
-      return map[cls]||'';
-    }
+      r();i();d();
+      window.addEventListener('resize',()=>{r();i()});
+      window.addEventListener('beforeunload',()=>cancelAnimationFrame(a));
+    })();
+
+    // NAV SCROLL
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll',()=>{if(window.scrollY>60)nav.classList.add('scrolled');else nav.classList.remove('scrolled')},{passive:true});
   </script>
 </body>
 </html>
