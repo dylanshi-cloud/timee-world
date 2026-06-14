@@ -3,435 +3,197 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Timee — A billion years in the making. A moment of peace in your pocket. Discover crystals for mindfulness and slow living." />
-  <title>Timee — Crystals for the Present Moment</title>
+  <meta name="description" content="Ethereal — Premium HTML templates for conscious brands. Crystal shops, jewelry, wellness, and lifestyle." />
+  <title>Ethereal — Premium Brand Templates</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
   <style>
-    /* Coze chat button - match Timee brand */
-    .coze-web-chat-assistant-button { box-shadow: 0 4px 20px rgba(200,146,90,0.3) !important; }
-    .coze-web-chat-assistant-button:hover { transform: scale(1.05); }
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--bg:#FAF7F2;--bg-alt:#F3EDE4;--bg-dark:#1E1E1E;--text:#2D3436;--text-light:#7A7A7A;--text-muted:#9E9E9E;--accent:#C8925A;--accent-light:#E8D5B7;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
+    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+    body{font-family:var(--sans);font-weight:300;font-size:1rem;line-height:1.75;color:var(--text);background:var(--bg);overflow-x:hidden}
+    .container{width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem)}
+    img{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+    ul{list-style:none}
+    ::selection{background:var(--accent-light);color:var(--text)}
+
+    /* Hero */
+    .hero{position:relative;height:80vh;min-height:500px;display:flex;align-items:center;justify-content:center;color:#fff;overflow:hidden;text-align:center}
+    .hero__bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(200,146,90,0.12) 0%,transparent 70%),radial-gradient(ellipse 60% 80% at 20% 80%,rgba(200,146,90,0.06) 0%,transparent 60%),linear-gradient(135deg,#1E1E1E,#2D3436,#1E1E1E);z-index:0}
+    .hero__content{position:relative;z-index:1}
+    .hero__logo{font-family:var(--serif);font-size:1.2rem;font-style:italic;opacity:0.5;letter-spacing:0.3em;margin-bottom:1.5rem}
+    .hero__logo em{font-style:italic;opacity:0.7}
+    .hero h1{font-family:var(--serif);font-size:clamp(2.2rem,5vw,4rem);font-weight:400;line-height:1.15;margin-bottom:1rem}
+    .hero p{font-size:clamp(1rem,1.3vw,1.2rem);opacity:0.6;max-width:600px;margin:0 auto 2rem}
+    .hero__scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;opacity:0.3}
+
+    /* Section */
+    .section{padding:clamp(3rem,8vw,6rem) 0}
+    .section__title{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.5rem);font-weight:400;text-align:center;margin-bottom:0.8rem}
+    .section__sub{text-align:center;color:var(--text-light);margin-bottom:3rem;max-width:600px;margin-left:auto;margin-right:auto}
+
+    /* Template Grid */
+    .template-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem}
+    .template-card{background:#fff;border:1px solid rgba(0,0,0,0.04);transition:transform 0.5s var(--ease),box-shadow 0.5s var(--ease);overflow:hidden;display:flex;flex-direction:column}
+    .template-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.06)}
+    .template-preview{position:relative;aspect-ratio:16/10;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#fff}
+    .template-preview span{font-size:2rem;opacity:0.5}
+    .template-info{padding:1.5rem;flex:1;display:flex;flex-direction:column}
+    .template-name{font-family:var(--serif);font-size:1.2rem;margin-bottom:0.3rem}
+    .template-desc{font-size:0.85rem;color:var(--text-light);line-height:1.6;margin-bottom:0.8rem;flex:1}
+    .template-tags{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1rem}
+    .tag{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.05em;padding:0.2rem 0.6rem;background:var(--bg-alt);color:var(--text-muted)}
+    .template-links{display:flex;gap:0.8rem}
+    .template-links a{padding:0.5rem 1.2rem;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;transition:all 0.3s}
+    .btn-demo{border:1px solid var(--text);color:var(--text)}
+    .btn-demo:hover{background:var(--text);color:#fff}
+    .btn-buy{background:var(--accent);color:#fff}
+    .btn-buy:hover{background:var(--accent-dark)}
+    .btn-buy--sold{background:var(--text-muted);cursor:default}
+
+    /* Nav */
+    .nav{position:fixed;top:0;left:0;width:100%;z-index:100;padding:1.2rem 0;background:rgba(250,247,242,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0.04)}
+    .nav__inner{display:flex;align-items:center;justify-content:space-between}
+    .nav__logo{font-family:var(--serif);font-size:1.3rem;color:var(--text)}
+
+    /* Footer */
+    .footer{padding:3rem 0;text-align:center;border-top:1px solid rgba(0,0,0,0.04);color:var(--text-muted);font-size:0.85rem}
+
+    /* Responsive */
+    @media(max-width:768px){.template-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-
-  <!-- ==================== NAV ==================== -->
-  <nav class="nav" id="nav">
-    <div class="nav__inner container">
-      <a href="#" class="nav__logo">tim<span class="nav__logo--ee">ee</span></a>
-      <button class="nav__toggle" id="navToggle" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-      <ul class="nav__links" id="navLinks">
-        <li><a href="#story">The Story</a></li>
-        <li><a href="#products">Crystals</a></li>
-        <li><a href="/blog/">Journal</a></li>
-        <li><a href="#philosophy">Philosophy</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="#" class="nav__logo">ether<span style="font-style:italic;opacity:0.7">e</span>al</a>
+      <div style="display:flex;gap:1.5rem;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-light)">
+        <a href="#templates">Templates</a>
+        <a href="https://github.com/dylanshi-cloud/ethereal-template" target="_blank">GitHub</a>
+      </div>
     </div>
   </nav>
 
-  <!-- ==================== HERO ==================== -->
-  <section class="hero" id="hero">
+  <!-- Hero -->
+  <section class="hero">
     <div class="hero__bg"></div>
-    <canvas class="hero__particles" id="heroParticles"></canvas>
-    <div class="hero__content container">
-      <div class="hero__crystal-icon">
-        <svg viewBox="0 0 80 100" width="80" height="100">
-          <polygon points="40,5 75,85 40,70 5,85" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
-          <polygon points="40,15 65,78 40,65 15,78" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.3"/>
-          <line x1="40" y1="5" x2="40" y2="15" stroke="currentColor" stroke-width="1" opacity="0.4"/>
-          <line x1="40" y1="70" x2="40" y2="85" stroke="currentColor" stroke-width="1" opacity="0.4"/>
-        </svg>
-      </div>
-      <h1 class="hero__title">
-        <span class="hero__title--small">Timee</span>
-        <span class="hero__title--large">A billion years<br/>in the making.</span>
-        <span class="hero__title--sub">A moment of peace in your pocket.</span>
-      </h1>
-      <a href="#products" class="btn btn--outline hero__cta">Discover the collection</a>
+    <div class="hero__content">
+      <p class="hero__logo">ether<em>e</em>al</p>
+      <h1>Premium templates<br/>for conscious brands.</h1>
+      <p>Zero-dependency HTML templates for crystal shops, jewelry, wellness, luxury, and lifestyle brands.</p>
+      <a href="#templates" style="display:inline-block;padding:0.9rem 2.5rem;border:1px solid #fff;color:#fff;text-transform:uppercase;letter-spacing:0.08em;font-size:0.8rem;transition:all 0.3s">Browse templates</a>
     </div>
-    <div class="hero__scroll">
-      <span>Scroll</span>
-      <div class="hero__scroll-line"></div>
-    </div>
+    <p class="hero__scroll">↓ Scroll</p>
   </section>
 
-  <!-- ==================== STORY ==================== -->
-  <section class="story" id="story">
+  <!-- Template Gallery -->
+  <section class="section" id="templates">
     <div class="container">
-      <div class="story__grid">
-        <div class="story__visual">
-          <div class="story__shape">
-            <div class="story__shape-inner">
-              <span class="story__bee"><img src="/images/bee-icon.svg" alt="bee" class="bee-desktop" /><span class="bee-mobile">🐝</span></span>
+      <h2 class="section__title">✦ Template Collection</h2>
+      <p class="section__sub">Premium, zero-dependency HTML templates. Each comes with full documentation and 5 color themes.</p>
+
+      <div class="template-grid">
+
+        <!-- 1. Ethereal (Done) -->
+        <div class="template-card">
+          <div class="template-preview" style="background:linear-gradient(135deg,#1E1E1E,#2D3436)"><span>✦</span></div>
+          <div class="template-info">
+            <div class="template-name">Ethereal</div>
+            <div class="template-desc">Warm gold on cream. Canvas particles, scroll reveals, cursor glow. Original ethereal style.</div>
+            <div class="template-tags"><span class="tag">Warm</span><span class="tag">Gold</span><span class="tag">Premium</span><span class="tag">5 Themes</span></div>
+            <div class="template-links">
+              <a href="https://dylanshi-cloud.github.io/ethereal-template/" class="btn-demo" target="_blank">Live Demo</a>
+              <a href="https://github.com/dylanshi-cloud/ethereal-template#-pricing" class="btn-buy" target="_blank">¥299</a>
             </div>
           </div>
         </div>
-        <div class="story__text">
-          <h2 class="section-title">The Timee Story</h2>
-          <p class="story__p">
-            Time is the most precious thing we have. Yet we give it away so easily —
-            to notifications, to noise, to the relentless rush of more.
-          </p>
-          <p class="story__p">
-            At Timee, we believe in <em>slowing down</em>. In finding beauty in the
-            natural world. In surrounding ourselves with objects that carry meaning.
-          </p>
-          <p class="story__p">
-            Inspired by the <strong>bee</strong> — nature's most intentional creator —
-            and the <strong>crystal</strong> — formed over millions of years deep
-            within the earth — Timee brings you small reminders to breathe,
-            to be present, to reconnect with what matters.
-          </p>
-          <div class="story__signature">
-            <span class="story__sig-text">— Timee</span>
-            <span class="story__sig-sub">Slow down. Feel more.</span>
+
+        <!-- 2. Glass (Coming Soon) -->
+        <div class="template-card" style="opacity:0.5">
+          <div class="template-preview" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)"><span>◆</span></div>
+          <div class="template-info">
+            <div class="template-name">Glass</div>
+            <div class="template-desc">Apple-style glassmorphism. Frosted cards, blur overlays, ultra-clean typography.</div>
+            <div class="template-tags"><span class="tag">Glassmorphism</span><span class="tag">Modern</span><span class="tag">Clean</span></div>
+            <div class="template-links">
+              <span class="btn-demo" style="opacity:0.5;cursor:default">Coming Soon</span>
+            </div>
           </div>
         </div>
+
+        <!-- 3. Aurora (Coming Soon) -->
+        <div class="template-card" style="opacity:0.5">
+          <div class="template-preview" style="background:linear-gradient(135deg,#667eea,#764ba2,#f093fb)"><span>~</span></div>
+          <div class="template-info">
+            <div class="template-name">Aurora</div>
+            <div class="template-desc">Flowing gradient landscapes. Vibrant aurora effects, smooth color transitions.</div>
+            <div class="template-tags"><span class="tag">Gradient</span><span class="tag">Vibrant</span><span class="tag">Colorful</span></div>
+            <div class="template-links">
+              <span class="btn-demo" style="opacity:0.5;cursor:default">Coming Soon</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Noir (Coming Soon) -->
+        <div class="template-card" style="opacity:0.5">
+          <div class="template-preview" style="background:linear-gradient(135deg,#0D0D0D,#1A1A1A)"><span>▲</span></div>
+          <div class="template-info">
+            <div class="template-name">Noir</div>
+            <div class="template-desc">Dark luxury with gold accents. Bold typography, premium feel, high contrast.</div>
+            <div class="template-tags"><span class="tag">Dark</span><span class="tag">Luxury</span><span class="tag">Bold</span></div>
+            <div class="template-links">
+              <span class="btn-demo" style="opacity:0.5;cursor:default">Coming Soon</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Bento (Coming Soon) -->
+        <div class="template-card" style="opacity:0.5">
+          <div class="template-preview" style="background:linear-gradient(135deg,#2C3E50,#4CA1AF)"><span>▣</span></div>
+          <div class="template-info">
+            <div class="template-name">Bento</div>
+            <div class="template-desc">Japanese bento-grid layout. Modular cards, asymmetric grid, information-dense.</div>
+            <div class="template-tags"><span class="tag">Grid</span><span class="tag">Modern</span><span class="tag">Clean</span></div>
+            <div class="template-links">
+              <span class="btn-demo" style="opacity:0.5;cursor:default">Coming Soon</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Ember (Coming Soon) -->
+        <div class="template-card" style="opacity:0.5">
+          <div class="template-preview" style="background:linear-gradient(135deg,#2A1E18,#3D2B20)"><span>🔥</span></div>
+          <div class="template-info">
+            <div class="template-name">Ember</div>
+            <div class="template-desc">Warm terracotta for home decor, candles, artisan brands. Cozy and earthy.</div>
+            <div class="template-tags"><span class="tag">Warm</span><span class="tag">Earthy</span><span class="tag">Cozy</span></div>
+            <div class="template-links">
+              <span class="btn-demo" style="opacity:0.5;cursor:default">Coming Soon</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- ==================== PRODUCTS ==================== -->
-  <section class="products" id="products">
+  <!-- CTA -->
+  <section class="section" style="background:var(--bg-alt);text-align:center">
     <div class="container">
-      <div class="products__header">
-        <h2 class="section-title section-title--light">Our First Collection</h2>
-        <p class="products__intro">
-          Three ways to bring a moment of stillness into your day.
-          Hand-selected crystals, thoughtfully packaged.
-        </p>
-      </div>
-
-      <div class="products__grid">
-
-        <!-- Product 1: Pink Crystal Elephant -->
-        <article class="product-card">
-          <div class="product-card__visual">
-            <img src="/images/products/timee_01_product.jpg" alt="Pink Crystal Elephant" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
-          </div>
-          <div class="product-card__body">
-            <span class="product-card__tag product-card__tag--featured">Sold</span>
-            <h3 class="product-card__title">Pink Crystal Elephant</h3>
-            <p class="product-card__desc">
-              A hand-carved pink crystal elephant figurine. Symbol of wisdom, strength, and good fortune. Beautifully polished natural stone.
-              <br/><em style="color:var(--color-accent)">This piece has found its home.</em>
-            </p>
-            <div class="product-card__footer">
-              <span class="product-card__price">$426</span>
-              <span class="btn btn--small" style="border:1px solid var(--color-border);color:var(--color-text-muted);cursor:default;opacity:0.6">Sold</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Product 2: Aquamarine Bracelet -->
-        <article class="product-card product-card--featured">
-          <div class="product-card__visual">
-            <img src="/images/products/timee_02_product.jpg" alt="Aquamarine Bracelet" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
-          </div>
-          <div class="product-card__body">
-            <span class="product-card__tag product-card__tag--featured">Editor's Pick</span>
-            <h3 class="product-card__title">Aquamarine Bracelet</h3>
-            <p class="product-card__desc">
-              Natural aquamarine beads in a calming ocean-blue hue. Known as the stone of courage and clarity. Elastic band, fits most wrists.
-            </p>
-            <div class="product-card__footer">
-              <span class="product-card__price">$420</span>
-              <button class="btn btn--small btn--ghost buy-btn" data-product="aquamarine-bracelet">Buy Now</button>
-            </div>
-          </div>
-        </article>
-
-        <!-- Product 3: Amethyst Geode Mirror -->
-        <article class="product-card">
-          <div class="product-card__visual">
-            <img src="/images/products/timee_03_product.jpg" alt="Amethyst Geode Mirror" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
-          </div>
-          <div class="product-card__body">
-            <span class="product-card__tag">Premium</span>
-            <h3 class="product-card__title">Amethyst Geode Mirror</h3>
-            <p class="product-card__desc">
-              A stunning amethyst geode slice with a mirrored surface. Natural crystal formations on one side, reflective mirror on the other. Unique home decor piece.
-            </p>
-            <div class="product-card__footer">
-              <span class="product-card__price">$624</span>
-              <button class="btn btn--small btn--ghost buy-btn" data-product="geode-mirror">Buy Now</button>
-            </div>
-          </div>
-        </article>
-
-        <!-- Product 4: Amethyst Bracelet -->
-        <article class="product-card">
-          <div class="product-card__visual">
-            <img src="/images/products/timee_04_product.jpg" alt="Amethyst Bracelet" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
-          </div>
-          <div class="product-card__body">
-            <span class="product-card__tag">Bestseller</span>
-            <h3 class="product-card__title">Amethyst Bracelet</h3>
-            <p class="product-card__desc">
-              Classic purple amethyst bead bracelet. Known for its calming energy. Perfect for daily wear or meditation. Stretches comfortably.
-            </p>
-            <div class="product-card__footer">
-              <span class="product-card__price">$350</span>
-              <button class="btn btn--small btn--ghost buy-btn" data-product="amethyst-bracelet">Buy Now</button>
-            </div>
-          </div>
-        </article>
-
-        <!-- Product 5: Pi Xiu Bracelet -->
-        <article class="product-card">
-          <div class="product-card__visual">
-            <img src="/images/products/timee_05_product.jpg" alt="Pi Xiu Bracelet" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
-          </div>
-          <div class="product-card__body">
-            <span class="product-card__tag">Traditional</span>
-            <h3 class="product-card__title">Pi Xiu Bracelet</h3>
-            <p class="product-card__desc">
-              Authentic Pi Xiu crystal bracelet. Ancient Chinese symbol of wealth protection. Each bead carries intricate carving details.
-            </p>
-            <div class="product-card__footer">
-              <span class="product-card__price">$310</span>
-              <button class="btn btn--small btn--ghost buy-btn" data-product="pixiu-bracelet">Buy Now</button>
-            </div>
-          </div>
-        </article>
-
-        <!-- Product 6: Titanium Gold Bangle -->
-        <article class="product-card">
-          <div class="product-card__visual">
-            <img src="/images/products/timee_06_product.jpg" alt="Titanium Gold Bangle" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
-          </div>
-          <div class="product-card__body">
-            <span class="product-card__tag">Luxury</span>
-            <h3 class="product-card__title">Titanium Gold Bangle</h3>
-            <p class="product-card__desc">
-              Premium titanium bangle with gold-plated finish and natural crystal inlay. Lightweight, durable, and elegantly designed.
-            </p>
-            <div class="product-card__footer">
-              <span class="product-card__price">$1,639</span>
-              <button class="btn btn--small btn--ghost buy-btn" data-product="titanium-bangle">Buy Now</button>
-            </div>
-          </div>
-        </article>
-
-      </div>
-
-      <!-- Pre-order / waitlist CTA -->
-      <div class="products__cta">
-        <p>Want to know when we launch?</p>
-        <a href="#contact" class="btn btn--primary">Get notified</a>
-      </div>
+      <h2 class="section__title">✦ Want a custom template?</h2>
+      <p style="color:var(--text-light);margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto">Every template can be customized to your brand. Need something unique? Let's talk.</p>
+      <a href="mailto:dylan_shi@hotmail.com" style="display:inline-block;padding:0.9rem 2.5rem;background:var(--accent);color:#fff;text-transform:uppercase;letter-spacing:0.08em;font-size:0.8rem;transition:background 0.3s">Contact</a>
     </div>
   </section>
 
-  <!-- ==================== PHILOSOPHY ==================== -->
-  <section class="philosophy" id="philosophy">
-    <div class="container">
-      <div class="philosophy__grid">
-        <div class="philosophy__item">
-          <div class="philosophy__icon">
-            <svg viewBox="0 0 48 48" width="48" height="48">
-              <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="1"/>
-              <path d="M24 12v12l8 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <h3 class="philosophy__title">Time</h3>
-          <p class="philosophy__text">
-            Crystals form over millions of years. They remind us that
-            the best things can't be rushed.
-          </p>
-        </div>
-        <div class="philosophy__item">
-          <div class="philosophy__icon">
-            <svg viewBox="0 0 48 48" width="48" height="48">
-              <path d="M24 8C16 8 12 14 12 20c0 8 12 20 12 20s12-12 12-20c0-6-4-12-12-12z" fill="none" stroke="currentColor" stroke-width="1.5"/>
-              <circle cx="24" cy="20" r="4" fill="none" stroke="currentColor" stroke-width="1"/>
-            </svg>
-          </div>
-          <h3 class="philosophy__title">Intention</h3>
-          <p class="philosophy__text">
-            Like the bee building its hive, every object we create
-            serves a purpose — to bring you back to the present.
-          </p>
-        </div>
-        <div class="philosophy__item">
-          <div class="philosophy__icon">
-            <svg viewBox="0 0 48 48" width="48" height="48">
-              <path d="M12 36c0-6 4-10 12-18S36 18 36 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              <path d="M28 36h8v-8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <h3 class="philosophy__title">Connection</h3>
-          <p class="philosophy__text">
-            We believe in small, meaningful rituals — a breath before you begin,
-            a moment of gratitude at the end of the day.
-          </p>
-        </div>
-      </div>
-
-      <div class="philosophy__quote">
-        <blockquote>
-          "Every crystal carries the memory of time.<br/>
-          Every bee builds with purpose.<br/>
-          <strong>Every moment deserves to be felt.</strong>"
-        </blockquote>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== CONTACT / WAITLIST ==================== -->
-  <section class="contact" id="contact">
-    <div class="container">
-      <div class="contact__card">
-        <div class="contact__content">
-          <h2 class="section-title">Stay in Touch</h2>
-          <p class="contact__text">
-            No launch noise. Just a quiet note when we're ready —
-            and occasionally, a story about the natural world.
-          </p>
-          <form class="contact__form" id="waitlistForm">
-            <input
-              type="email"
-              id="emailInput"
-              class="contact__input"
-              placeholder="Your email address"
-              required
-              aria-label="Email address"
-            />
-            <button type="submit" class="btn btn--primary contact__btn">Notify me</button>
-          </form>
-          <p class="contact__privacy">
-            No spam. Unsubscribe anytime.
-          </p>
-          <div class="contact__success" id="successMsg">
-            Thank you! We'll let you know when we launch.
-          </div>
-        </div>
-        <div class="contact__visual">
-          <div class="contact__circle"></div>
-          <span class="contact__emoji"><img src="/images/bee-icon.svg" alt="bee" class="bee-desktop" /><span class="bee-mobile">🐝</span></span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== FOOTER ==================== -->
   <footer class="footer">
-    <div class="container footer__inner">
-      <div class="footer__brand">
-        <a href="#" class="nav__logo">tim<span class="nav__logo--ee">ee</span></a>
-        <p class="footer__tagline">A billion years in the making.<br/>A moment of peace in your pocket.</p>
-      </div>
-      <div class="footer__links">
-        <h4 class="footer__heading">Explore</h4>
-        <ul>
-          <li><a href="#story">The Story</a></li>
-          <li><a href="#products">Crystals</a></li>
-          <li><a href="/blog/">Journal</a></li>
-          <li><a href="#philosophy">Philosophy</a></li>
-        </ul>
-      </div>
-      <div class="footer__social">
-        <h4 class="footer__heading">Connect</h4>
-        <ul>
-          <li><a href="#" target="_blank">Instagram</a></li>
-          <li><a href="#" target="_blank">TikTok</a></li>
-          <li><a href="mailto:dylan_shi@hotmail.com">dylan_shi@hotmail.com</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer__bottom container">
-      <p>&copy; 2026 Timee. All rights reserved.</p>
-      <p class="footer__credit">Made with intention.</p>
+    <div class="container">
+      <p style="font-family:var(--serif);font-size:1.2rem;margin-bottom:0.5rem">ether<span style="font-style:italic;opacity:0.7">e</span>al</p>
+      <p>Premium HTML templates for mindful brands.</p>
+      <p style="margin-top:1rem;font-size:0.75rem">&copy; 2026 Ethereal Templates. Made with intention.</p>
     </div>
   </footer>
-
-  <!-- Product detail modal -->
-  <div class="modal" id="productModal">
-    <div class="modal__overlay"></div>
-    <div class="modal__content">
-      <button class="modal__close" aria-label="Close">&times;</button>
-      <div class="modal__body">
-        <h3 class="modal__title"></h3>
-        <p class="modal__desc"></p>
-        <p class="modal__price"></p>
-        <p class="modal__note">This product is not yet available. Join the waitlist to be notified at launch.</p>
-        <a href="#contact" class="btn btn--primary modal__cta">Join Waitlist</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Cursor glow (desktop only) -->
-  <div class="cursor-glow" id="cursorGlow"></div>
-
-  <script src="js/main.js"></script>
-
-  <!-- Timee Chat Widget -->
-  <style>
-    .twb{position:fixed;bottom:30px;right:30px;z-index:9999;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#C8925A,#A67845);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(200,146,90,0.4);display:flex;align-items:center;justify-content:center;transition:all .3s}
-    .twb:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(200,146,90,0.5)}
-    .twp{position:fixed;bottom:100px;right:30px;z-index:9998;width:380px;height:560px;background:#fff;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,0.12);display:none;flex-direction:column;overflow:hidden}
-    .twp.o{display:flex}
-    .twp .h{background:#2D3436;color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
-    .twp .h h3{font-family:Playfair Display,serif;font-size:16px;margin:0}
-    .twp .h .x{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;opacity:0.6}
-    .twp .h .x:hover{opacity:1}
-    .twm{flex:1;overflow-y:auto;padding:16px;background:#FAF7F2;display:flex;flex-direction:column;gap:10px}
-    .twi{max-width:85%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;font-weight:300;white-space:pre-wrap}
-    .twi.b{align-self:flex-start;background:#fff;border:1px solid #eee;color:#2D3436}
-    .twi.u{align-self:flex-end;background:#C8925A;color:#fff}
-    .twin{padding:12px 16px;border-top:1px solid #eee;display:flex;gap:8px;background:#fff}
-    .twin input{flex:1;padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;outline:none}
-    .twin input:focus{border-color:#C8925A}
-    .twin button{padding:10px 18px;background:#C8925A;color:#fff;border:none;border-radius:8px;cursor:pointer}
-    @media(max-width:480px){.twp{width:calc(100vw-32px);right:16px;bottom:90px;height:60vh}.twb{bottom:20px;right:20px;width:54px;height:54px}}
-  </style>
-
-  <div class="twb" id="twB"><svg viewBox="0 0 100 100" width="32" height="32"><ellipse cx="50" cy="55" rx="16" ry="20" fill="rgba(255,255,255,0.9)"/><rect x="36" y="44" width="28" height="5" rx="2" fill="#2C3E50" opacity=".7"/><rect x="37" y="52" width="26" height="5" rx="2" fill="#2C3E50" opacity=".7"/><rect x="40" y="60" width="20" height="5" rx="2" fill="#2C3E50" opacity=".7"/><circle cx="44" cy="42" r="2.5" fill="#2C3E50"/><circle cx="56" cy="42" r="2.5" fill="#2C3E50"/><ellipse cx="35" cy="32" rx="10" ry="7" fill="rgba(255,255,255,0.4)" transform="rotate(-20,35,32)"/><ellipse cx="65" cy="32" rx="10" ry="7" fill="rgba(255,255,255,0.4)" transform="rotate(20,65,32)"/></svg></div>
-
-  <div class="twp" id="twP">
-    <div class="h"><h3>Timee 🐝</h3><button class="x" id="twX">&times;</button></div>
-    <div class="twm" id="twM"><div class="twi b">Ask me about our crystals! How can I help you today? 💎</div></div>
-    <div class="twin"><input id="twI" placeholder="Ask us anything..." /><button id="twS">Send</button></div>
-  </div>
-
-  <script>
-    (function(){
-      var B=document.getElementById("twB"),P=document.getElementById("twP"),X=document.getElementById("twX"),
-          M=document.getElementById("twM"),I=document.getElementById("twI"),S=document.getElementById("twS"),
-          t='pat_G5n68uZyYkqcWPAsGSHU3Qx7o8hIUFd2gsMHi8lvyWEXhiePwCuN4lZQ8HjMCJVa',b='7650332710011240474',u='u'+Date.now();
-      B.onclick=function(){P.classList.toggle("o")};X.onclick=function(){P.classList.remove("o")};
-      function add(t,r){var d=document.createElement("div");d.className="twi "+r;d.textContent=t;M.appendChild(d);M.scrollTop=M.scrollHeight}
-      function send(){
-        var q=I.value.trim();if(!q)return;I.value="";add(q,"u");
-        var l=add("Typing...","b");
-        fetch("https://api.coze.cn/v3/chat",{method:"POST",headers:{"Authorization":"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify({bot_id:b,user_id:u,query:q,stream:false})})
-        .then(function(r){return r.json()}).then(function(d){
-          var ci=d.data&&d.data.id,cv=d.data&&d.data.conversation_id;
-          if(!ci){l.remove();add("Email dylan_shi@hotmail.com","b");return}
-          function poll(){
-            fetch("https://api.coze.cn/v3/chat/retrieve?chat_id="+ci+"&conversation_id="+cv,{headers:{"Authorization":"Bearer "+t}})
-            .then(function(r){return r.json()}).then(function(s){
-              if(s.data&&(s.data.status=="completed")){
-                fetch("https://api.coze.cn/v3/chat/message/list?conversation_id="+cv+"&chat_id="+ci,{headers:{"Authorization":"Bearer "+t}})
-                .then(function(r){return r.json()}).then(function(md){
-                  l.remove();var list=md.data||[],reply="";
-                  for(var i=0;i<list.length;i++){if(list[i].role=="assistant"){reply=list[i].content;break}}
-                  add(reply||"Thanks!","b")
-                })
-              }else if(s.data&&s.data.status=="failed"){l.remove();add("Email dylan_shi@hotmail.com","b")}
-              else{setTimeout(poll,1500)}
-            })
-          }
-          setTimeout(poll,1500)
-        }).catch(function(){l.remove();add("Email dylan_shi@hotmail.com","b")})
-      }
-      S.onclick=send;I.onkeydown=function(e){if(e.key=="Enter")send()}
-    })();
-  </script>
 </body>
 </html>
