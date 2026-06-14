@@ -9,135 +9,128 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    :root{--bg:#FAF7F2;--bg-alt:#F3EDE4;--text:#2D3436;--text-light:#7A7A7A;--accent:#C8925A;--accent-light:#E8D5B7;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
-    html,body{height:100%}
-    body{font-family:var(--sans);font-weight:300;font-size:1rem;color:var(--text);background:var(--bg);display:flex;flex-direction:column}
+    :root{--bg:#FAF7F2;--bg-alt:#F3EDE4;--text:#2D3436;--text-light:#7A7A7A;--accent:#C8925A;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);font-weight:300;color:var(--text);background:var(--bg)}
+    .container{max-width:1100px;margin:0 auto;padding:0 1.5rem}
     a{text-decoration:none;color:inherit}
 
-    /* TOP BAR */
-    .topbar{display:flex;align-items:center;padding:0.6rem 1rem;background:#fff;border-bottom:1px solid rgba(0,0,0,0.04);gap:0.8rem;flex-shrink:0}
-    .topbar__logo{font-family:var(--serif);font-size:1.1rem;margin-right:auto}
-    .topbar__title{font-size:0.85rem;color:var(--text-light)}
-    .topbar select{padding:0.3rem 0.6rem;font-size:0.8rem;border:1px solid rgba(0,0,0,0.08);border-radius:4px;background:#fff;font-family:var(--sans);outline:none;cursor:pointer}
-    .topbar select:focus{border-color:var(--accent)}
-    .topbar__btn{padding:0.3rem 0.8rem;font-size:0.7rem;letter-spacing:0.05em;text-transform:uppercase;border:1px solid rgba(0,0,0,0.1);border-radius:4px;background:transparent;cursor:pointer;transition:all 0.2s;color:var(--text-light)}
-    .topbar__btn:hover{border-color:var(--accent);color:var(--accent)}
+    .nav{padding:1.2rem 0;border-bottom:1px solid rgba(0,0,0,0.04);background:#fff}
+    .nav__inner{display:flex;align-items:center;justify-content:space-between}
+    .nav__logo{font-family:var(--serif);font-size:1.3rem}
 
-    /* IFRAME */
-    .preview{flex:1;display:flex;flex-direction:column;background:#fff}
-    .preview iframe{width:100%;flex:1;border:none}
-    .preview__placeholder{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-light);gap:1rem;background:linear-gradient(135deg,#FAF7F2,#F3EDE4)}
-    .preview__placeholder p{font-size:0.9rem}
-    .preview__placeholder small{font-size:0.75rem;color:var(--text-muted)}
+    .hero{padding:5rem 0 3rem;text-align:center}
+    .hero h1{font-family:var(--serif);font-size:clamp(2rem,4.5vw,3.5rem);font-weight:400;margin-bottom:0.5rem}
+    .hero p{color:var(--text-light);max-width:400px;margin:0 auto 2rem;font-size:0.9rem}
 
-    /* INTRO OVERLAY on first load */
-    .intro{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#1E1E1E,#2D3436);color:#fff;text-align:center;transition:opacity 0.6s var(--ease)}
-    .intro.hide{opacity:0;pointer-events:none}
-    .intro h1{font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);font-weight:400;margin-bottom:0.5rem}
-    .intro p{opacity:0.5;max-width:400px;margin-bottom:2rem;font-size:0.9rem}
-    .intro__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem;max-width:600px;width:90%}
-    .intro__btn{padding:0.8rem;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);cursor:pointer;transition:all 0.3s;font-size:0.8rem;color:rgba(255,255,255,0.6)}
-    .intro__btn:hover{background:rgba(255,255,255,0.08);border-color:var(--accent);color:#fff}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;padding-bottom:3rem}
+    .card{display:block;background:#fff;border:1px solid rgba(0,0,0,0.04);overflow:hidden;transition:all 0.3s var(--ease);text-decoration:none;color:inherit}
+    .card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.04)}
+    .card__preview{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;position:relative}
+    .card__name{position:absolute;bottom:0.8rem;left:0.8rem;font-family:var(--serif);font-size:0.9rem;color:#fff}
+    .card__arrow{position:absolute;top:0.8rem;right:0.8rem;font-size:1rem;color:rgba(255,255,255,0.5);transition:all 0.3s}
+    .card:hover .card__arrow{color:#fff;transform:translate(2px,-2px)}
+    .card__status{position:absolute;top:0.8rem;left:0.8rem;display:flex;gap:0.2rem}
+    .card__status dot{width:5px;height:5px;border-radius:50%;display:block}
+    .card__label{padding:0.4rem 0.75rem;font-size:0.7rem;letter-spacing:0.03em;border-top:1px solid rgba(0,0,0,0.04);color:var(--text-light);display:flex;align-items:center;justify-content:space-between}
 
-    @media(max-width:768px){.intro__grid{grid-template-columns:repeat(2,1fr)}}
+    .footer{padding:2rem 0;text-align:center;border-top:1px solid rgba(0,0,0,0.04);color:var(--text-muted);font-size:0.75rem}
+
+    @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:500px){.grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <span class="topbar__logo">tim<span style="font-style:italic;opacity:0.7">ee</span></span>
-    <span class="topbar__title" id="currentLabel">Select a template to preview</span>
-    <select id="templateSelect">
-      <option value="">— Choose a template —</option>
-      <option value="https://dylanshi-cloud.github.io/ethereal-template/">Ethereal</option>
-      <option value="https://dylanshi-cloud.github.io/glass-template/">Glass</option>
-      <option value="https://dylanshi-cloud.github.io/aurora-template/">Aurora</option>
-      <option value="https://dylanshi-cloud.github.io/noir-template/">Noir</option>
-      <option value="https://dylanshi-cloud.github.io/bento-template/">Bento</option>
-      <option value="https://dylanshi-cloud.github.io/cinema-template/">Cinema</option>
-      <option value="https://dylanshi-cloud.github.io/cyber-template/">Cyber</option>
-      <option value="https://dylanshi-cloud.github.io/ember-template/">Ember</option>
-    </select>
-    <button class="topbar__btn" id="openBtn" disabled>Open in New Tab</button>
-  </div>
-
-  <!-- PREVIEW AREA -->
-  <div class="preview">
-    <div class="preview__placeholder" id="placeholder">
-      <p style="font-family:var(--serif);font-size:2rem;color:var(--accent-light)">✦</p>
-      <p>Select a template from the dropdown above</p>
-      <small>Or click a template below to preview instantly</small>
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="#" class="nav__logo">tim<span style="font-style:italic;opacity:0.7">ee</span></a>
+      <div style="font-size:0.8rem;color:var(--text-light)">Premium HTML Templates</div>
     </div>
-    <iframe id="previewFrame" style="display:none"></iframe>
-  </div>
+  </nav>
 
-  <!-- INTRO / QUICK PICK -->
-  <div class="intro" id="intro">
-    <h1>✦ Preview templates</h1>
-    <p>Click any template to see it live instantly. No download needed.</p>
-    <div class="intro__grid">
-      <div class="intro__btn" data-url="https://dylanshi-cloud.github.io/ethereal-template/">Ethereal</div>
-      <div class="intro__btn" data-url="https://dylanshi-cloud.github.io/glass-template/">Glass</div>
-      <div class="intro__btn" data-url="https://dylanshi-cloud.github.io/aurora-template/">Aurora</div>
-      <div class="intro__btn" data-url="https://dylanshi-cloud.github.io/noir-template/">Noir</div>
-      <div class="intro__btn" data-url="https://dylanshi-cloud.github.io/bento-template/">Bento</div>
-      <div class="intro__btn" data-url="https://dylanshi-cloud.github.io/cinema-template/">Cinema</div>
-      <div class="intro__btn" data-url="https://dylanshi-cloud.github.io/cyber-template/">Cyber</div>
-      <div class="intro__btn" data-url="https://dylanshi-cloud.github.io/ember-template/">Ember</div>
+  <section class="hero">
+    <div class="container">
+      <h1>✦ Click to view live</h1>
+      <p>8 templates, 8 distinct styles. Click any one to see the full site in a new tab.</p>
     </div>
-  </div>
+  </section>
 
-  <script>
-    const frame = document.getElementById('previewFrame');
-    const placeholder = document.getElementById('placeholder');
-    const select = document.getElementById('templateSelect');
-    const label = document.getElementById('currentLabel');
-    const openBtn = document.getElementById('openBtn');
-    const intro = document.getElementById('intro');
+  <section>
+    <div class="container">
+      <div class="grid">
+        <a href="https://dylanshi-cloud.github.io/ethereal-template/" target="_blank" class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#1E1E1E,#2D3436)">
+            <div class="card__status"><dot style="background:#C8925A"></dot><dot style="background:#C8925A66"></dot><dot style="background:#C8925A33"></dot></div>
+            <span class="card__name">Ethereal</span>
+            <span class="card__arrow">↗</span>
+          </div>
+          <div class="card__label"><span>Warm · Gold · 5 Themes</span><span style="color:var(--accent)">→</span></div>
+        </a>
 
-    const names = {
-      'https://dylanshi-cloud.github.io/ethereal-template/': 'Ethereal',
-      'https://dylanshi-cloud.github.io/glass-template/': 'Glass',
-      'https://dylanshi-cloud.github.io/aurora-template/': 'Aurora',
-      'https://dylanshi-cloud.github.io/noir-template/': 'Noir',
-      'https://dylanshi-cloud.github.io/bento-template/': 'Bento',
-      'https://dylanshi-cloud.github.io/cinema-template/': 'Cinema',
-      'https://dylanshi-cloud.github.io/cyber-template/': 'Cyber',
-      'https://dylanshi-cloud.github.io/ember-template/': 'Ember'
-    };
+        <a href="https://dylanshi-cloud.github.io/glass-template/" target="_blank" class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#0F1118,#16213e)">
+            <span class="card__name">Glass</span>
+            <span class="card__arrow">↗</span>
+          </div>
+          <div class="card__label"><span>Glassmorphism · Dark Mode</span><span style="color:var(--accent)">→</span></div>
+        </a>
 
-    let currentUrl = '';
+        <a href="https://dylanshi-cloud.github.io/aurora-template/" target="_blank" class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#0B0A1A,#1a0533)">
+            <span class="card__name">Aurora</span>
+            <span class="card__arrow">↗</span>
+          </div>
+          <div class="card__label"><span>Gradient · Vibrant · Neon</span><span style="color:var(--accent)">→</span></div>
+        </a>
 
-    function loadPreview(url) {
-      if (!url) return;
-      currentUrl = url;
-      const name = names[url] || 'Template';
-      label.textContent = name;
-      placeholder.style.display = 'none';
-      frame.style.display = 'block';
-      frame.src = url;
-      openBtn.disabled = false;
-      select.value = url;
-      intro.classList.add('hide');
-    }
+        <a href="https://dylanshi-cloud.github.io/noir-template/" target="_blank" class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#0A0A0A,#1A1A1A)">
+            <span class="card__name">Noir</span>
+            <span class="card__arrow">↗</span>
+          </div>
+          <div class="card__label"><span>Dark · Gold · Luxury</span><span style="color:var(--accent)">→</span></div>
+        </a>
 
-    // Dropdown change
-    select.addEventListener('change', function() {
-      if (this.value) loadPreview(this.value);
-    });
+        <a href="https://dylanshi-cloud.github.io/bento-template/" target="_blank" class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#F5F5F0,#e8e8e0)">
+            <span class="card__name" style="color:#2D3436">Bento</span>
+            <span class="card__arrow" style="color:rgba(0,0,0,0.3)">↗</span>
+          </div>
+          <div class="card__label"><span>Grid · Modular · Portfolio</span><span style="color:var(--accent)">→</span></div>
+        </a>
 
-    // Intro buttons
-    document.querySelectorAll('.intro__btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        loadPreview(this.dataset.url);
-      });
-    });
+        <a href="https://dylanshi-cloud.github.io/cinema-template/" target="_blank" class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#0A0A0A,#1A1410)">
+            <span class="card__name">Cinema</span>
+            <span class="card__arrow">↗</span>
+          </div>
+          <div class="card__label"><span>Widescreen · Narrative · Dark</span><span style="color:var(--accent)">→</span></div>
+        </a>
 
-    // Open in new tab
-    openBtn.addEventListener('click', function() {
-      if (currentUrl) window.open(currentUrl, '_blank');
-    });
-  </script>
+        <a href="https://dylanshi-cloud.github.io/cyber-template/" target="_blank" class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#0A0E17,#1E293B)">
+            <span class="card__name">Cyber</span>
+            <span class="card__arrow">↗</span>
+          </div>
+          <div class="card__label"><span>Tech · Neon · SaaS</span><span style="color:var(--accent)">→</span></div>
+        </a>
+
+        <a href="https://dylanshi-cloud.github.io/ember-template/" target="_blank" class="card">
+          <div class="card__preview" style="background:linear-gradient(135deg,#FCF8F5,#F5EDE8)">
+            <span class="card__name" style="color:#3D2B20">Ember</span>
+            <span class="card__arrow" style="color:rgba(0,0,0,0.3)">↗</span>
+          </div>
+          <div class="card__label"><span>Warm · Terracotta · Artisan</span><span style="color:var(--accent)">→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p style="font-family:var(--serif);font-size:1.1rem">tim<span style="font-style:italic;opacity:0.7">ee</span></p>
+      <p style="margin-top:0.2rem">Premium HTML templates. Click to preview.</p>
+    </div>
+  </footer>
 </body>
 </html>
