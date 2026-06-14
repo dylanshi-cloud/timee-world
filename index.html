@@ -3,309 +3,257 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Timee — Premium HTML templates. Preview live demos instantly." />
   <title>Timee — Premium HTML Templates</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&family=Satoshi:wght@400;500;700&family=Work+Sans:wght@300;400;500;600&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    :root{--bg:#FAF7F2;--bg-alt:#F3EDE4;--bg-dark:#1E1E1E;--text:#2D3436;--text-light:#7A7A7A;--text-muted:#9E9E9E;--accent:#C8925A;--accent-light:#E8D5B7;--accent-dark:#A67845;--border:rgba(45,52,54,0.06);--serif:'Playfair Display',Georgia,serif;--sans:'Inter',-apple-system,sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
-    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-    body{font-family:var(--sans);font-weight:300;font-size:1rem;line-height:1.7;color:var(--text);background:var(--bg);overflow-x:hidden}
-    .container{width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem)}
-    a{color:inherit;text-decoration:none}
-    ul{list-style:none}
-    ::selection{background:var(--accent-light);color:var(--text)}
-
-    .nav{position:fixed;top:0;left:0;width:100%;z-index:100;padding:1.2rem 0;background:rgba(250,247,242,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
-    .nav__inner{display:flex;align-items:center;justify-content:space-between}
-    .nav__logo{font-family:var(--serif);font-size:1.4rem;color:var(--text)}
-    .nav__links{display:flex;gap:2rem;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase}
-    .nav__links a{color:var(--text-light);transition:color 0.3s}
-    .nav__links a:hover{color:var(--text)}
-
-    .hero{position:relative;min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;color:#fff}
-    .hero__bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(200,146,90,0.12),transparent),radial-gradient(ellipse 60% 80% at 20% 80%,rgba(200,146,90,0.06),transparent),linear-gradient(135deg,#1E1E1E,#2D3436,#1E1E1E);z-index:0}
-    .hero__content{position:relative;z-index:1;padding:6rem 0}
-    .hero h1{font-family:var(--serif);font-size:clamp(2.2rem,5vw,4rem);font-weight:400;line-height:1.1;margin-bottom:1rem}
-    .hero h1 em{font-style:italic;opacity:0.7}
-    .hero p{font-size:clamp(0.95rem,1.2vw,1.1rem);opacity:0.55;max-width:480px;margin:0 auto 2rem}
-    .btn{display:inline-block;padding:0.85rem 2.2rem;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.4s var(--ease);cursor:pointer;text-decoration:none;border:none}
-    .btn--outline{border:1px solid rgba(255,255,255,0.3);color:#fff;background:transparent}
-    .btn--outline:hover{background:#fff;color:var(--bg-dark)}
+    :root{--bg:#FAF7F2;--bg-alt:#F3EDE4;--bg-dark:#1E1E1E;--text:#2D3436;--text-light:#7A7A7A;--accent:#C8925A;--accent-light:#E8D5B7;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);font-weight:300;font-size:1rem;color:var(--text);background:var(--bg)}
+    .container{max-width:1100px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem)}
+    a{text-decoration:none;color:inherit}
+    .btn{display:inline-block;padding:0.75rem 2rem;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;border:none;transition:all 0.3s var(--ease)}
     .btn--primary{background:var(--accent);color:#fff}
     .btn--primary:hover{background:var(--accent-dark)}
-    .btn--small{padding:0.45rem 1rem;font-size:0.7rem}
+    .btn--outline{border:1px solid var(--text);color:var(--text);background:transparent}
+    .btn--outline:hover{background:var(--text);color:#fff}
 
-    section{padding:clamp(3rem,6vw,5rem) 0}
-    .section-title{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.2rem);font-weight:400;text-align:center;margin-bottom:0.5rem}
-    .section-sub{text-align:center;color:var(--text-light);max-width:500px;margin:0 auto 2.5rem;font-size:0.9rem}
+    .nav{position:fixed;top:0;left:0;width:100%;z-index:100;padding:1.2rem 0;background:rgba(250,247,242,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0.04)}
+    .nav__inner{display:flex;align-items:center;justify-content:space-between}
+    .nav__logo{font-family:var(--serif);font-size:1.4rem}
 
-    /* ===== TEMPLATE GRID ===== */
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:1.5rem}
+    .hero{min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;position:relative;overflow:hidden}
+    .hero__bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(200,146,90,0.12),transparent),radial-gradient(ellipse 60% 80% at 20% 80%,rgba(200,146,90,0.06),transparent),linear-gradient(135deg,#1E1E1E,#2D3436,#1E1E1E);z-index:0}
+    .hero__content{position:relative;z-index:1;padding:5rem 0}
+    .hero h1{font-family:var(--serif);font-size:clamp(2rem,4.5vw,3.5rem);font-weight:400;line-height:1.1;margin-bottom:0.8rem}
+    .hero p{opacity:0.5;max-width:420px;margin:0 auto 1.5rem;font-size:0.95rem}
 
-    .card{background:#fff;border:1px solid rgba(0,0,0,0.04);overflow:hidden;display:flex;flex-direction:column}
-    .card__preview{position:relative;aspect-ratio:16/9.5;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s}
-    .card__preview:hover .card__overlay{opacity:1}
+    section{padding:clamp(3rem,5vw,4rem) 0}
 
-    .card__overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s;backdrop-filter:blur(2px);z-index:2}
-    .card__overlay span{color:#fff;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.3);padding:0.6rem 1.5rem}
-    .card__preview:hover .card__overlay span:hover{background:#fff;color:#000}
+    /* ===== TEMPLATES ===== */
+    .section-title{font-family:var(--serif);font-size:clamp(1.5rem,2.5vw,2rem);font-weight:400;margin-bottom:2rem;text-align:center}
 
-    .card__tag{position:absolute;top:0.8rem;left:0.8rem;padding:0.2rem 0.6rem;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.06em;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);color:rgba(255,255,255,0.8);border-radius:3px;z-index:1}
+    .templates{display:flex;flex-direction:column;gap:2.5rem}
 
-    .card__body{padding:1.2rem 1.5rem 1.5rem;flex:1;display:flex;flex-direction:column}
-    .card__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.4rem}
-    .card__name{font-family:var(--serif);font-size:1.15rem}
-    .card__price{font-family:var(--serif);font-size:1rem;color:var(--accent)}
-    .card__price small{font-size:0.7rem;color:var(--text-muted);font-family:var(--sans)}
-    .card__desc{font-size:0.8rem;color:var(--text-light);line-height:1.6;margin-bottom:0.8rem;flex:1}
-    .card__tags{display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:0.8rem}
-    .card__tags span{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.05em;padding:0.2rem 0.5rem;background:var(--bg);color:var(--text-muted);border-radius:2px;border:1px solid var(--border)}
-    .card__footer{display:flex;gap:0.5rem}
-    .card__footer .btn--outline{border-color:var(--border);color:var(--text-light);flex:1;text-align:center}
-    .card__footer .btn--outline:hover{border-color:var(--text);color:var(--text)}
-    .card__footer .btn--primary{flex:1;text-align:center}
+    .template{display:grid;grid-template-columns:1.2fr 1fr;gap:2.5rem;background:#fff;border:1px solid rgba(0,0,0,0.04);overflow:hidden;transition:all 0.4s var(--ease)}
+    .template:hover{box-shadow:0 12px 40px rgba(0,0,0,0.04)}
+    .template__preview{position:relative;aspect-ratio:4/3;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .template__preview:hover .template__live{opacity:1}
+    .template__live{position:absolute;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s;backdrop-filter:blur(2px);color:#fff;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase}
+    .template__info{padding:2rem 2rem 2rem 0;display:flex;flex-direction:column;justify-content:center}
+    .template__name{font-family:var(--serif);font-size:1.5rem;margin-bottom:0.3rem}
+    .template__price{font-family:var(--serif);font-size:1.1rem;color:var(--accent);margin-bottom:0.8rem}
+    .template__price small{font-size:0.75rem;color:var(--text-muted);font-family:var(--sans)}
+    .template__desc{font-size:0.85rem;color:var(--text-light);line-height:1.7;margin-bottom:0.8rem}
+    .template__tags{display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:1rem}
+    .template__tags span{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.05em;padding:0.2rem 0.5rem;background:var(--bg);color:var(--text-muted);border:1px solid rgba(0,0,0,0.04)}
+    .template__actions{display:flex;gap:0.6rem}
+    .template__actions .btn{padding:0.5rem 1.5rem;font-size:0.75rem}
 
-    /* ===== MINI LAYOUT PREVIEWS ===== */
-    .ml{width:100%;height:100%;display:flex;flex-direction:column;padding:clamp(4px,1vw,12px);gap:clamp(2px,0.5vw,6px)}
-    .ml__nav{height:clamp(6px,1.2vw,16px);border-radius:2px;flex-shrink:0;display:flex;align-items:center;padding:0 clamp(4px,0.8vw,10px);gap:clamp(2px,0.4vw,6px)}
-    .ml__nav-dot{width:clamp(2px,0.4vw,5px);height:clamp(2px,0.4vw,5px);border-radius:50%}
-    .ml__nav-lines{height:2px;border-radius:1px;flex:1;max-width:clamp(20px,4vw,50px)}
-    .ml__hero{flex:1;border-radius:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(1px,0.3vw,4px);padding:clamp(2px,0.5vw,8px)}
-    .ml__hero-line{height:clamp(2px,0.4vw,5px);border-radius:2px}
-    .ml__hero-block{height:clamp(4px,0.7vw,10px);width:clamp(15px,3vw,40px);border-radius:2px}
-    .ml__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1px,0.2vw,4px);margin-top:auto}
-    .ml__grid-item{aspect-ratio:1;border-radius:2px}
+    /* ===== DESIGN SNIPPET - shows actual template style ===== */
+    .ds{width:100%;height:100%;display:flex;flex-direction:column}
+    .ds__preview{flex:1;padding:clamp(12px,2vw,24px);display:flex;flex-direction:column;gap:clamp(4px,0.6vw,10px)}
+    /* Ethereal */
+    .ds-ethereal{background:#1E1E1E}
+    .ds-ethereal .ds__nav{display:flex;justify-content:space-between;margin-bottom:clamp(6px,1vw,14px)}
+    .ds-ethereal .ds__nav span{font-family:'Playfair Display',serif;color:#C8925A;font-size:clamp(8px,1.2vw,16px)}
+    .ds-ethereal .ds__nav div{display:flex;gap:clamp(6px,1vw,14px)}
+    .ds-ethereal .ds__nav div i{width:clamp(20px,3vw,50px);height:2px;background:rgba(255,255,255,0.15);display:block;margin-top:clamp(6px,0.8vw,12px)}
+    .ds-ethereal .ds__hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(3px,0.5vw,8px)}
+    .ds-ethereal .ds__hero h2{font-family:'Playfair Display',serif;color:#fff;font-size:clamp(10px,1.5vw,22px);font-weight:400;line-height:1.2}
+    .ds-ethereal .ds__hero p{font-size:clamp(6px,0.8vw,11px);color:rgba(255,255,255,0.3)}
+    .ds-ethereal .ds__hero span{display:inline-block;border:1px solid rgba(255,255,255,0.2);padding:clamp(2px,0.3vw,6px) clamp(6px,0.8vw,14px);font-size:clamp(5px,0.6vw,9px);color:rgba(255,255,255,0.4);letter-spacing:0.05em}
 
-    /* ===== QUICK PREVIEW MODAL ===== */
-    .modal{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+    /* Glass */
+    .ds-glass{background:linear-gradient(135deg,#0F1118,#1a1d2e)}
+    .ds-glass .ds__nav{height:clamp(10px,1.5vw,22px);background:rgba(255,255,255,0.04);backdrop-filter:blur(4px);border-radius:4px;margin-bottom:clamp(4px,0.6vw,10px);display:flex;align-items:center;padding:0 clamp(6px,0.8vw,14px);gap:clamp(4px,0.5vw,8px)}
+    .ds-glass .ds__nav dot{width:clamp(4px,0.5vw,8px);height:clamp(4px,0.5vw,8px);border-radius:50%;display:block}
+    .ds-glass .ds__nav bar{height:2px;background:rgba(255,255,255,0.06);flex:1;border-radius:2px}
+    .ds-glass .ds__hero{flex:1;display:flex;align-items:center;justify-content:center;gap:clamp(4px,0.6vw,10px)}
+    .ds-glass .ds__card{background:rgba(255,255,255,0.04);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.06);border-radius:clamp(4px,0.6vw,10px);padding:clamp(6px,0.8vw,14px);flex:1;height:80%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .ds-glass .ds__card span{font-size:clamp(6px,0.8vw,12px);color:rgba(255,255,255,0.3)}
+    .ds-glass .ds__card b{width:clamp(20px,3vw,50px);height:clamp(3px,0.4vw,6px);background:rgba(99,102,241,0.3);border-radius:2px;margin-top:clamp(3px,0.3vw,6px)}
+
+    /* Aurora */
+    .ds-aurora{background:#0B0A1A;position:relative;overflow:hidden}
+    .ds-aurora::before{content:'';position:absolute;width:200%;height:200%;top:-50%;left:-50%;background:conic-gradient(from 0deg,#7C3AED,#EC4899,#06B6D4,#7C3AED);animation:spin 8s linear infinite;opacity:0.12}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .ds-aurora .ds__inner{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .ds-aurora .ds__inner h3{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(10px,1.4vw,20px);background:linear-gradient(135deg,#7C3AED,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .ds-aurora .ds__inner p{font-size:clamp(5px,0.6vw,10px);color:rgba(255,255,255,0.3);margin-top:clamp(2px,0.3vw,5px)}
+
+    /* Noir */
+    .ds-noir{background:#0A0A0A;position:relative}
+    .ds-noir::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(201,169,78,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,169,78,0.04) 1px,transparent 1px);background-size:clamp(8px,1.2vw,20px) clamp(8px,1.2vw,20px)}
+    .ds-noir .ds__inner{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .ds-noir .ds__inner h3{font-family:'DM Serif Display',serif;font-size:clamp(12px,1.6vw,24px);font-style:italic;color:#C9A94E;font-weight:400}
+    .ds-noir .ds__inner p{font-size:clamp(5px,0.6vw,10px);color:rgba(255,255,255,0.2);letter-spacing:0.15em;text-transform:uppercase}
+
+    /* Bento */
+    .ds-bento{background:#F5F5F0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:clamp(2px,0.3vw,6px);padding:clamp(6px,0.8vw,14px)}
+    .ds-bento div{background:#fff;border-radius:clamp(3px,0.4vw,8px);display:flex;align-items:center;justify-content:center;font-size:clamp(5px,0.6vw,10px);color:#2563EB;border:1px solid rgba(37,99,235,0.06)}
+    .ds-bento div:nth-child(1){grid-column:span 2;grid-row:span 2}
+    .ds-bento div span{font-size:clamp(7px,1vw,16px);font-weight:700;font-family:'Satoshi',sans-serif}
+
+    /* Cinema */
+    .ds-cinema{background:#0A0A0A;position:relative;display:flex;align-items:center;justify-content:center}
+    .ds-cinema::before,.ds-cinema::after{content:'';position:absolute;left:0;right:0;height:clamp(4px,0.6vw,10px);background:#000;z-index:1}
+    .ds-cinema::before{top:0}
+    .ds-cinema::after{bottom:0}
+    .ds-cinema .ds__inner{text-align:center}
+    .ds-cinema .ds__inner h3{font-family:'Work Sans',sans-serif;font-weight:300;font-size:clamp(10px,1.3vw,18px);color:#fff;letter-spacing:0.02em}
+    .ds-cinema .ds__inner em{color:#D4A853;font-style:normal}
+    .ds-cinema .ds__inner p{font-size:clamp(4px,0.5vw,8px);color:rgba(255,255,255,0.2);margin-top:clamp(2px,0.3vw,5px);letter-spacing:0.2em;text-transform:uppercase}
+
+    /* Cyber */
+    .ds-cyber{background:#0A0E17;position:relative;display:flex;align-items:center;justify-content:center}
+    .ds-cyber::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(34,211,238,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,0.03) 1px,transparent 1px);background-size:clamp(6px,0.8vw,14px) clamp(6px,0.8vw,14px)}
+    .ds-cyber .ds__inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:clamp(2px,0.3vw,5px)}
+    .ds-cyber .ds__inner dot{width:clamp(4px,0.5vw,8px);height:clamp(4px,0.5vw,8px);border-radius:50%;background:#22D3EE;animation:pulse 1.2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+    .ds-cyber .ds__inner h3{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(9px,1.2vw,18px);background:linear-gradient(135deg,#22D3EE,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .ds-cyber .ds__inner p{font-size:clamp(4px,0.5vw,8px);color:rgba(255,255,255,0.2)}
+
+    /* Ember */
+    .ds-ember{background:#FCF8F5;display:flex;align-items:center;justify-content:center}
+    .ds-ember .ds__inner{text-align:center}
+    .ds-ember .ds__inner h3{font-family:'Fraunces',Georgia,serif;font-size:clamp(10px,1.3vw,20px);font-weight:300;color:#C87A4A}
+    .ds-ember .ds__inner p{font-size:clamp(5px,0.6vw,9px);color:rgba(0,0,0,0.15);letter-spacing:0.1em;text-transform:uppercase;margin-top:clamp(2px,0.3vw,5px)}
+
+    /* ===== MODAL ===== */
+    .modal{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.85)}
     .modal.open{display:block}
-    .modal__inner{width:100%;height:100%;display:flex;flex-direction:column}
-    .modal__bar{display:flex;align-items:center;justify-content:space-between;padding:0.8rem 1.5rem;color:#fff}
-    .modal__bar-title{font-size:0.85rem;letter-spacing:0.05em}
-    .modal__bar a{font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.6);transition:color 0.3s}
+    .modal__bar{display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1.5rem;color:#fff}
+    .modal__bar span{font-size:0.8rem}
+    .modal__bar a{font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.5)}
     .modal__bar a:hover{color:#fff}
-    .modal__close{background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;opacity:0.6;transition:opacity 0.3s}
-    .modal__close:hover{opacity:1}
-    .modal__iframe{flex:1;width:100%;border:none;background:#fff}
-    .modal__loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);font-size:0.85rem;z-index:-1}
+    .modal__close{background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
+    .modal__iframe{width:100%;height:calc(100vh - 50px);border:none;background:#fff}
 
-    /* ===== SPECIAL ===== */
-    .special{background:var(--bg-dark);color:#fff;text-align:center}
-    .special p{color:rgba(255,255,255,0.5);max-width:480px;margin:0.5rem auto 1.5rem;font-size:0.9rem}
-    .special .btn--outline{border-color:var(--accent);color:var(--accent)}
-    .special .btn--outline:hover{background:var(--accent);color:#fff}
+    .footer{padding:2.5rem 0;text-align:center;border-top:1px solid rgba(0,0,0,0.04);color:var(--text-muted);font-size:0.8rem}
 
-    .footer{padding:3rem 0;text-align:center;border-top:1px solid var(--border);color:var(--text-muted);font-size:0.85rem}
-
-    @media(max-width:768px){.grid{grid-template-columns:1fr}.modal__iframe{height:calc(100vh - 50px)}}
+    @media(max-width:768px){
+      .template{grid-template-columns:1fr}
+      .template__info{padding:1.5rem}
+      .template__preview{aspect-ratio:16/9}
+    }
   </style>
 </head>
 <body>
   <nav class="nav">
     <div class="container nav__inner">
       <a href="#" class="nav__logo">tim<span style="font-style:italic;opacity:0.7">ee</span></a>
-      <ul class="nav__links"><li><a href="#grid">Templates</a></li><li><a href="mailto:dylan_shi@hotmail.com">Contact</a></li></ul>
     </div>
   </nav>
 
   <section class="hero">
     <div class="hero__bg"></div>
     <div class="hero__content container">
-      <h1>Premium templates.<br/>See them <em>live.</em></h1>
-      <p>Click any template to preview it live — no download required. What you see is what you get.</p>
-      <a href="#grid" class="btn btn--outline">Browse 8 Templates</a>
+      <h1>Premium HTML templates.<br/>See them in action.</h1>
+      <p>Each template below shows a live preview. Click "Preview Live" to see the full site.</p>
+      <a href="#templates" class="btn btn--outline">Browse Collection</a>
     </div>
   </section>
 
-  <section id="grid">
+  <section id="templates">
     <div class="container">
-      <h2 class="section-title">✦ The Collection</h2>
-      <p class="section-sub">Click "Quick Preview" to see each template live. Hover over the preview for a closer look.</p>
-      <div class="grid" id="templateGrid"></div>
-    </div>
-  </section>
-
-  <section class="special">
-    <div class="container">
-      <h2 style="font-family:var(--serif);font-size:clamp(1.4rem,2.5vw,2rem);font-weight:400">Zero dependencies. Pure craftsmanship.</h2>
-      <p>Every template is hand-coded HTML + CSS + JS. No React, no build tools — just clean code that deploys anywhere in under a minute.</p>
-      <a href="mailto:dylan_shi@hotmail.com" class="btn btn--outline">Questions? Contact us</a>
+      <h2 class="section-title">✦ 8 templates, 8 distinct styles</h2>
+      <div class="templates" id="templateList"></div>
     </div>
   </section>
 
   <footer class="footer">
     <div class="container">
       <p style="font-family:var(--serif);font-size:1.2rem">tim<span style="font-style:italic;opacity:0.7">ee</span></p>
-      <p style="margin-top:0.2rem;font-size:0.8rem">Premium HTML templates.</p>
-      <p style="margin-top:1rem;font-size:0.7rem">&copy; 2026 Timee</p>
+      <p style="margin-top:0.2rem">Premium HTML templates. Zero dependencies.</p>
     </div>
   </footer>
 
-  <!-- Preview Modal -->
   <div class="modal" id="previewModal">
-    <div class="modal__inner">
-      <div class="modal__bar">
-        <span class="modal__bar-title" id="modalTitle">Preview</span>
-        <div style="display:flex;align-items:center;gap:1rem">
-          <a href="#" id="modalOpenLive" target="_blank">Open Live →</a>
-          <button class="modal__close" id="modalClose">&times;</button>
-        </div>
+    <div class="modal__bar">
+      <span id="modalTitle">Preview</span>
+      <div style="display:flex;gap:1rem;align-items:center">
+        <a href="#" id="modalOpen" target="_blank">Open in new tab →</a>
+        <button class="modal__close" id="modalClose">&times;</button>
       </div>
-      <div class="modal__loading" id="modalLoading">Loading preview...</div>
-      <iframe class="modal__iframe" id="modalIframe" sandbox="allow-scripts allow-same-origin"></iframe>
     </div>
+    <iframe class="modal__iframe" id="modalIframe" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
   </div>
 
   <script>
-    // ===== TEMPLATE DATA =====
-    const templates = [
-      {
-        name: "Ethereal", price: "¥299", usd: "$39",
-        desc: "Warm gold on cream. Canvas particles, scroll reveals, cursor glow, and 5 complete color themes built in.",
-        tags: ["Warm", "Gold", "Particles", "5 Themes"],
-        demo: "https://dylanshi-cloud.github.io/ethereal-template/",
-        buy: "https://github.com/dylanshi-cloud/ethereal-template#-pricing",
-        style: { bg: "#1E1E1E", accent: "#C8925A", navBg: "#1a1a1a", cardBg: "#2D3436" }
-      },
-      {
-        name: "Glass", price: "¥199", usd: "$29",
-        desc: "Apple-inspired glassmorphism. Frosted backdrop-filter cards, fluid gradients, floating glass orbs, built-in dark mode.",
-        tags: ["Glassmorphism", "Frosted", "Dark Mode", "Modern"],
-        demo: "https://dylanshi-cloud.github.io/glass-template/",
-        buy: "https://github.com/dylanshi-cloud/glass-template#-pricing",
-        style: { bg: "#0F1118", accent: "#6366F1", navBg: "#1a1d2e", cardBg: "#16213e" }
-      },
-      {
-        name: "Aurora", price: "¥199", usd: "$29",
-        desc: "Flowing conic aurora gradients on a dark canvas. Purple-to-pink-to-cyan palette for creative and bold brands.",
-        tags: ["Gradient", "Dark", "Vibrant", "Neon"],
-        demo: "https://dylanshi-cloud.github.io/aurora-template/",
-        buy: "https://github.com/dylanshi-cloud/aurora-template#-pricing",
-        style: { bg: "#0B0A1A", accent: "#7C3AED", navBg: "#1a0533", cardBg: "#2d1b69" }
-      },
-      {
-        name: "Noir", price: "¥199", usd: "$29",
-        desc: "Dark luxury with warm gold accents. Architectural grid background, serif typography, high-contrast editorial elegance.",
-        tags: ["Dark", "Gold", "Luxury", "Editorial"],
-        demo: "https://dylanshi-cloud.github.io/noir-template/",
-        buy: "https://github.com/dylanshi-cloud/noir-template#-pricing",
-        style: { bg: "#0A0A0A", accent: "#C9A94E", navBg: "#111111", cardBg: "#1A1A1A" }
-      },
-      {
-        name: "Bento", price: "¥199", usd: "$29",
-        desc: "Japanese bento-grid layout with modular asymmetric cards. Information-dense, clean, perfect for portfolios and SaaS dashboards.",
-        tags: ["Grid", "Modular", "Portfolio", "Clean"],
-        demo: "https://dylanshi-cloud.github.io/bento-template/",
-        buy: "https://github.com/dylanshi-cloud/bento-template#-pricing",
-        style: { bg: "#F5F5F0", accent: "#2563EB", navBg: "#e8e8e0", cardBg: "#FFFFFF" }
-      },
-      {
-        name: "Cinema", price: "¥199", usd: "$29",
-        desc: "Cinematic widescreen storytelling with letterbox bars. Narrative scroll, warm golden hour lighting, chapter-based sections.",
-        tags: ["Cinematic", "Narrative", "Dark", "Widescreen"],
-        demo: "https://dylanshi-cloud.github.io/cinema-template/",
-        buy: "https://github.com/dylanshi-cloud/cinema-template#-pricing",
-        style: { bg: "#0A0A0A", accent: "#D4A853", navBg: "#1A1410", cardBg: "#1A1A1A" }
-      },
-      {
-        name: "Cyber", price: "¥199", usd: "$29",
-        desc: "Dark tech with neon cyan accents. Grid overlay, glowing stat counters, SaaS-ready aesthetic for startups and digital products.",
-        tags: ["Tech", "Neon", "SaaS", "Dark"],
-        demo: "https://dylanshi-cloud.github.io/cyber-template/",
-        buy: "https://github.com/dylanshi-cloud/cyber-template#-pricing",
-        style: { bg: "#0A0E17", accent: "#22D3EE", navBg: "#0F172A", cardBg: "#1E293B" }
-      },
-      {
-        name: "Ember", price: "¥199", usd: "$29",
-        desc: "Warm terracotta for artisan and home decor brands. Product catalog grid, story section, organic earthy palette throughout.",
-        tags: ["Warm", "Terracotta", "Artisan", "Product"],
-        demo: "https://dylanshi-cloud.github.io/ember-template/",
-        buy: "https://github.com/dylanshi-cloud/ember-template#-pricing",
-        style: { bg: "#FCF8F5", accent: "#C87A4A", navBg: "#F5EDE8", cardBg: "#FFFFFF" }
-      }
+    const data = [
+      { name:"Ethereal", price:"¥299", usd:"$39", cls:"ds-ethereal", demo:"https://dylanshi-cloud.github.io/ethereal-template/", buy:"https://github.com/dylanshi-cloud/ethereal-template#-pricing", desc:"Warm gold on dark. Canvas particles, scroll reveals, cursor glow, and 5 complete color themes.", tags:["Warm","Gold","Particles","5 Themes"] },
+      { name:"Glass", price:"¥199", usd:"$29", cls:"ds-glass", demo:"https://dylanshi-cloud.github.io/glass-template/", buy:"https://github.com/dylanshi-cloud/glass-template#-pricing", desc:"Apple-style glassmorphism. Frosted cards, fluid gradients, floating orbs, built-in dark mode.", tags:["Glassmorphism","Frosted","Dark Mode"] },
+      { name:"Aurora", price:"¥199", usd:"$29", cls:"ds-aurora", demo:"https://dylanshi-cloud.github.io/aurora-template/", buy:"https://github.com/dylanshi-cloud/aurora-template#-pricing", desc:"Flowing aurora gradients on a dark canvas. Purple-to-pink-to-cyan for creative brands.", tags:["Gradient","Dark","Vibrant","Neon"] },
+      { name:"Noir", price:"¥199", usd:"$29", cls:"ds-noir", demo:"https://dylanshi-cloud.github.io/noir-template/", buy:"https://github.com/dylanshi-cloud/noir-template#-pricing", desc:"Dark luxury with gold accents. Grid background, serif typography, editorial elegance.", tags:["Dark","Gold","Luxury","Editorial"] },
+      { name:"Bento", price:"¥199", usd:"$29", cls:"ds-bento", demo:"https://dylanshi-cloud.github.io/bento-template/", buy:"https://github.com/dylanshi-cloud/bento-template#-pricing", desc:"Japanese bento-grid layout. Modular asymmetric cards for portfolios and content-rich sites.", tags:["Grid","Modular","Portfolio","Clean"] },
+      { name:"Cinema", price:"¥199", usd:"$29", cls:"ds-cinema", demo:"https://dylanshi-cloud.github.io/cinema-template/", buy:"https://github.com/dylanshi-cloud/cinema-template#-pricing", desc:"Widescreen storytelling. Letterbox bars, narrative scroll, warm golden hour lighting.", tags:["Cinematic","Narrative","Dark","Widescreen"] },
+      { name:"Cyber", price:"¥199", usd:"$29", cls:"ds-cyber", demo:"https://dylanshi-cloud.github.io/cyber-template/", buy:"https://github.com/dylanshi-cloud/cyber-template#-pricing", desc:"Dark tech with neon cyan. Grid overlay, glowing stats, built for SaaS and startups.", tags:["Tech","Neon","SaaS","Dark"] },
+      { name:"Ember", price:"¥199", usd:"$29", cls:"ds-ember", demo:"https://dylanshi-cloud.github.io/ember-template/", buy:"https://github.com/dylanshi-cloud/ember-template#-pricing", desc:"Warm terracotta for artisan brands. Product grid, story sections, organic earthy palette.", tags:["Warm","Terracotta","Artisan","Product"] }
     ];
 
-    // ===== BUILD GRID =====
-    const grid = document.getElementById('templateGrid');
-
-    templates.forEach(t => {
-      const card = document.createElement('div');
-      card.className = 'card';
-
-      card.innerHTML = `
-        <div class="card__preview" data-demo="${t.demo}" data-name="${t.name}">
-          <span class="card__tag">${t.demo.replace('https://dylanshi-cloud.github.io/','').replace('-template/','')}</span>
-          <div class="card__overlay"><span>🔍 Quick Preview</span></div>
-          <div class="ml" style="background:${t.style.bg}">
-            <div class="ml__nav" style="background:${t.style.navBg}">
-              <div class="ml__nav-dot" style="background:#ff5f57"></div>
-              <div class="ml__nav-dot" style="background:#ffbd2e"></div>
-              <div class="ml__nav-dot" style="background:#28c840"></div>
-              <div class="ml__nav-lines" style="background:${t.style.accent}33"></div>
-            </div>
-            <div class="ml__hero">
-              <div class="ml__hero-line" style="width:clamp(30px,6vw,80px);background:${t.style.accent}"></div>
-              <div class="ml__hero-block" style="background:${t.style.accent}44"></div>
-              <div class="ml__grid" style="margin-top:auto">
-                <div class="ml__grid-item" style="background:${t.style.cardBg};border:1px solid ${t.style.accent}11"></div>
-                <div class="ml__grid-item" style="background:${t.style.cardBg};border:1px solid ${t.style.accent}11"></div>
-                <div class="ml__grid-item" style="background:${t.style.cardBg};border:1px solid ${t.style.accent}11"></div>
-              </div>
-            </div>
-          </div>
+    const list = document.getElementById('templateList');
+    data.forEach((t,i) => {
+      const div = document.createElement('div');
+      div.className = 'template';
+      div.innerHTML = `
+        <div class="template__preview" data-demo="${t.demo}" data-name="${t.name}">
+          <div class="ds ${t.cls}">${previewContent(t.cls,t.name)}</div>
+          <div class="template__live">✦ Click to Preview Live</div>
         </div>
-        <div class="card__body">
-          <div class="card__head">
-            <span class="card__name">${t.name}</span>
-            <span class="card__price">${t.price} <small>${t.usd}</small></span>
-          </div>
-          <div class="card__desc">${t.desc}</div>
-          <div class="card__tags">${t.tags.map(tag => `<span>${tag}</span>`).join('')}</div>
-          <div class="card__footer">
-            <a href="#" class="btn btn--small btn--outline preview-btn" data-demo="${t.demo}" data-name="${t.name}">Quick Preview</a>
-            <a href="${t.buy}" class="btn btn--small btn--primary" target="_blank">Buy</a>
+        <div class="template__info">
+          <div class="template__name">${t.name}</div>
+          <div class="template__price">${t.price} <small>${t.usd}</small></div>
+          <div class="template__desc">${t.desc}</div>
+          <div class="template__tags">${t.tags.map(t=>`<span>${t}</span>`).join('')}</div>
+          <div class="template__actions">
+            <a href="#" class="btn btn--outline preview-btn" data-demo="${t.demo}" data-name="${t.name}">Preview Live</a>
+            <a href="${t.buy}" class="btn btn--primary" target="_blank">Buy</a>
           </div>
         </div>
       `;
-      grid.appendChild(card);
+      list.appendChild(div);
     });
 
-    // ===== PREVIEW MODAL =====
+    function previewContent(cls, name) {
+      const html = {
+        'ds-ethereal':'<div class="ds__preview"><div class="ds__nav"><span>ethereal</span><div><i></i><i></i><i></i></div></div><div class="ds__hero"><h2>Timeless beauty</h2><p>Crafted for those who appreciate the finer details.</p><span>Explore</span></div></div>',
+        'ds-glass':'<div class="ds__preview"><div class="ds__nav"><dot style="background:#ff5f57"></dot><dot style="background:#ffbd2e"></dot><dot style="background:#28c840"></dot><bar></bar></div><div class="ds__hero"><div class="ds__card"><span>✦</span><b></b></div><div class="ds__card"><span>◆</span><b></b></div><div class="ds__card"><span>◇</span><b></b></div></div></div>',
+        'ds-aurora':'<div class="ds__inner"><h3>Aurora</h3><p>Colors that flow like light</p></div>',
+        'ds-noir':'<div class="ds__inner"><h3>Noir</h3><p>Luxury lives in the dark</p></div>',
+        'ds-bento':'<div><span>✦</span></div><div>01</div><div>02</div><div>03</div>',
+        'ds-cinema':'<div class="ds__inner"><h3>Every brand has a story worth <em>telling</em></h3><p>A cinematic html template</p></div>',
+        'ds-cyber':'<div class="ds__inner"><dot></dot><h3>Built for the future</h3><p>Dark tech template</p></div>',
+        'ds-ember':'<div class="ds__inner"><h3>Ember</h3><p>Warmth that lingers</p></div>'
+      };
+      return html[cls] || '';
+    }
+
+    // Modal
     const modal = document.getElementById('previewModal');
     const iframe = document.getElementById('modalIframe');
     const modalTitle = document.getElementById('modalTitle');
     const modalClose = document.getElementById('modalClose');
-    const modalLoading = document.getElementById('modalLoading');
-    const modalOpenLive = document.getElementById('modalOpenLive');
-
-    function openPreview(url, name) {
-      iframe.src = '';
-      modal.classList.add('open');
-      modalTitle.textContent = name;
-      modalOpenLive.href = url;
-      modalLoading.style.display = 'flex';
-      iframe.onload = () => { modalLoading.style.display = 'none' };
-      iframe.src = url;
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closePreview() {
-      modal.classList.remove('open');
-      iframe.src = '';
-      document.body.style.overflow = '';
-    }
+    const modalOpen = document.getElementById('modalOpen');
 
     document.addEventListener('click', e => {
       const btn = e.target.closest('[data-demo]');
-      if (btn) { e.preventDefault(); openPreview(btn.dataset.demo, btn.dataset.name); }
+      if (btn) {
+        e.preventDefault();
+        iframe.src = '';
+        modal.classList.add('open');
+        modalTitle.textContent = btn.dataset.name;
+        modalOpen.href = btn.dataset.demo;
+        iframe.src = btn.dataset.demo;
+        document.body.style.overflow = 'hidden';
+      }
     });
 
-    modalClose.addEventListener('click', closePreview);
-    modal.addEventListener('click', e => { if(e.target === modal) closePreview() });
-    document.addEventListener('keydown', e => { if(e.key === 'Escape') closePreview() });
+    modalClose.onclick = () => { modal.classList.remove('open'); iframe.src = ''; document.body.style.overflow = ''; };
+    modal.onclick = e => { if(e.target === modal) { modal.classList.remove('open'); iframe.src = ''; document.body.style.overflow = ''; } };
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') { modal.classList.remove('open'); iframe.src = ''; document.body.style.overflow = ''; } });
   </script>
 </body>
 </html>
