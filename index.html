@@ -3,41 +3,118 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Timee — HTML Templates</title>
+  <title>Timee — Premium HTML Templates</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600&family=DM+Serif+Display:ital@0;1&family=Satoshi:wght@400;500;700&family=Work+Sans:wght@300;400;500&family=Fraunces:opsz,wght@9..144,300;9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    :root{--bg:#FAF7F2;--bg-alt:#F3EDE4;--text:#2D3436;--text-light:#7A7A7A;--accent:#C8925A;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
+    :root{--bg:#FAF7F2;--text:#2D3436;--text-light:#7A7A7A;--accent:#C8925A;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
     html{scroll-behavior:smooth}
     body{font-family:var(--sans);font-weight:300;color:var(--text);background:var(--bg)}
-    .container{max-width:1100px;margin:0 auto;padding:0 1.5rem}
+    .container{max-width:1000px;margin:0 auto;padding:0 1.5rem}
     a{text-decoration:none;color:inherit}
 
-    .nav{padding:1.2rem 0;border-bottom:1px solid rgba(0,0,0,0.04);background:#fff}
+    .nav{padding:1.2rem 0;border-bottom:1px solid rgba(0,0,0,0.04);background:#fff;position:sticky;top:0;z-index:10}
     .nav__inner{display:flex;align-items:center;justify-content:space-between}
     .nav__logo{font-family:var(--serif);font-size:1.3rem}
 
-    .hero{padding:5rem 0 3rem;text-align:center}
-    .hero h1{font-family:var(--serif);font-size:clamp(2rem,4.5vw,3.5rem);font-weight:400;margin-bottom:0.5rem}
-    .hero p{color:var(--text-light);max-width:400px;margin:0 auto 2rem;font-size:0.9rem}
+    .hero{text-align:center;padding:4rem 0 2rem}
+    .hero h1{font-family:var(--serif);font-size:clamp(1.8rem,4vw,3rem);font-weight:400;margin-bottom:0.5rem}
+    .hero p{color:var(--text-light);max-width:500px;margin:0 auto;font-size:0.9rem}
 
-    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;padding-bottom:3rem}
-    .card{display:block;background:#fff;border:1px solid rgba(0,0,0,0.04);overflow:hidden;transition:all 0.3s var(--ease);text-decoration:none;color:inherit}
-    .card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.04)}
-    .card__preview{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;position:relative}
-    .card__name{position:absolute;bottom:0.8rem;left:0.8rem;font-family:var(--serif);font-size:0.9rem;color:#fff}
-    .card__arrow{position:absolute;top:0.8rem;right:0.8rem;font-size:1rem;color:rgba(255,255,255,0.5);transition:all 0.3s}
-    .card:hover .card__arrow{color:#fff;transform:translate(2px,-2px)}
-    .card__status{position:absolute;top:0.8rem;left:0.8rem;display:flex;gap:0.2rem}
-    .card__status dot{width:5px;height:5px;border-radius:50%;display:block}
-    .card__label{padding:0.4rem 0.75rem;font-size:0.7rem;letter-spacing:0.03em;border-top:1px solid rgba(0,0,0,0.04);color:var(--text-light);display:flex;align-items:center;justify-content:space-between}
+    /* ===== TEMPLATE SHOWCASE ===== */
+    .showcase{padding-bottom:3rem}
+
+    .tblock{background:#fff;border:1px solid rgba(0,0,0,0.04);margin-bottom:2rem;overflow:hidden}
+    .tblock:last-child{margin-bottom:0}
+
+    /* Preview area - large visual showcase */
+    .tblock__preview{aspect-ratio:16/9;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}
+    .tblock__preview:hover .tblock__overlay{opacity:1}
+    .tblock__overlay{position:absolute;inset:0;background:rgba(0,0,0,0.4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;opacity:0;transition:opacity 0.3s;color:#fff;backdrop-filter:blur(2px)}
+    .tblock__overlay span{border:1px solid rgba(255,255,255,0.3);padding:0.6rem 1.5rem;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase}
+    .tblock__overlay small{opacity:0.6;font-size:0.75rem}
+
+    /* Info area */
+    .tblock__body{padding:1.5rem 2rem 2rem}
+    .tblock__row{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem}
+    .tblock__name{font-family:var(--serif);font-size:1.4rem}
+    .tblock__price{font-family:var(--serif);font-size:1.2rem;color:var(--accent)}
+    .tblock__price small{font-size:0.7rem;color:var(--text-light);font-family:var(--sans)}
+    .tblock__desc{font-size:0.85rem;color:var(--text-light);line-height:1.7;margin-bottom:1rem}
+    .tblock__features{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1.2rem}
+    .tblock__features span{font-size:0.65rem;padding:0.25rem 0.7rem;background:var(--bg);border:1px solid rgba(0,0,0,0.04);border-radius:20px;color:var(--text-light)}
+    .tblock__btn{display:inline-block;padding:0.6rem 1.8rem;border:1px solid var(--text);font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.3s}
+    .tblock__btn:hover{background:var(--text);color:#fff}
+
+    /* ===== VISUAL PREVIEW STYLES ===== */
+    .vp{width:100%;height:100%;display:flex;flex-direction:column}
+    .vp__inner{flex:1;display:flex;flex-direction:column}
+    /* Ethereal */
+    .vp-ethereal{background:linear-gradient(135deg,#1E1E1E,#2D3436);padding:clamp(12px,2vw,24px)}
+    .vp-ethereal .vp__nav{display:flex;justify-content:space-between;margin-bottom:auto;align-items:center}
+    .vp-ethereal .vp__nav span{font-family:'Playfair Display',serif;color:#C8925A;font-size:clamp(10px,1.2vw,18px)}
+    .vp-ethereal .vp__nav i{display:flex;gap:clamp(8px,1.2vw,20px)}
+    .vp-ethereal .vp__nav i b{width:clamp(16px,2.5vw,40px);height:2px;background:rgba(255,255,255,0.08);display:block}
+    .vp-ethereal .vp__hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+    .vp-ethereal .vp__hero h2{font-family:'Playfair Display',serif;color:#fff;font-size:clamp(14px,2vw,32px);font-weight:400;line-height:1.2}
+    .vp-ethereal .vp__hero p{color:rgba(255,255,255,0.2);font-size:clamp(7px,0.9vw,14px);margin-top:clamp(4px,0.5vw,8px)}
+    .vp-ethereal .vp__hero div{border:1px solid rgba(255,255,255,0.1);padding:clamp(4px,0.5vw,8px) clamp(10px,1.5vw,24px);font-size:clamp(6px,0.7vw,11px);color:rgba(255,255,255,0.3);margin-top:clamp(12px,1.5vw,24px)}
+
+    /* Glass */
+    .vp-glass{background:linear-gradient(135deg,#0F1118,#1a1d2e);padding:clamp(10px,1.5vw,20px)}
+    .vp-glass .vp__bar{height:clamp(10px,1.2vw,18px);background:rgba(255,255,255,0.03);backdrop-filter:blur(4px);border-radius:4px;margin-bottom:clamp(6px,0.8vw,12px);display:flex;align-items:center;padding:0 clamp(6px,0.8vw,12px);gap:clamp(3px,0.4vw,6px)}
+    .vp-glass .vp__bar d{width:clamp(4px,0.5vw,7px);height:clamp(4px,0.5vw,7px);border-radius:50%;display:block}
+    .vp-glass .vp__bar l{height:2px;background:rgba(255,255,255,0.04);flex:1;border-radius:2px}
+    .vp-glass .vp__grid{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(4px,0.6vw,10px)}
+    .vp-glass .vp__grid div{background:rgba(255,255,255,0.03);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.04);border-radius:clamp(4px,0.5vw,8px);display:flex;align-items:center;justify-content:center;font-size:clamp(6px,0.8vw,12px);color:rgba(255,255,255,0.15)}
+
+    /* Aurora */
+    .vp-aurora{background:#0B0A1A;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .vp-aurora::before{content:'';position:absolute;width:200%;height:200%;top:-50%;left:-50%;background:conic-gradient(from 0deg,#7C3AED,#EC4899,#06B6D4,#7C3AED);opacity:0.15;animation:spin 8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .vp-aurora .vp__c{position:relative;z-index:1;text-align:center}
+    .vp-aurora .vp__c h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(14px,2vw,30px);background:linear-gradient(135deg,#7C3AED,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .vp-aurora .vp__c p{font-size:clamp(6px,0.8vw,12px);color:rgba(255,255,255,0.2);margin-top:clamp(4px,0.4vw,8px)}
+
+    /* Noir */
+    .vp-noir{background:#0A0A0A;position:relative;display:flex;align-items:center;justify-content:center}
+    .vp-noir::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(201,169,78,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,169,78,0.04) 1px,transparent 1px);background-size:clamp(10px,1.5vw,24px) clamp(10px,1.5vw,24px)}
+    .vp-noir .vp__c{position:relative;z-index:1;text-align:center}
+    .vp-noir .vp__c h3{font-family:'DM Serif Display',serif;font-size:clamp(16px,2.5vw,40px);font-style:italic;color:#C9A94E;font-weight:400}
+    .vp-noir .vp__c p{font-size:clamp(5px,0.6vw,10px);color:rgba(255,255,255,0.15);letter-spacing:0.2em;text-transform:uppercase}
+
+    /* Bento */
+    .vp-bento{background:#F5F5F0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:clamp(3px,0.4vw,8px);padding:clamp(8px,1vw,16px)}
+    .vp-bento div{background:#fff;border-radius:clamp(4px,0.5vw,8px);display:flex;align-items:center;justify-content:center;font-size:clamp(6px,0.8vw,12px);border:1px solid rgba(0,0,0,0.03)}
+    .vp-bento div:nth-child(1){grid-column:span 2;grid-row:span 2;background:linear-gradient(135deg,#DBEAFE,#fff);font-family:'Satoshi',sans-serif;font-weight:700;font-size:clamp(10px,1.5vw,24px);color:#2563EB}
+
+    /* Cinema */
+    .vp-cinema{background:#0A0A0A;position:relative;display:flex;align-items:center;justify-content:center}
+    .vp-cinema::before,.vp-cinema::after{content:'';position:absolute;left:0;right:0;height:clamp(4px,0.5vw,10px);background:#000;z-index:1}
+    .vp-cinema::before{top:0}.vp-cinema::after{bottom:0}
+    .vp-cinema .vp__c{text-align:center}
+    .vp-cinema .vp__c h3{font-family:'Work Sans',sans-serif;font-weight:300;font-size:clamp(10px,1.5vw,24px);color:#fff}
+    .vp-cinema .vp__c em{color:#D4A853;font-style:normal}
+    .vp-cinema .vp__c p{font-size:clamp(4px,0.5vw,8px);color:rgba(255,255,255,0.15);letter-spacing:0.3em;text-transform:uppercase;margin-top:clamp(4px,0.4vw,8px)}
+
+    /* Cyber */
+    .vp-cyber{background:#0A0E17;position:relative;display:flex;align-items:center;justify-content:center}
+    .vp-cyber::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(34,211,238,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,0.03) 1px,transparent 1px);background-size:clamp(8px,1vw,16px) clamp(8px,1vw,16px)}
+    .vp-cyber .vp__c{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:clamp(4px,0.5vw,8px)}
+    .vp-cyber .vp__c dot{width:clamp(5px,0.6vw,9px);height:clamp(5px,0.6vw,9px);border-radius:50%;background:#22D3EE;animation:pulse 1.5s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.2}}
+    .vp-cyber .vp__c h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(12px,1.8vw,28px);background:linear-gradient(135deg,#22D3EE,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .vp-cyber .vp__c p{font-size:clamp(5px,0.6vw,9px);color:rgba(255,255,255,0.15)}
+
+    /* Ember */
+    .vp-ember{background:#FCF8F5;display:flex;align-items:center;justify-content:center}
+    .vp-ember .vp__c{text-align:center}
+    .vp-ember .vp__c h3{font-family:'Fraunces',Georgia,serif;font-size:clamp(14px,2vw,32px);font-weight:300;color:#C87A4A}
+    .vp-ember .vp__c p{font-size:clamp(5px,0.6vw,9px);color:rgba(0,0,0,0.1);letter-spacing:0.15em;text-transform:uppercase;margin-top:clamp(4px,0.5vw,8px)}
 
     .footer{padding:2rem 0;text-align:center;border-top:1px solid rgba(0,0,0,0.04);color:var(--text-muted);font-size:0.75rem}
-
-    @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:500px){.grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -50,80 +127,13 @@
 
   <section class="hero">
     <div class="container">
-      <h1>✦ Click to view live</h1>
-      <p>8 templates, 8 distinct styles. Click any one to see the full site in a new tab.</p>
+      <h1>✦ 8 templates, 8 styles</h1>
+      <p>Click the preview or "View Live" to see each template in action.</p>
     </div>
   </section>
 
-  <section>
-    <div class="container">
-      <div class="grid">
-        <a href="https://dylanshi-cloud.github.io/ethereal-template/" target="_blank" class="card">
-          <div class="card__preview" style="background:linear-gradient(135deg,#1E1E1E,#2D3436)">
-            <div class="card__status"><dot style="background:#C8925A"></dot><dot style="background:#C8925A66"></dot><dot style="background:#C8925A33"></dot></div>
-            <span class="card__name">Ethereal</span>
-            <span class="card__arrow">↗</span>
-          </div>
-          <div class="card__label"><span>Warm · Gold · 5 Themes</span><span style="color:var(--accent)">→</span></div>
-        </a>
-
-        <a href="https://dylanshi-cloud.github.io/glass-template/" target="_blank" class="card">
-          <div class="card__preview" style="background:linear-gradient(135deg,#0F1118,#16213e)">
-            <span class="card__name">Glass</span>
-            <span class="card__arrow">↗</span>
-          </div>
-          <div class="card__label"><span>Glassmorphism · Dark Mode</span><span style="color:var(--accent)">→</span></div>
-        </a>
-
-        <a href="https://dylanshi-cloud.github.io/aurora-template/" target="_blank" class="card">
-          <div class="card__preview" style="background:linear-gradient(135deg,#0B0A1A,#1a0533)">
-            <span class="card__name">Aurora</span>
-            <span class="card__arrow">↗</span>
-          </div>
-          <div class="card__label"><span>Gradient · Vibrant · Neon</span><span style="color:var(--accent)">→</span></div>
-        </a>
-
-        <a href="https://dylanshi-cloud.github.io/noir-template/" target="_blank" class="card">
-          <div class="card__preview" style="background:linear-gradient(135deg,#0A0A0A,#1A1A1A)">
-            <span class="card__name">Noir</span>
-            <span class="card__arrow">↗</span>
-          </div>
-          <div class="card__label"><span>Dark · Gold · Luxury</span><span style="color:var(--accent)">→</span></div>
-        </a>
-
-        <a href="https://dylanshi-cloud.github.io/bento-template/" target="_blank" class="card">
-          <div class="card__preview" style="background:linear-gradient(135deg,#F5F5F0,#e8e8e0)">
-            <span class="card__name" style="color:#2D3436">Bento</span>
-            <span class="card__arrow" style="color:rgba(0,0,0,0.3)">↗</span>
-          </div>
-          <div class="card__label"><span>Grid · Modular · Portfolio</span><span style="color:var(--accent)">→</span></div>
-        </a>
-
-        <a href="https://dylanshi-cloud.github.io/cinema-template/" target="_blank" class="card">
-          <div class="card__preview" style="background:linear-gradient(135deg,#0A0A0A,#1A1410)">
-            <span class="card__name">Cinema</span>
-            <span class="card__arrow">↗</span>
-          </div>
-          <div class="card__label"><span>Widescreen · Narrative · Dark</span><span style="color:var(--accent)">→</span></div>
-        </a>
-
-        <a href="https://dylanshi-cloud.github.io/cyber-template/" target="_blank" class="card">
-          <div class="card__preview" style="background:linear-gradient(135deg,#0A0E17,#1E293B)">
-            <span class="card__name">Cyber</span>
-            <span class="card__arrow">↗</span>
-          </div>
-          <div class="card__label"><span>Tech · Neon · SaaS</span><span style="color:var(--accent)">→</span></div>
-        </a>
-
-        <a href="https://dylanshi-cloud.github.io/ember-template/" target="_blank" class="card">
-          <div class="card__preview" style="background:linear-gradient(135deg,#FCF8F5,#F5EDE8)">
-            <span class="card__name" style="color:#3D2B20">Ember</span>
-            <span class="card__arrow" style="color:rgba(0,0,0,0.3)">↗</span>
-          </div>
-          <div class="card__label"><span>Warm · Terracotta · Artisan</span><span style="color:var(--accent)">→</span></div>
-        </a>
-      </div>
-    </div>
+  <section class="showcase" id="showcase">
+    <div class="container" id="showcaseList"></div>
   </section>
 
   <footer class="footer">
@@ -132,5 +142,54 @@
       <p style="margin-top:0.2rem">Premium HTML templates. Click to preview.</p>
     </div>
   </footer>
+
+  <script>
+    const T = [
+      {n:"Ethereal",price:"¥299",usd:"$39",desc:"Warm gold on dark. Canvas particles system, scroll-triggered reveals, warm cursor glow, and 5 complete color themes included.",feat:["Canvas Particles","Scroll Reveals","5 Color Themes","Cursor Glow","Zero Dependencies"],url:"https://dylanshi-cloud.github.io/ethereal-template/",bg:"linear-gradient(135deg,#1E1E1E,#2D3436)",c:"#C8925A",vp:"vp-ethereal"},
+      {n:"Glass",price:"¥199",usd:"$29",desc:"Apple-inspired glassmorphism. Frosted backdrop-filter cards, fluid animated gradients, floating glass orbs with mouse parallax, built-in dark mode with persistence.",feat:["Glassmorphism","Fluid Gradients","Dark Mode","Orb Parallax","Mobile Responsive"],url:"https://dylanshi-cloud.github.io/glass-template/",bg:"linear-gradient(135deg,#0F1118,#1a1d2e)",c:"#6366F1",vp:"vp-glass"},
+      {n:"Aurora",price:"¥199",usd:"$29",desc:"Flowing conic aurora gradients on a dark canvas. Purple, pink, and cyan — a vibrant, immersive canvas for creative and bold brands.",feat:["Conic Gradients","Dark-first","Vibrant Colors","CSS Only","Pure HTML+CSS"],url:"https://dylanshi-cloud.github.io/aurora-template/",bg:"linear-gradient(135deg,#0B0A1A,#1a0533)",c:"#7C3AED",vp:"vp-aurora"},
+      {n:"Noir",price:"¥199",usd:"$29",desc:"Dark luxury with warm gold accents. Architectural grid, DM Serif Display typography, high-contrast editorial elegance for premium brands.",feat:["Dark Luxury","Gold Accents","Grid Pattern","Serif Typography","Editorial"],url:"https://dylanshi-cloud.github.io/noir-template/",bg:"linear-gradient(135deg,#0A0A0A,#1A1A1A)",c:"#C9A94E",vp:"vp-noir"},
+      {n:"Bento",price:"¥199",usd:"$29",desc:"Japanese bento-grid layout. Modular asymmetric cards, information-dense layout, perfect for portfolios and content-rich brand sites.",feat:["Bento Grid","Modular Cards","Clean Layout","Portfolio Ready","Light Theme"],url:"https://dylanshi-cloud.github.io/bento-template/",bg:"linear-gradient(135deg,#F5F5F0,#e8e8e0)",c:"#2563EB",vp:"vp-bento"},
+      {n:"Cinema",price:"¥199",usd:"$29",desc:"Widescreen cinematic storytelling. Letterbox bars, golden hour lighting, narrative scroll sections — for brands with a story to tell.",feat:["Widescreen","Narrative Scroll","Dark Theme","Warm Light","Film Style"],url:"https://dylanshi-cloud.github.io/cinema-template/",bg:"linear-gradient(135deg,#0A0A0A,#1A1410)",c:"#D4A853",vp:"vp-cinema"},
+      {n:"Cyber",price:"¥199",usd:"$29",desc:"Dark tech with neon cyan accents. Grid overlay, glowing stats, architecture-grade design for SaaS and digital-first companies.",feat:["Neon Accents","Grid Overlay","Dark Theme","SaaS Ready","Stats Display"],url:"https://dylanshi-cloud.github.io/cyber-template/",bg:"linear-gradient(135deg,#0A0E17,#1E293B)",c:"#22D3EE",vp:"vp-cyber"},
+      {n:"Ember",price:"¥199",usd:"$29",desc:"Warm terracotta for artisan and home decor brands. Product catalog grid, story sections, Fraunces serif typography with a cozy, earthy feel.",feat:["Terracotta","Product Grid","Warm Theme","Story Sections","Earthy"],url:"https://dylanshi-cloud.github.io/ember-template/",bg:"linear-gradient(135deg,#FCF8F5,#F5EDE8)",c:"#C87A4A",vp:"vp-ember"}
+    ];
+
+    const list = document.getElementById('showcaseList');
+    T.forEach(t => {
+      const block = document.createElement('div');
+      block.className = 'tblock';
+      block.innerHTML = `
+        <a href="${t.url}" target="_blank" class="tblock__preview" style="background:${t.bg}">
+          <div class="vp ${t.vp}">${previewHTML(t.vp)}</div>
+          <div class="tblock__overlay"><span>View Live Demo</span><small>Click to open in new tab</small></div>
+        </a>
+        <div class="tblock__body">
+          <div class="tblock__row">
+            <span class="tblock__name">${t.n}</span>
+            <span class="tblock__price">${t.price} <small>${t.usd}</small></span>
+          </div>
+          <div class="tblock__desc">${t.desc}</div>
+          <div class="tblock__features">${t.feat.map(f=>'<span>'+f+'</span>').join('')}</div>
+          <a href="${t.url}" target="_blank" class="tblock__btn">View Live Demo →</a>
+        </div>
+      `;
+      list.appendChild(block);
+    });
+
+    function previewHTML(cls) {
+      const map = {
+        'vp-ethereal':'<div class="vp__inner"><div class="vp__nav"><span>ethereal</span><i><b></b><b></b><b></b></i></div><div class="vp__hero"><h2>Timeless beauty</h2><p>Crafted for those who appreciate the finer details.</p><div>Explore the collection</div></div></div>',
+        'vp-glass':'<div class="vp__inner"><div class="vp__bar"><d style="background:#ff5f57"></d><d style="background:#ffbd2e"></d><d style="background:#28c840"></d><l></l></div><div class="vp__grid"><div>✦</div><div>◆</div><div>◇</div></div></div>',
+        'vp-aurora':'<div class="vp__c"><h3>Aurora</h3><p>Colors that flow like light</p></div>',
+        'vp-noir':'<div class="vp__c"><h3>Noir</h3><p>Luxury lives in the dark</p></div>',
+        'vp-bento':'<div>✦</div><div>01</div><div>02</div><div>03</div>',
+        'vp-cinema':'<div class="vp__c"><h3>Every brand has a story worth <em>telling</em></h3><p>A cinematic html template</p></div>',
+        'vp-cyber':'<div class="vp__c"><dot></dot><h3>Built for the future</h3><p>Dark tech template / SaaS ready</p></div>',
+        'vp-ember':'<div class="vp__c"><h3>Ember</h3><p>Warmth that lingers / artisan collection</p></div>'
+      };
+      return map[cls]||'';
+    }
+  </script>
 </body>
 </html>
