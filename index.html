@@ -9,144 +9,147 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    :root{--bg:#FAF7F2;--bg-dark:#1A1A1A;--text:#2D3436;--text-light:#7A7A7A;--accent:#C8925A;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
+    :root{--bg:#0D0D0D;--text:#E8E4DE;--text-muted:#6B6560;--gold:#C9A94E;--cream:#E8D5B7;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif;--ease:cubic-bezier(0.22,1,0.36,1)}
     html{scroll-behavior:smooth}
-    body{font-family:var(--sans);font-weight:300;color:var(--text);background:var(--bg)}
-    .container{max-width:1000px;margin:0 auto;padding:0 1.5rem}
-    a{text-decoration:none;color:inherit}
+    body{font-family:var(--sans);font-weight:300;color:var(--text);background:var(--bg);overflow-x:hidden}
 
-    /* HERO */
-    .hero{min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;position:relative;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(200,146,90,0.12),transparent),radial-gradient(ellipse 60% 80% at 20% 80%,rgba(200,146,90,0.06),transparent),linear-gradient(135deg,#1A1A1A,#2D3436,#1A1A1A)}
-    .hero__content{padding:5rem 0}
-    .hero__icon{font-size:2rem;color:var(--accent);margin-bottom:1rem}
-    .hero h1{font-family:var(--serif);font-size:clamp(2rem,4.5vw,3.5rem);font-weight:400;line-height:1.08;margin-bottom:0.8rem}
-    .hero h1 em{font-style:italic;opacity:0.7}
-    .hero p{color:rgba(255,255,255,0.45);max-width:420px;margin:0 auto 1.5rem;font-size:0.9rem}
-    .hero__scroll{font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-top:2rem}
-    .hero__scroll-line{width:1px;height:24px;background:linear-gradient(to bottom,var(--accent),transparent);margin:0.4rem auto}
-    .btn{display:inline-block;padding:0.8rem 2rem;border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.3s}
-    .btn:hover{background:#fff;color:#1A1A1A}
+    /* ===== HERO ===== */
+    .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .hero__bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 30%,rgba(201,169,78,0.06),transparent),radial-gradient(ellipse 60% 80% at 80% 80%,rgba(201,169,78,0.03),transparent),linear-gradient(135deg,#0D0D0D,#1A1A1A,#0D0D0D)}
+    .hero__grain{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.015) 1px,transparent 0);background-size:24px 24px}
+    .hero__content{position:relative;z-index:1;text-align:center;padding:4rem 1.5rem;max-width:600px}
+    .hero__mark{font-family:var(--serif);font-size:0.8rem;font-style:italic;color:var(--gold);letter-spacing:0.3em;margin-bottom:2rem;opacity:0.6}
+    .hero h1{font-family:var(--serif);font-size:clamp(2.5rem,6vw,5rem);font-weight:400;line-height:1.05;margin-bottom:1rem;letter-spacing:-0.02em}
+    .hero h1 span{font-style:italic;color:var(--gold)}
+    .hero p{color:var(--text-muted);font-size:clamp(0.9rem,1.1vw,1.05rem);margin-bottom:2.5rem;line-height:1.7;max-width:420px;margin-left:auto;margin-right:auto}
+    .hero__btn{display:inline-block;padding:0.8rem 2.5rem;border:1px solid var(--gold);color:var(--gold);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.4s var(--ease);text-decoration:none}
+    .hero__btn:hover{background:var(--gold);color:var(--bg)}
+    .hero__scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted)}
 
-    /* SHOWCASE */
-    .showcase{}
-    .item{background:#fff;border-bottom:1px solid rgba(0,0,0,0.04)}
-    .item:last-child{border-bottom:none}
-    .item__inner{display:grid;grid-template-columns:1fr;gap:0}
-    .item__image{width:100%;display:block;aspect-ratio:16/10;overflow:hidden}
-    .item__image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s var(--ease)}
-    .item:hover .item__image img{transform:scale(1.02)}
-    .item__info{padding:clamp(1.5rem,3vw,3rem) clamp(1.5rem,4vw,4rem);text-align:center}
-    .item__name{font-family:var(--serif);font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:0.3rem}
-    .item__desc{font-size:0.85rem;color:var(--text-light);margin-bottom:1.2rem;max-width:500px;margin-left:auto;margin-right:auto}
-    .item__btn{display:inline-block;padding:0.6rem 1.8rem;border:1px solid var(--text);font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.3s;color:var(--text)}
-    .item__btn:hover{background:var(--text);color:#fff}
+    /* ===== TEMPLATES ===== */
+    .templates{}
+    .t{height:100vh;position:relative;display:flex;align-items:center;overflow:hidden}
+    .t:nth-child(even){justify-content:flex-end}
+    .t__bg{position:absolute;inset:0}
+    .t__content{position:relative;z-index:1;max-width:480px;padding:3rem}
+    .t__num{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:0.8rem;letter-spacing:0.15em;margin-bottom:0.5rem}
+    .t__name{font-family:var(--serif);font-size:clamp(2rem,3.5vw,3rem);font-weight:400;margin-bottom:0.5rem}
+    .t__desc{font-size:0.85rem;color:var(--text-muted);line-height:1.7;margin-bottom:1.5rem}
+    .t__link{display:inline-block;padding:0.6rem 1.8rem;border:1px solid var(--gold);color:var(--gold);font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.3s;text-decoration:none}
+    .t__link:hover{background:var(--gold);color:var(--bg)}
 
-    .footer{padding:2.5rem 0;text-align:center;border-top:1px solid rgba(0,0,0,0.04);color:var(--text-muted);font-size:0.75rem}
+    /* Individual template backgrounds */
+    .t1 .t__bg{background:radial-gradient(ellipse at 30% 50%,rgba(201,169,78,0.08),transparent 60%),linear-gradient(90deg,#0D0D0D,#1A1A1A)}
+    .t1::after{content:'✦';position:absolute;font-size:20vw;color:rgba(201,169,78,0.03);right:-5%;bottom:-10%;pointer-events:none}
+    .t2 .t__bg{background:radial-gradient(ellipse at 70% 50%,rgba(99,102,241,0.06),transparent 60%),linear-gradient(90deg,#1A1A1A,#0D0D0D)}
+    .t2::after{content:'◆';position:absolute;font-size:18vw;color:rgba(99,102,241,0.03);left:-5%;bottom:-10%;pointer-events:none}
+    .t3 .t__bg{background:radial-gradient(ellipse at 50% 50%,rgba(124,58,237,0.06),transparent 70%),radial-gradient(ellipse at 80% 20%,rgba(236,72,153,0.04),transparent 50%)}
+    .t4 .t__bg{background:radial-gradient(ellipse at 50% 50%,rgba(201,169,78,0.04),transparent 70%);background-image:linear-gradient(rgba(201,169,78,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(201,169,78,0.03) 1px,transparent 1px);background-size:40px 40px}
+    .t5 .t__bg{background:radial-gradient(ellipse at 30% 50%,rgba(37,99,235,0.04),transparent 60%),linear-gradient(135deg,#F5F5F0,#E8E8E0)}
+    .t5{color:#1A1A1A}
+    .t5 .t__desc{color:#6B6B6B}
+    .t6 .t__bg{background:radial-gradient(ellipse at 50% 50%,rgba(212,168,83,0.04),transparent 70%),linear-gradient(135deg,#0D0D0D,#1A1410)}
+    .t7 .t__bg{background:radial-gradient(ellipse at 50% 50%,rgba(34,211,238,0.04),transparent 70%);background-image:linear-gradient(rgba(34,211,238,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,0.02) 1px,transparent 1px);background-size:30px 30px}
+    .t8 .t__bg{background:radial-gradient(ellipse at 50% 50%,rgba(200,122,74,0.04),transparent 70%),linear-gradient(135deg,#FCF8F5,#F5EDE8)}
+    .t8{color:#3D2B20}
+    .t8 .t__desc{color:#8A7060}
+
+    @media(max-width:768px){.t__content{padding:2rem}.t:nth-child(even){justify-content:flex-start}}
   </style>
 </head>
 <body>
   <section class="hero">
-    <div class="hero__content container">
-      <div class="hero__icon">✦</div>
-      <h1>A website is a<br/><em>living thing.</em></h1>
-      <p>HTML templates that breathe. Pure craftsmanship, zero dependencies.</p>
-      <a href="#list" class="btn">Explore</a>
-      <div class="hero__scroll">Scroll<div class="hero__scroll-line"></div></div>
+    <div class="hero__bg"></div>
+    <div class="hero__grain"></div>
+    <div class="hero__content">
+      <p class="hero__mark">tim<span style="font-style:italic;opacity:0.7">ee</span></p>
+      <h1>A website is a <span>living thing.</span></h1>
+      <p>HTML templates built with patience and intention. Each one a complete world — yours to inhabit.</p>
+      <a href="#t1" class="hero__btn">See the collection</a>
     </div>
+    <p class="hero__scroll">↓ Scroll to explore</p>
   </section>
 
-  <section class="showcase" id="list">
-    <div class="item">
-      <a href="https://dylanshi-cloud.github.io/ethereal-template/" target="_blank" class="item__inner">
-        <div class="item__image"><img src="images/thumb-ethereal.png" alt="Ethereal" /></div>
-        <div class="item__info">
-          <div class="item__name">Ethereal</div>
-          <div class="item__desc">Warm gold on dark. Canvas particles, 5 color themes, cursor glow.</div>
-          <span class="item__btn">View Live →</span>
-        </div>
-      </a>
+  <div class="templates">
+    <div class="t t1" id="t1">
+      <div class="t__bg"></div>
+      <div class="t__content">
+        <p class="t__num">01</p>
+        <h2 class="t__name">Ethereal</h2>
+        <p class="t__desc">Warm gold on dark. Floating particles, scroll-triggered animations, 5 color themes. The original Timee template.</p>
+        <a href="https://dylanshi-cloud.github.io/ethereal-template/" target="_blank" class="t__link">View Live →</a>
+      </div>
     </div>
 
-    <div class="item">
-      <a href="https://dylanshi-cloud.github.io/glass-template/" target="_blank" class="item__inner">
-        <div class="item__image"><img src="images/thumb-glass.png" alt="Glass" /></div>
-        <div class="item__info">
-          <div class="item__name">Glass</div>
-          <div class="item__desc">Apple-inspired glassmorphism. Frosted cards, dark mode, fluid gradients.</div>
-          <span class="item__btn">View Live →</span>
-        </div>
-      </a>
+    <div class="t t2">
+      <div class="t__bg"></div>
+      <div class="t__content">
+        <p class="t__num">02</p>
+        <h2 class="t__name">Glass</h2>
+        <p class="t__desc">Apple-inspired glassmorphism. Frosted cards with backdrop-filter, floating orbs, fluid gradients, and a built-in dark mode.</p>
+        <a href="https://dylanshi-cloud.github.io/glass-template/" target="_blank" class="t__link">View Live →</a>
+      </div>
     </div>
 
-    <div class="item">
-      <a href="https://dylanshi-cloud.github.io/aurora-template/" target="_blank" class="item__inner">
-        <div class="item__image"><img src="images/thumb-aurora.png" alt="Aurora" /></div>
-        <div class="item__info">
-          <div class="item__name">Aurora</div>
-          <div class="item__desc">Flowing aurora gradients. Purple-pink-cyan on a dark canvas.</div>
-          <span class="item__btn">View Live →</span>
-        </div>
-      </a>
+    <div class="t t3">
+      <div class="t__bg"></div>
+      <div class="t__content">
+        <p class="t__num">03</p>
+        <h2 class="t__name">Aurora</h2>
+        <p class="t__desc">Flowing gradients that never repeat. Purple, pink, and cyan on a deep dark canvas. For brands that live in color.</p>
+        <a href="https://dylanshi-cloud.github.io/aurora-template/" target="_blank" class="t__link">View Live →</a>
+      </div>
     </div>
 
-    <div class="item">
-      <a href="https://dylanshi-cloud.github.io/noir-template/" target="_blank" class="item__inner">
-        <div class="item__image"><img src="images/thumb-noir.png" alt="Noir" /></div>
-        <div class="item__info">
-          <div class="item__name">Noir</div>
-          <div class="item__desc">Dark luxury with gold accents. Architectural grid, serif elegance.</div>
-          <span class="item__btn">View Live →</span>
-        </div>
-      </a>
+    <div class="t t4">
+      <div class="t__bg"></div>
+      <div class="t__content">
+        <p class="t__num">04</p>
+        <h2 class="t__name">Noir</h2>
+        <p class="t__desc">Black and gold. Architectural grids, italic serif headlines, and the restrained elegance of something built to last.</p>
+        <a href="https://dylanshi-cloud.github.io/noir-template/" target="_blank" class="t__link">View Live →</a>
+      </div>
     </div>
 
-    <div class="item">
-      <a href="https://dylanshi-cloud.github.io/bento-template/" target="_blank" class="item__inner">
-        <div class="item__image"><img src="images/thumb-bento.png" alt="Bento" /></div>
-        <div class="item__info">
-          <div class="item__name">Bento</div>
-          <div class="item__desc">Japanese bento-grid layout. Modular cards for portfolios.</div>
-          <span class="item__btn">View Live →</span>
-        </div>
-      </a>
+    <div class="t t5">
+      <div class="t__bg"></div>
+      <div class="t__content">
+        <p class="t__num">05</p>
+        <h2 class="t__name">Bento</h2>
+        <p class="t__desc">A modular grid inspired by Japanese bento boxes. Clean, organized, and information-rich. Perfect for portfolios.</p>
+        <a href="https://dylanshi-cloud.github.io/bento-template/" target="_blank" class="t__link">View Live →</a>
+      </div>
     </div>
 
-    <div class="item">
-      <a href="https://dylanshi-cloud.github.io/cinema-template/" target="_blank" class="item__inner">
-        <div class="item__image"><img src="images/thumb-cinema.png" alt="Cinema" /></div>
-        <div class="item__info">
-          <div class="item__name">Cinema</div>
-          <div class="item__desc">Widescreen cinematic storytelling. Letterbox bars, narrative scroll.</div>
-          <span class="item__btn">View Live →</span>
-        </div>
-      </a>
+    <div class="t t6">
+      <div class="t__bg"></div>
+      <div class="t__content">
+        <p class="t__num">06</p>
+        <h2 class="t__name">Cinema</h2>
+        <p class="t__desc">Widescreen storytelling. Letterbox bars, chaptered narrative, and the warm glow of golden hour — for brands with a story.</p>
+        <a href="https://dylanshi-cloud.github.io/cinema-template/" target="_blank" class="t__link">View Live →</a>
+      </div>
     </div>
 
-    <div class="item">
-      <a href="https://dylanshi-cloud.github.io/cyber-template/" target="_blank" class="item__inner">
-        <div class="item__image"><img src="images/thumb-cyber.png" alt="Cyber" /></div>
-        <div class="item__info">
-          <div class="item__name">Cyber</div>
-          <div class="item__desc">Dark tech with neon cyan. Grid overlay, SaaS-ready.</div>
-          <span class="item__btn">View Live →</span>
-        </div>
-      </a>
+    <div class="t t7">
+      <div class="t__bg"></div>
+      <div class="t__content">
+        <p class="t__num">07</p>
+        <h2 class="t__name">Cyber</h2>
+        <p class="t__desc">Dark tech with neon cyan. A precise grid, glowing accents, and the clean geometry of modern infrastructure.</p>
+        <a href="https://dylanshi-cloud.github.io/cyber-template/" target="_blank" class="t__link">View Live →</a>
+      </div>
     </div>
 
-    <div class="item">
-      <a href="https://dylanshi-cloud.github.io/ember-template/" target="_blank" class="item__inner">
-        <div class="item__image"><img src="images/thumb-ember.png" alt="Ember" /></div>
-        <div class="item__info">
-          <div class="item__name">Ember</div>
-          <div class="item__desc">Warm terracotta for artisan brands. Product grid, earthy palette.</div>
-          <span class="item__btn">View Live →</span>
-        </div>
-      </a>
+    <div class="t t8">
+      <div class="t__bg"></div>
+      <div class="t__content">
+        <p class="t__num">08</p>
+        <h2 class="t__name">Ember</h2>
+        <p class="t__desc">Warm terracotta for the makers and the makers' markets. Product catalogs, story sections, and the texture of honest materials.</p>
+        <a href="https://dylanshi-cloud.github.io/ember-template/" target="_blank" class="t__link">View Live →</a>
+      </div>
     </div>
-  </section>
-
-  <footer class="footer">
-    <div class="container"><p>Timee — HTML Templates</p></div>
-  </footer>
+  </div>
 </body>
 </html>
