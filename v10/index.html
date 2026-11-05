@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>V10 飞行器 · 起降 / 飞行 / 飞控 前置条件对照表</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#fff; --ink:#1d2430; --muted:#6b7480; --line:#e3e6ea;
+    --ok:#15803d; --okbg:#e8f5ec;
+    --part:#b45309; --partbg:#fdf1e0;
+    --gap:#5b6472; --gapbg:#eceef1;
+    --blk:#b91c1c; --blkbg:#fbe9e9;
+    --accent:#1f5fa8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",system-ui,sans-serif}
+  header{background:#fff;border-bottom:1px solid var(--line);padding:24px 28px 18px}
+  h1{margin:0 0 6px;font-size:22px;letter-spacing:.5px}
+  .sub{color:var(--muted);font-size:13px}
+  main{max-width:1180px;margin:0 auto;padding:22px 20px 60px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .kpi .v{font-size:28px;font-weight:700;line-height:1.1}
+  .kpi .l{font-size:12px;color:var(--muted);margin-top:4px}
+  .kpi.ok .v{color:var(--ok)} .kpi.part .v{color:var(--part)}
+  .kpi.gap .v{color:var(--gap)} .kpi.blk .v{color:var(--blk)}
+  section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:18px}
+  h2{font-size:17px;margin:0 0 4px}
+  .hint{color:var(--muted);font-size:12px;margin-bottom:14px}
+  .bar{display:flex;height:16px;border-radius:8px;overflow:hidden;background:#eef0f3;margin:8px 0 6px}
+  .bar span{display:block;height:100%}
+  .bar .s-ok{background:var(--ok)} .bar .s-part{background:var(--part)}
+  .bar .s-gap{background:#cdd3da} .bar .s-blk{background:var(--blk)}
+  .barlbl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font-size:12px;
+        cursor:pointer;user-select:none;color:var(--muted)}
+  .chip.on{border-color:var(--accent);color:var(--accent);background:#eef4fb;font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;font-size:12px;color:var(--muted);font-weight:600;
+     border-bottom:2px solid var(--line);padding:8px 8px;white-space:nowrap}
+  td{border-bottom:1px solid var(--line);padding:9px 8px;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  tr.hide{display:none}
+  .tag{display:inline-block;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:600;white-space:nowrap}
+  .t-ok{color:var(--ok);background:var(--okbg)}
+  .t-part{color:var(--part);background:var(--partbg)}
+  .t-gap{color:var(--gap);background:var(--gapbg)}
+  .t-blk{color:var(--blk);background:var(--blkbg)}
+  .cur{color:var(--ink)}
+  .ev{color:var(--muted);font-size:12px;white-space:nowrap}
+  .num{color:var(--muted);font-size:12px;width:28px}
+  .top{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px}
+  .top div{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff}
+  .top b{color:var(--blk)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:middle}
+  footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--muted);font-size:12px}
+  @media print{body{background:#fff}section,.kpi{break-inside:avoid} .chips{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>V10 双翼三桨小机 · 前置条件对照表</h1>
+  <div class="sub">起降 / 飞行 / 飞控 / 合规运行 · 需求 vs 现状 · 2026-11-05 · 依据：<code>01_总体与几何</code> <code>02_结构方案</code> <code>03_控制与飞控</code> + r9 模型（94 件）</div>
+</header>
+
+<main>
+  <div class="kpis" id="kpis"></div>
+
+  <section>
+    <h2>各领域完成度</h2>
+    <div class="hint">绿=已具备（有定量结论/已建模） · 琥珀=有方案或估算、未落地 · 灰=识别到但缺 · 红=阻断（不解决不能飞）</div>
+    <div id="bars"></div>
+    <div class="legend">
+      <span><i style="background:var(--ok)"></i>已具备</span>
+      <span><i style="background:var(--part)"></i>方案/估算</span>
+      <span><i style="background:#cdd3da"></i>缺失</span>
+      <span><i style="background:var(--blk)"></i>阻断</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>最该先补的 8 条</h2>
+    <div class="hint">按「不解决就飞不了」排序；括号内是判定依据</div>
+    <div class="top">
+      <div><b>1. 副翼还不存在</b> — 巡航段翼桨停转后滚转权限 = 0，只能压坡度转弯；副翼只有尺寸与力矩，CAD 里没有（03 §2 / §9.2）</div>
+      <div><b>2. 三桨差速混控未写</b> — ArduPlane 无原生三桨构型，偏航全靠 LUA 直写两路输出（03 §6.3、§11.1-4）</div>
+      <div><b>3. 无推力即无俯仰</b> — 落地全程要 ≥25 % 推力、拉平约需 68 % 油门，这是最大安全缺口（03 §9.1）</div>
+      <div><b>4. 颤振 / 质量平衡未做</b> — 副翼是硬要求项，V_ne ≥1.25 V_max + 地面振动试验，不做不许飞（03 §2.5）</div>
+      <div><b>5. 地面试验链全空</b> — 台架推力、落震 3 g、盒段 6 g、整机静力、称重/CG/惯量一项都未做（02 §10.1、03 §10.1）</div>
+      <div><b>6. 安全硬件缺位</b> — 独立安全监控器（不可省）+ 弹道伞（载人）都没有（03 §8.4）</div>
+      <div><b>7. 合规零启动</b> — 实名登记、空域/飞行计划、操控员、第三者责任险都未办</div>
+      <div><b>8. 起降数据断档</b> — 滑跑/离地速度仍是 31 kg 口径，没按 95 kg 重算；场地净空未评估（01 §5.3）</div>
+    </div>
+  </section>
+
+  <div class="chips" id="chips">
+    <span class="chip on" data-f="all">全部</span>
+    <span class="chip" data-f="blk">只看阻断</span>
+    <span class="chip" data-f="gap">只看缺失</span>
+    <span class="chip" data-f="ok">只看已具备</span>
+  </div>
+
+  <div id="tables"></div>
+
+  <footer>
+    状态判定口径：<b>已具备</b>=有 A/B 级定量结论或已进模型；<b>方案/估算</b>=有设计或 C/D 级估算但未建模/未验证；<b>缺失</b>=已识别但无方案或无数据；<b>阻断</b>=不解决不能进入首飞。<br>
+    合规一栏的具体门槛（登记重量、执照类别、适航要求）按现行《无人驾驶航空器飞行管理暂行条例》方向列出，<b>具体适用条款需按最终构型与使用地区核定</b>，未作法律结论。
+  </footer>
+</main>
+
+<script>
+const ST = {
+  ok:   {t:'已具备', cls:'t-ok',   c:'var(--ok)'},
+  part: {t:'方案/估算', cls:'t-part', c:'var(--part)'},
+  gap:  {t:'缺失', cls:'t-gap',   c:'#cdd3da'},
+  blk:  {t:'阻断', cls:'t-blk',   c:'var(--blk)'}
+};
+
+const DATA = [
+{cat:'一、起降', note:'从停机到离地、从进近到停稳：场地、起落架、地面操纵、拉平判据', items:[
+ ['起降构型','明确滑跑 / 短距 / 垂直起降方式','前二后一三点式；翼桨 0–45° 给 134 N 垂直分量（24 % W），只能短距','01 §2·§4 / 03 §1.2','part'],
+ ['起飞滑跑距离','按最终 MTOW 算起飞滑跑 + 15 m 障碍净空','仍是 31 kg 口径，未按 95 kg 重算','01 §5.3','gap'],
+ ['着陆距离','进近 13.5 m/s、4° 下滑、拉平 + 滑跑总长','未算着陆距离；进近需 ≈39 % 油门（不是滑翔）','03 §7.4','gap'],
+ ['场地硬度 / 平整度','机腹最低点离地 56 mm','只能硬质平整场地滑行/停放，无草地余量','01 §4','part'],
+ ['场地净空','两侧/两端障碍物、可用长度与宽度','未评估场地，无 15 m 障碍物净空数据','—','gap'],
+ ['静态抬头角','滑跑时迎角已 12.5°，飞机会自己离地','已量化；控制器任务是压住别过早离地','01 §4','ok'],
+ ['失速 / 离地速度','Vs、Vr 按 95 kg 重算','9.8 m/s @55.9 kg，未重算；V_lo≈1.3 Vs','01 §5.3','gap'],
+ ['起落架强度','落震 3 g 不破坏、2 g 无永久变形','只有轮 + 斜撑，逐件估算 B，未做落震试验','02 §6.4·§10.1','part'],
+ ['起落架减震','吸收着陆冲击','无减震','01 §7 / 评审 P0-6','gap'],
+ ['刹车','主轮刹车或等效减速手段','无刹车','01 §7','gap'],
+ ['地面转向','尾轮转向或差速刹车','尾轮固定、无转向','01 §7 / 评审 P0-6','gap'],
+ ['机轮 / 轮轴 / 尾轮抱箍','主轮 Ø204、尾轮 Ø69、轮距 1.20 m','已建模，尾轮抱箍 4 g 校核过','01 §3.5 / 02 §6.4','ok'],
+ ['侧风 / 阵风窗口','自动落地侧风 ≤3 m/s、阵风 ≤5 m/s','已写死（C 级，需试飞确认）','03 §7.4','part'],
+ ['拉平高度源','下视测距 0.1–12 m，±0.01 m ±1 %','方案 LW20/TFmini，安装位 s 0.10–0.18，未采购安装','03 §7.1–7.3','part'],
+ ['离地 / 触地检测','主轮卸载 + 测距增大 + 下沉率<0 三条件','判据已定，无传感器实现','03 §7.4','part'],
+ ['复飞判据','<10 m 且下沉>1.5 m/s 或横偏>2 m 或 V<1.15 Vs','已定，未实现','03 §7.4','part'],
+ ['自动起降门槛','GNSS≥12 星 / HDOP<1.0 / 罗盘差<5° / 电压 / 链路 LQ>90 % / 侧风','门槛已列，未接成检查单','03 §7.4','part'],
+ ['迫降 / 应急回收','整机伞或场地内迫降程序','r9 已取消整机伞；载人无回收手段','03 §8.4 / 评审','blk'],
+ ['地面保障','消防、警戒、拖车、充电、地勤分工','未安排','—','gap']
+]},
+
+{cat:'二、飞行', note:'离地之后能不能持续、可控、安全地飞：结构、动力、能量、气动、环境', items:[
+ ['结构静力','整机 1.5× 限制载荷不永久变形','只有梁/管逐件估算（B 级），无整机 FE、无静力试验','02 §10.1–10.2','part'],
+ ['部件试验','盒段 6 g、门洞 1.5×300 N·m、耳片 1.5×11 kN、撑杆、尾梁承口、落震','六项均未做','02 §10.1','gap'],
+ ['颤振 / 地面振动','V_ne ≥1.25 V_max；副翼质量平衡；铰链间隙 ≤1 mm','完全未做','03 §2.5·§10.2','blk'],
+ ['质量与重心','空机 / 满载 / 电池首尾四种状态实称','A 级估算：空机 70.75 kg、CG 0.9705；未实称','analysis/v10_r9_mass','part'],
+ ['转动惯量','三线摆实测 Ixx/Iyy/Izz','未测，控制增益只能用估的','03 §10.1','gap'],
+ ['动力台架','三桨推力/电流/转速 vs 油门，推力 ±10 %','未做；三桨静推力仍是 r1 量级参考','02 §10.2 / 01 §5.3','blk'],
+ ['电池能量 / 航程','0.5 h @30 m/s、85 % 可用','无人 MTOW 94.98 kg、航程 46–48 km（C 级估算）','analysis/v10_r9_mass / 01 §5.3','part'],
+ ['电池包与高压安全','绑带、熔断、接触器、预充、防火','无','评审 P0-7','gap'],
+ ['热管理','电机/电调/电池冷却与测温','未设计','01 §7','gap'],
+ ['电气架构 / 线束','母线分区、强弱电隔离、EMC','未设计；三电机共用主母线是单点','03 §8.4','gap'],
+ ['气动 L/D','30 m/s L/D、双翼干扰、下洗/尾流','L/D 3.57 为估算，双翼干扰系数 0.9 是拍的','01 §5.3 / 02 §7.2','part'],
+ ['失速 / 尾旋 / 大迎角','CLmax 1.30、低速大迎角特性','未算；SM 只有 8–10 %，低速大迎角是主风险区','01 §5.3 / 03 §7.1','gap'],
+ ['静稳定裕度','SM ≥5 %（目标 10 %）','8.2 %（r9 口径）/ 10 %（r6 口径）','01 §5.2 / v10_r9_mass','ok'],
+ ['尾容量','V_h 0.4–0.7、V_v 0.03–0.05','V_h 0.480 / V_v 0.037','01 §3.3','ok'],
+ ['操纵权限','俯仰/滚转/偏航各有定量权限','俯仰 +108/−118 N·m、滚转 293 N·m、偏航 114/60 N·m','03 §0','ok'],
+ ['配平能力','30 m/s 配平余量 ≥1.5×','需 −38/+25 N·m，余量 1.6–2.2×','03 §3.1','ok'],
+ ['飞行包线','Vne / Va / Vs / 过载限制','未定义','—','gap'],
+ ['过渡态','翼桨 0→45°、停转顺桨、倾转过渡','未算配平与推力耦合','01 §7 / 03 §11.3','gap'],
+ ['环境适应','温度、湿度、雨、UV、振动','未做','—','gap'],
+ ['载荷固定','3 kg 设备舱载荷固定与质量约束','仅占位','01 §5.1','gap']
+]},
+
+{cat:'三、飞控', note:'从飞控硬件到链路、失效处理：让飞机「听得懂、稳得住、坏了自己能收」', items:[
+ ['飞控硬件','Cube Orange（14 PWM、3 IMU、2 气压、双电源）','已选型，未采购','03 §5.3','part'],
+ ['固件与脚本','ArduPlane 4.6+ / LUA 堆 128 kB','未装','03 §5.3','part'],
+ ['控制架构','三层 400/50/10 Hz，机载电脑不进内环','架构已定，未实现','03 §5.1–5.2','part'],
+ ['俯仰通道','前桨倾转 +25°/−20°，速率 60 °/s','机构 r9 已建模（94 件第 69–83）','03 §3 / 模型','ok'],
+ ['滚转通道','副翼 ±25/−15°，0.215 m²/侧，293 N·m @30 m/s','只有尺寸与力矩，CAD 里没有','03 §2.1–2.3','blk'],
+ ['偏航通道','翼桨差速 ±0.30','方案有，未写混控','03 §6.3','part'],
+ ['三桨混控','LUA 直写两路翼桨油门 + 单发收油','未写','03 §11.1-4','blk'],
+ ['倾转作动器','24 V 15/30 N·m、抱闸、绝对编码器、DroneCAN','未选型（Cube 无 SSI/模拟编码器口）','03 §3.3·§11.1-5','gap'],
+ ['翼桨同步倾转','Ø50 扭矩管、轴承、40 kg·cm 舵机、锁','未建模','03 §4','gap'],
+ ['传感器套件','3 IMU / 2 气压 / 空速 / GNSS / 罗盘 / 下视测距 / 编码器 / ESC 遥测','清单齐全，未采购安装','03 §7.1','part'],
+ ['传感器安装位','空速上翼外段 y±2.3、测距前机身 s 0.10–0.18、GNSS 外置','已定（避开桨流与 56 mm 机腹）','03 §7.3','ok'],
+ ['供电三条线','Cube 双 BEC / 舵机 8.4 V 独立 / 作动器 24 V 独立','方案已定，未做','03 §5.5','part'],
+ ['遥控链路','ELRS 2.4 GHz 50 Hz + 433 MHz 备份，天线外置','方案已定；国内可用频段需核定','03 §5.6–5.7','part'],
+ ['链路预算','1 km 内余量 ≥6 dB','500 m +32 dB（天线外置）','03 §5.7','ok'],
+ ['失效处理','失效表 + 分高度返航 + 电池门限','策略已全列，未实现','03 §8','part'],
+ ['独立安全监控器','独立 MCU + 独立电源，超限拉平/开伞','无（不可省）','03 §8.4','blk'],
+ ['弹道伞','载人版整机伞 + 独立电源/接收','无','03 §5.3·§8.4','blk'],
+ ['地面站 / 日志','参数版本、飞行日志、回放','未搭','03 §11.3','gap'],
+ ['SITL / HITL','含倾转推力耦合、翼桨低头矩、固定平尾的模型','未做','03 §10.1 P2','gap'],
+ ['增益调度','按空速/惯量调度','未做','03 §6.6','gap'],
+ ['调参顺序 / 放行闸门','滚转→俯仰→偏航→空速→相位→失效→自动起降','已定','03 §10.2–10.3','ok'],
+ ['试飞组织','操纵员资质、检查单、试飞流程','无','—','gap']
+]},
+
+{cat:'四、合规与运行', note:'不限于技术文档：手续、资质、场地、保险、维护——一条没办就不能合法起飞', items:[
+ ['实名登记','>250 g 民用无人机实名登记','未办（具体重量门槛需核定）','—','gap'],
+ ['适航 / 特殊适航','25–150 kg 中型机的适航或特殊适航要求','未办；适用条款需按构型核定','—','gap'],
+ ['操控员资质','按类别考取执照 / 培训证明','未办','—','gap'],
+ ['空域 / 飞行计划','飞行计划申请、临时空域、禁飞区核查','未启动','—','gap'],
+ ['第三者责任险','飞行活动保险','未办','—','gap'],
+ ['试验场地','合法起降场 / 专用试验场协议','未落实','—','gap'],
+ ['应急预案','失火、坠落、人员伤害处置流程','未编制','—','gap'],
+ ['维护体系','检查单、维护周期、备件、适航指令跟踪','未建立','02 §9.3','gap'],
+ ['运输与存放','6.0 m 翼展、4.117 m 长、1.472 m 高','需 4.5 m 拖车/机库，无快卸方案','评审 P1','gap'],
+ ['若走载人','载人适航证、飞行员执照、运行许可、伞','均未启动','—','gap']
+]}]
+
+;
+
+/* ---------- 渲染 ---------- */
+const order = ['ok','part','gap','blk'];
+let filter = 'all';
+
+function stats(items){
+  const s = {ok:0,part:0,gap:0,blk:0};
+  items.forEach(i=>s[i[4]]++);
+  return s;
+}
+
+function renderKPI(){
+  let all = [];
+  DATA.forEach(g=>all = all.concat(g.items));
+  const s = stats(all);
+  const total = all.length;
+  const score = Math.round(100*(s.ok + 0.5*s.part)/total);
+  const el = document.getElementById('kpis');
+  el.innerHTML = [
+    ['','总条目', total, '覆盖起降/飞行/飞控/合规'],
+    ['ok','已具备', s.ok, '有 A/B 级结论或已进模型'],
+    ['part','方案/估算', s.part, '设计或 C/D 估计，未落地'],
+    ['gap','缺失', s.gap, '识别到但无方案/无数据'],
+    ['blk','阻断', s.blk, '不解决不能首飞'],
+    ['', '加权就绪度', score+' %', '已具备 1 分 / 方案 0.5 分']
+  ].map(([k,l,v,d])=>`<div class="kpi ${k}"><div class="v">${v}</div><div class="l">${l}<br><span style="opacity:.75">${d}</span></div></div>`).join('');
+}
+
+function renderBars(){
+  const host = document.getElementById('bars');
+  host.innerHTML = DATA.map(g=>{
+    const s = stats(g.items), n = g.items.length;
+    const rows = order.map(k=>`<span class="s-${k}" style="width:${100*s[k]/n}%" title="${ST[k].t} ${s[k]}"></span>`).join('');
+    return `<div style="margin-bottom:14px">
+      <div class="barlbl"><b>${g.cat}</b><span>${s.ok} 具备 · ${s.part} 方案 · ${s.gap} 缺 · ${s.blk} 阻断 / 共 ${n}</span></div>
+      <div class="bar">${rows}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderTables(){
+  const host = document.getElementById('tables');
+  host.innerHTML = DATA.map((g,gi)=>`
+    <section>
+      <h2>${g.cat}</h2>
+      <div class="hint">${g.note}</div>
+      <table>
+        <thead><tr><th class="num">#</th><th style="width:15%">前置条件</th><th style="width:26%">要求 / 判据</th><th style="width:33%">目前现状</th><th>依据</th><th>状态</th></tr></thead>
+        <tbody>
+        ${g.items.map((it,i)=>{
+          const [n,req,cur,ev,st] = it;
+          return `<tr data-st="${st}">
+            <td class="num">${i+1}</td>
+            <td><b>${n}</b></td>
+            <td>${req}</td>
+            <td class="cur">${cur||'—'}</td>
+            <td class="ev">${ev}</td>
+            <td><span class="tag ${ST[st].cls}">${ST[st].t}</span></td>
+          </tr>`;
+        }).join('')}
+        </tbody>
+      </table>
+    </section>`).join('');
+  applyFilter();
+}
+
+function applyFilter(){
+  document.querySelectorAll('#tables tbody tr').forEach(tr=>{
+    const st = tr.dataset.st;
+    let show = filter==='all' || (filter==='blk' && st==='blk') ||
+               (filter==='gap' && (st==='gap'||st==='blk')) ||
+               (filter==='ok'  && st==='ok');
+    tr.classList.toggle('hide', !show);
+  });
+}
+
+document.querySelectorAll('.chip').forEach(c=>{
+  c.addEventListener('click',()=>{
+    document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');
+    filter = c.dataset.f;
+    applyFilter();
+  });
+});
+
+renderKPI(); renderBars(); renderTables();
+</script>
+</body>
+</html>
