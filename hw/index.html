@@ -108,6 +108,7 @@ tr:hover td{background:rgba(255,255,255,.025)}
 .src.board{color:#7ee2a8;border:1px solid rgba(34,197,94,.45);background:rgba(34,197,94,.12)}
 .src.buy{color:#9fb3c8;border:1px solid rgba(129,148,168,.35);background:rgba(129,148,168,.08)}
 .src.diy{color:#c4b5fd;border:1px solid rgba(167,139,250,.4);background:rgba(167,139,250,.1)}
+.src.hold{color:#f2c079;border:1px solid rgba(242,169,59,.45);background:rgba(242,169,59,.1)}
 .filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}
 .filters .btn{padding:7px 13px;font-size:13px}
 .fkeys{margin-left:auto;font-size:12px;color:var(--muted)}
@@ -478,6 +479,32 @@ Port = 14550</pre>
         <tbody id="tbody"></tbody>
       </table>
     </div>
+  </div>
+
+  <div class="card">
+    <h2>台架测试硬件 <span class="hint">单独列账 · 暂不采购</span></h2>
+    <p class="lead">这些只在地面台架用，<b>不装机、不进飞控</b>。按「不做完 10 项台架判据不许装机」的顺序，等 S 闸门签字后再下单；现在只记账，不议价、不占预算。</p>
+    <div class="scroll" style="max-height:none">
+      <table>
+        <thead><tr><th style="width:20%">件</th><th style="width:26%">规格 / 数量</th>
+          <th style="width:30%">台架用途</th><th style="width:12%">状态</th></tr></thead>
+        <tbody>
+          <tr><td class="n">台架电源 / 电池组</td><td class="g">24S 包或等效 + 防打火 ×1</td>
+            <td class="g">先做预充；台架不接整机线束</td><td><span class="src hold">暂不采购</span></td></tr>
+          <tr><td class="n">电流 / 功率采集</td><td class="g">电流钳或功率计 ×1</td>
+            <td class="g">300 A 瞬态与线径温升</td><td><span class="src hold">暂不采购</span></td></tr>
+          <tr><td class="n">转速计</td><td class="g">光电 / 霍尔 ×1</td>
+            <td class="g">三桨转速 vs 油门</td><td><span class="src hold">暂不采购</span></td></tr>
+          <tr><td class="n">逻辑分析仪 / 示波器</td><td class="g">≥4 通道 ×1</td>
+            <td class="g">UART / CAN 时序、继电器动作、ESC 遥测</td><td><span class="src hold">暂不采购</span></td></tr>
+          <tr><td class="n">振动采集</td><td class="g">IMU 或加速度计 ×1</td>
+            <td class="g">全油门 FFT；确认无共振落在控制带宽</td><td><span class="src hold">暂不采购</span></td></tr>
+          <tr><td class="n">推力台架</td><td class="g">传感器 + 采集 ×1 套</td>
+            <td class="g">三桨推力 / 电流 / 转速 vs 油门</td><td><span class="src hold">暂不采购</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="lead" style="margin:10px 0 0">振动采集那台的 IMU <b>不是</b>飞控 IMU：飞控的三颗在 Cube 板上，不用买；这台只管地面测频谱。</p>
   </div>
 
   <footer>
