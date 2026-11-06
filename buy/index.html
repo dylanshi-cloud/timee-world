@@ -52,6 +52,7 @@ h1{font-size:clamp(28px,3vw,40px);line-height:1.1;margin:6px 0 0;font-weight:650
 .tag.p1{color:#9dc3f2;border-color:rgba(57,135,229,.4);background:rgba(57,135,229,.08)}
 .tag.p2{color:#c3c2b7}
 .tag.hold{color:#f2c079;border-color:rgba(242,169,59,.45);background:rgba(242,169,59,.1)}
+.tag.est{color:#9ed3b2;border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.08)}
 .gnote{font-size:12px;color:var(--muted);margin:0 0 8px}
 
 .list{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
@@ -62,10 +63,19 @@ h1{font-size:clamp(28px,3vw,40px);line-height:1.1;margin:6px 0 0;font-weight:650
 .chk{width:18px;height:18px;margin-top:2px;accent-color:var(--good);cursor:pointer}
 .nm{font-size:14px;color:var(--ink);line-height:1.35}
 .nm .note{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45}
+.nm .price{display:inline-block;font-size:12px;color:#f2c079;margin-top:4px;
+  border:1px solid rgba(242,169,59,.28);background:rgba(242,169,59,.07);
+  border-radius:999px;padding:1px 8px}
 .model{font-size:13px;color:var(--ink2);line-height:1.4}
 .qty{font-size:13px;color:var(--ink2);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .done .nm{color:var(--muted);text-decoration:line-through}
 .done .model,.done .qty{opacity:.5}
+
+.pricebar{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.pricebar > div{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.pricebar .pk{font-size:12px;color:var(--muted)}
+.pricebar .pv{font-size:22px;font-weight:650;margin-top:3px;color:var(--ink);font-variant-numeric:tabular-nums}
+.pricebar .pn{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45}
 
 .box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-top:18px}
 .box h2{font-size:15px;margin:0 0 8px;font-weight:620}
@@ -76,6 +86,7 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--grid);
   padding-top:13px;margin-top:22px;line-height:1.7}
 @media (max-width:820px){
   .stats{grid-template-columns:1fr 1fr}
+  .pricebar{grid-template-columns:1fr}
   .item{grid-template-columns:26px minmax(0,1fr) 54px;gap:8px}
   .item .chk{grid-column:1;grid-row:1}
   .item .nm{grid-column:2;grid-row:1}
@@ -109,6 +120,24 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--grid);
   <div class="stat"><div class="n">1<small> 项</small></div><div class="l">P2 · 后置</div></div>
 </section>
 
+<section class="pricebar">
+  <div>
+    <div class="pk">飞控硬件 · A+B+C</div>
+    <div class="pv">≈ ¥1.85 万</div>
+    <div class="pn">中值；区间 ¥1.3–2.4 万。23 项，±30%，未询价</div>
+  </div>
+  <div>
+    <div class="pk">台架 · D 组</div>
+    <div class="pv">≈ ¥0.50 万</div>
+    <div class="pn">暂不采购：10 项台架判据过完再买</div>
+  </div>
+  <div>
+    <div class="pk">不含</div>
+    <div class="pv">电机 / 桨 / 主电池</div>
+    <div class="pn">另列；也不含结构件、运费与认证</div>
+  </div>
+</section>
+
 <div class="shopbar">
   <div class="t">已勾选 <b id="doneCount">0</b> / <span id="allCount">29</span></div>
   <div class="pbar"><div class="f" id="doneBar"></div></div>
@@ -128,12 +157,14 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--grid);
     <li><b>ESC 必须支持遥测</b>：没有 ESC 遥测，前桨失效与翼桨单发检测会静默跳过。台架第 1 项要验证“断信号 1 s 内停转”。</li>
     <li><b>编码器不要两片 AS5600 同挂 I2C</b>：固定地址都是 0x36；选 AS5048A（SPI）、MT6701 或 DroneCAN。</li>
     <li><b>安全监控器是强制项</b>：独立电源、独立判据、只切三路 ESC 信号；不触发弹道伞。硬件预算约 ¥245（见 fc/safety/README.md）。</li>
-    <li><b>价格未询价</b>：本页只给选型、数量和验收要点，不给报价；下单前按最终使用地区核定频段与认证。</li>
+    <li><b>价格为暂估</b>：2026-11 国内电商 / 厂家口径，按中值汇总，±30%，未询价、未含运费关税；下单前逐项询价。不含电机、桨、主电池、结构件。</li>
+    <li><b>降本优先级</b>：GNSS 选 M10 + RM3100 分体（省约 ¥700）→ 测距选 TFmini-S（省约 ¥1,200）→ 机载电脑选 RPi5（省约 ¥2,000）。<b>ESC、倾转作动器、编码器不要降</b>，省下的钱会在单发检测和相位漂移上赔回来。</li>
   </ul>
 </section>
 
 <footer>
   来源：03_控制与飞控.md §5.3 / §7.1 · fc/README.md §3 · fc/safety/README.md §2。<br>
+  价格为 2026-11 国内暂估，按组中值汇总，±30%，未询价；频段与认证仍须按最终使用地区核定。<br>
   勾选状态保存在本机浏览器 localStorage，不上传服务器。采购不等于制造放行；S 闸门未签字前不做物理制造。
 </footer>
 
@@ -141,52 +172,52 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--grid);
 "use strict";
 const GROUPS = [
   {
-    id:"A", title:"A · 飞控核心与导航", prio:"P0", note:"先能上电、读传感器、跑台架与 SIL。",
+    id:"A", title:"A · 飞控核心与导航", prio:"P0", est:"≈ ¥7,350", note:"先能上电、读传感器、跑台架与 SIL。",
     items:[
-      {id:"fc", name:"飞控", model:"Cube Orange 标准载板 ×1", qty:"1", note:"不要 Mini；14 PWM / 2 CAN / 5 UART；ArduPlane 4.6+"},
-      {id:"gnss", name:"GNSS / 罗盘", model:"Here3+ / M10 ×1", qty:"1", note:"天线外置、两根 90°；也可 M10 + RM3100 分体"},
-      {id:"mag", name:"独立罗盘", model:"RM3100 立杆 ×1", qty:"1", note:"离 ESC 母线 ≥350 mm；200 mm 时 300 A 下偏差 3.4°"},
-      {id:"aspd", name:"空速", model:"SDP3x-500Pa ×1", qty:"1", note:"上翼外段前缘 y±2.3；13.5 m/s 时 q=112 Pa，分辨率优于 0.5 Pa"},
-      {id:"laser", name:"下视测距", model:"LW20/C 或 TFmini-S ×1", qty:"1", note:"拉平唯一可信高度源；0.1–12 m，±0.01 m"},
-      {id:"rc", name:"主遥控", model:"ELRS 2.4 GHz 50 Hz 发射 + 双接收 ×1 套", qty:"1套", note:"天线外置；868/915 国内无免许可窗口"},
-      {id:"telem", name:"备链路", model:"433 MHz 数传 ×2", qty:"2", note:"只跑返航 / 降落 / 熄火三条命，不跑摇杆"},
-      {id:"companion", name:"机载电脑", model:"树莓派 5 8GB / Jetson Orin Nano ×1", qty:"1", note:"独立 5V 3A BEC；可后置，先不阻塞台架"}
+      {id:"fc", name:"飞控", model:"Cube Orange 标准载板 ×1", qty:"1", price:"2,300–3,200", note:"不要 Mini；14 PWM / 2 CAN / 5 UART；ArduPlane 4.6+"},
+      {id:"gnss", name:"GNSS / 罗盘", model:"M10 + RM3100 分体 ×1", qty:"1", price:"350–900", note:"天线外置、两根 90°；比 Here3+ 省约 ¥700，精度够用"},
+      {id:"mag", name:"独立罗盘", model:"RM3100 立杆 ×1", qty:"1", price:"400–800", note:"离 ESC 母线 ≥350 mm；200 mm 时 300 A 下偏差 3.4°"},
+      {id:"aspd", name:"空速", model:"SDP3x-500Pa ×1", qty:"1", price:"600–1,100", note:"上翼外段前缘 y±2.3；13.5 m/s 时 q=112 Pa，分辨率优于 0.5 Pa"},
+      {id:"laser", name:"下视测距", model:"TFmini-S ×1", qty:"1", price:"350–600", note:"拉平唯一可信高度源；0.1–12 m。LW20 更稳但贵约 ¥1,200"},
+      {id:"rc", name:"主遥控", model:"ELRS 2.4 GHz 50 Hz 发射 + 双接收 ×1 套", qty:"1套", price:"550–1,000", note:"天线外置；868/915 国内无免许可窗口"},
+      {id:"telem", name:"备链路", model:"433 MHz 数传 ×2", qty:"2", price:"300–600", note:"只跑返航 / 降落 / 熄火三条命，不跑摇杆"},
+      {id:"companion", name:"机载电脑", model:"树莓派 5 8GB ×1", qty:"1", price:"650–1,000", note:"独立 5V 3A BEC；Jetson 贵约 ¥2,000，当前用不上；可后置"}
     ]
   },
   {
-    id:"B", title:"B · 执行与动力", prio:"P1", note:"随机架一起买；先做台架，不装机。",
+    id:"B", title:"B · 执行与动力", prio:"P1", est:"≈ ¥10,600", note:"随机架一起买；先做台架，不装机。",
     items:[
-      {id:"esc", name:"三桨电调（带遥测）", model:"前桨 1 + 翼桨 2，共 3 ×1 套", qty:"3", note:"必须支持 BDShot / DroneCAN / 串口遥测；断信号 1 s 内停转"},
-      {id:"tilt_front", name:"前桨倾转作动器", model:"24 V / 15 N·m 连续 / 30 N·m 峰值 ×1", qty:"1", note:"30 N·m 抱闸；DroneCAN + 绝对编码器；Cube 无 SSI/模拟编码器口"},
-      {id:"tilt_wing", name:"翼桨倾转舵机", model:"40 kg·cm + 碳扭矩管 ×2", qty:"2", note:"共轴慢轴；20 °/s；相位 0/45/35°"},
-      {id:"aileron", name:"副翼舵机", model:"60 kg·cm 金属齿 ×2", qty:"2", note:"独立 8.4 V BEC；±25°；不与飞控共轨"},
-      {id:"enc", name:"绝对编码器", model:"17 bit ×2", qty:"2", note:"AS5048A（SPI）/ MT6701 / DroneCAN；不要两片 AS5600 同挂 I2C"},
-      {id:"bec", name:"BEC 电源", model:"8.4 V 舵机 + 5 V 航电 ×2", qty:"2", note:"副翼/翼桨舵机独立 8.4 V；飞控 Power1/2 双电源"},
-      {id:"precharge", name:"预充 / 熔断 / 主接触器", model:"300 A 母线 ×1 套", qty:"1套", note:"S2-E-04；上电顺序与预充电阻按台架实测"},
-      {id:"conn", name:"插头与线束", model:"XT90 / AS150 ×1 套", qty:"1套", note:"按 300 A 瞬态选线径；S2-E-05 线径温升"}
+      {id:"esc", name:"三桨电调（带遥测）", model:"前桨 1 + 翼桨 2，共 3 ×1 套", qty:"3", price:"2,800–5,000 / 组", note:"必须支持 BDShot / DroneCAN / 串口遥测；断信号 1 s 内停转"},
+      {id:"tilt_front", name:"前桨倾转作动器", model:"24 V / 15 N·m 连续 / 30 N·m 峰值 ×1", qty:"1", price:"1,500–3,500", note:"30 N·m 抱闸；DroneCAN + 绝对编码器；Cube 无 SSI/模拟编码器口"},
+      {id:"tilt_wing", name:"翼桨倾转舵机", model:"40 kg·cm + 碳扭矩管 ×2", qty:"2", price:"800–1,600 / 组", note:"共轴慢轴；20 °/s；相位 0/45/35°"},
+      {id:"aileron", name:"副翼舵机", model:"60 kg·cm 金属齿 ×2", qty:"2", price:"600–1,000 / 组", note:"独立 8.4 V BEC；±25°；不与飞控共轨"},
+      {id:"enc", name:"绝对编码器", model:"17 bit ×2", qty:"2", price:"160–400 / 组", note:"AS5048A（SPI）/ MT6701 / DroneCAN；不要两片 AS5600 同挂 I2C"},
+      {id:"bec", name:"BEC 电源", model:"8.4 V 舵机 + 5 V 航电 ×2", qty:"2", price:"250–600", note:"副翼/翼桨舵机独立 8.4 V；飞控 Power1/2 双电源"},
+      {id:"precharge", name:"预充 / 熔断 / 主接触器", model:"300 A 母线 ×1 套", qty:"1套", price:"600–1,500", note:"S2-E-04；上电顺序与预充电阻按台架实测"},
+      {id:"conn", name:"插头与线束", model:"XT90 / AS150 ×1 套", qty:"1套", price:"300–600", note:"按 300 A 瞬态选线径；S2-E-05 线径温升"}
     ]
   },
   {
-    id:"C", title:"C · 独立安全监控器", prio:"P0", note:"强制项：主飞控软件死了，这一层仍能切三路 ESC 信号。",
+    id:"C", title:"C · 独立安全监控器", prio:"P0", est:"≈ ¥560", note:"强制项：主飞控软件死了，这一层仍能切三路 ESC 信号。",
     items:[
-      {id:"mcu", name:"监控器 MCU", model:"RP2040 Pico ×1", qty:"1", note:"MicroPython + 硬件看门狗；不需要无线"},
-      {id:"batt", name:"独立电源", model:"2S 800 mAh LiPo + 5V/3A 降压 ×1", qty:"1", note:"主母线掉电时监控器仍工作"},
-      {id:"bec2", name:"备份供电", model:"5V/5A BEC ×1", qty:"1", note:"与 2S 电池二极管并联，任一路在就不断电"},
-      {id:"relay", name:"信号继电器", model:"3 路常开 ×1 套", qty:"1套", note:"SRD-05VDC ×3 或 1 只 3 组触点；只切信号线，不切功率地"},
-      {id:"alarm", name:"声光告警", model:"90 dB 蜂鸣器 + 双色 LED ×1", qty:"1", note:"原因编码用闪烁次数"},
-      {id:"estop", name:"人工急停", model:"自锁蘑菇头 ×1", qty:"1", note:"接 GP7，锁存；复位必须断监控器电源"},
-      {id:"sconn", name:"线束 / 插头 / 壳", model:"JST-GH + 3D 打印 ×1 套", qty:"1套", note:"只共地，不共 5 V"}
+      {id:"mcu", name:"监控器 MCU", model:"RP2040 Pico ×1", qty:"1", price:"30–60", note:"MicroPython + 硬件看门狗；不需要无线"},
+      {id:"batt", name:"独立电源", model:"2S 800 mAh LiPo + 5V/3A 降压 ×1", qty:"1", price:"80–150", note:"主母线掉电时监控器仍工作"},
+      {id:"bec2", name:"备份供电", model:"5V/5A BEC ×1", qty:"1", price:"60–120", note:"与 2S 电池二极管并联，任一路在就不断电"},
+      {id:"relay", name:"信号继电器", model:"3 路常开 ×1 套", qty:"1套", price:"35–80", note:"SRD-05VDC ×3 或 1 只 3 组触点；只切信号线，不切功率地"},
+      {id:"alarm", name:"声光告警", model:"90 dB 蜂鸣器 + 双色 LED ×1", qty:"1", price:"20–50", note:"原因编码用闪烁次数"},
+      {id:"estop", name:"人工急停", model:"自锁蘑菇头 ×1", qty:"1", price:"30–80", note:"接 GP7，锁存；复位必须断监控器电源"},
+      {id:"sconn", name:"线束 / 插头 / 壳", model:"JST-GH + 3D 打印 ×1 套", qty:"1套", price:"100–220", note:"只共地，不共 5 V"}
     ]
   },
   {
-    id:"D", title:"D · 台架与测试", prio:"P1", hold:true, note:"暂不采购：不做完 10 项台架判据，不许装机。",
+    id:"D", title:"D · 台架与测试", prio:"P1", hold:true, est:"≈ ¥4,975", note:"暂不采购：不做完 10 项台架判据，不许装机。",
     items:[
-      {id:"psu", name:"台架电源 / 电池组", model:"24S 包或等效 + 防打火 ×1", qty:"1", note:"先做预充；台架不接整机线束"},
-      {id:"meter", name:"电流 / 功率采集", model:"电流钳或功率计 ×1", qty:"1", note:"300 A 瞬态与线径温升"},
-      {id:"tach", name:"转速计", model:"光电 / 霍尔 ×1", qty:"1", note:"三桨转速 vs 油门"},
-      {id:"scope", name:"逻辑分析仪 / 示波器", model:"≥4 通道 ×1", qty:"1", note:"UART/CAN 时序、继电器动作、ESC 遥测"},
-      {id:"vib", name:"振动采集", model:"IMU 或加速度计 ×1", qty:"1", note:"全油门 FFT；这是台架件，不是飞控那三颗 IMU"},
-      {id:"loadcell", name:"推力台架", model:"传感器 + 采集 ×1 套", qty:"1套", note:"三桨推力 / 电流 / 转速 vs 油门"}
+      {id:"psu", name:"台架电源 / 电池组", model:"24S 包或等效 + 防打火 ×1", qty:"1", price:"1,500–3,000", note:"先做预充；台架不接整机线束"},
+      {id:"meter", name:"电流 / 功率采集", model:"电流钳或功率计 ×1", qty:"1", price:"200–600", note:"300 A 瞬态与线径温升"},
+      {id:"tach", name:"转速计", model:"光电 / 霍尔 ×1", qty:"1", price:"100–300", note:"三桨转速 vs 油门"},
+      {id:"scope", name:"逻辑分析仪 / 示波器", model:"≥4 通道 ×1", qty:"1", price:"350–1,500", note:"UART/CAN 时序、继电器动作、ESC 遥测"},
+      {id:"vib", name:"振动采集", model:"IMU 或加速度计 ×1", qty:"1", price:"100–300", note:"全油门 FFT；这是台架件，不是飞控那三颗 IMU"},
+      {id:"loadcell", name:"推力台架", model:"传感器 + 采集 ×1 套", qty:"1套", price:"500–1,500", note:"三桨推力 / 电流 / 转速 vs 油门"}
     ]
   }
 ];
@@ -201,6 +232,7 @@ el.innerHTML = GROUPS.map(g=>`
     <div class="ghead">
       <h2>${g.title}</h2>
       <span class="tag ${g.prio.toLowerCase()}">${g.prio}</span>
+      ${g.est ? `<span class="tag est">${g.est}</span>` : ''}
       ${g.hold ? '<span class="tag hold">暂不采购</span>' : ''}
     </div>
     <p class="gnote">${g.note}</p>
@@ -208,7 +240,7 @@ el.innerHTML = GROUPS.map(g=>`
       ${g.items.map(it=>`
         <label class="item ${checked[it.id]?"done":""}" data-id="${it.id}">
           <input class="chk" type="checkbox" ${checked[it.id]?"checked":""}>
-          <span class="nm">${it.name}<span class="note">${it.note}</span></span>
+          <span class="nm">${it.name}<span class="note">${it.note}</span><span class="price">暂估 ¥${it.price}</span></span>
           <span class="model">${it.model}</span>
           <span class="qty">${it.qty}</span>
         </label>`).join("")}
@@ -243,7 +275,7 @@ document.getElementById("copy").onclick = async ()=>{
     const left = g.items.filter(it=>!checked[it.id]);
     if(!left.length) continue;
     lines.push(`【${g.title}】`);
-    left.forEach(it=>lines.push(`- ${it.name}｜${it.model}｜数量 ${it.qty}｜${it.note}`));
+    left.forEach(it=>lines.push(`- ${it.name}｜${it.model}｜数量 ${it.qty}｜暂估 ¥${it.price}｜${it.note}`));
     lines.push("");
   }
   const txt = lines.join("\n");
