@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>V10 飞控硬件</title>
+<style>
+:root{
+  color-scheme:dark;
+  --page:#0a0f15; --surface:#121820; --surface2:#172029;
+  --ink:#eef2f6; --ink2:#b9c6d4; --muted:#8194a8;
+  --line:rgba(255,255,255,.10);
+  --accent:#3b8eea; --good:#22c55e; --warn:#f2a93b; --bad:#e05252; --vio:#a78bfa;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--page);color:var(--ink);
+  font:15px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Segoe UI",sans-serif;
+  -webkit-tap-highlight-color:transparent}
+a{color:var(--accent);text-decoration:none}
+.wrap{max-width:1240px;margin:0 auto;padding:22px 18px 40px}
+header{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+header h1{font-size:28px;margin:0;font-weight:680;letter-spacing:-.01em}
+header .sub{font-size:14px;color:var(--muted);padding-bottom:4px}
+header .right{margin-left:auto;display:flex;gap:9px;padding-bottom:3px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink2);
+  border-radius:10px;padding:9px 15px;font-size:14px}
+.btn:hover{color:var(--ink);border-color:rgba(255,255,255,.22)}
+.btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--ink2);
+  margin-bottom:10px;align-items:center}
+.legend i{display:inline-block;width:22px;height:0;border-top-width:3px;border-top-style:solid;
+  vertical-align:middle;margin-right:6px;border-radius:2px}
+.legend .sig i{border-color:#4c9ae8}
+.legend .pwr i{border-color:#f2a93b}
+.legend .saf i{border-color:#e05252;border-top-style:dashed}
+.legend .mech i{border-color:#8194a8;border-top-style:dashed}
+.legend .hint{margin-left:auto;color:var(--muted);font-size:13px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:14px 16px;margin-bottom:14px}
+.card h2{font-size:16px;margin:0 0 2px;font-weight:620;display:flex;align-items:baseline;gap:9px}
+.card h2 .hint{font-size:13px;color:var(--muted);font-weight:400}
+.card .lead{font-size:13px;color:var(--muted);margin:0 0 10px}
+
+#topo{width:100%;height:auto;display:block;touch-action:manipulation}
+#topo text{font-family:inherit;user-select:none}
+.n-box{fill:#141d27;stroke:#2c3b4a;stroke-width:1.4;transition:fill .12s,stroke .12s}
+.n-t1{font-size:13px;font-weight:600;fill:#e9f0f7}
+.n-t2{font-size:12px;fill:#8fa4b8}
+.node{cursor:pointer}
+.node:hover .n-box{stroke:#5aa9e6;fill:#17222e}
+.node.sel .n-box{stroke:#3b8eea;stroke-width:2.6;fill:#1a2a3b}
+.node.dim{opacity:.45}
+.k-fc .n-box{fill:#16324e;stroke:#3b8eea;stroke-width:2}
+.k-saf .n-box{fill:#2a1618;stroke:#8d3b3b}
+.k-pwr .n-box{fill:#2a2113;stroke:#8a6420}
+.k-mech .n-box{fill:#1b1f24;stroke:#5b6b7a}
+.k-sen .n-box{fill:#141d27;stroke:#2f4356}
+.k-act .n-box{fill:#132019;stroke:#2f6144}
+.k-lnk .n-box{fill:#1d1a2b;stroke:#5b4b8a}
+.edge{fill:none;stroke-width:1.6;opacity:.72;transition:opacity .12s,stroke-width .12s}
+.e-sig{stroke:#4c9ae8}
+.e-saf{stroke:#e05252;stroke-dasharray:5 4}
+.e-mech{stroke:#8194a8;stroke-dasharray:4 4}
+.edge.on{opacity:1;stroke-width:2.8}
+.edge.dim{opacity:.12}
+
+.detail{display:grid;grid-template-columns:1.1fr 1fr 1.2fr;gap:16px}
+.detail .blk{min-width:0}
+.detail .k{font-size:12px;color:var(--muted);letter-spacing:.04em;margin-bottom:3px}
+.detail .v{font-size:14px;color:var(--ink2);line-height:1.6}
+.detail .name{font-size:19px;font-weight:640;color:var(--ink);margin-bottom:2px}
+.detail .role{font-size:13px;color:var(--muted);margin-bottom:12px}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:2px}
+.chip{font-size:12px;color:#cfe3ff;border:1px solid rgba(59,142,234,.4);
+  background:rgba(59,142,234,.1);border-radius:999px;padding:3px 10px;cursor:pointer}
+.chip:hover{background:rgba(59,142,234,.22)}
+
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.06);
+  vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.04em;
+  position:sticky;top:0;background:var(--surface);z-index:1}
+td.n{color:var(--ink);font-weight:600;white-space:nowrap}
+td.g{color:var(--ink2)}
+tr:hover td{background:rgba(255,255,255,.025)}
+.scroll{overflow:auto;max-height:520px;border:1px solid var(--line);border-radius:12px}
+
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.rule{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.rule .t{font-size:14px;font-weight:620;margin-bottom:5px}
+.rule .d{font-size:13px;color:var(--ink2);line-height:1.6}
+.rule .w{font-size:12px;color:var(--warn);margin-top:6px}
+
+footer{font-size:13px;color:var(--muted);line-height:1.7;border-top:1px solid var(--line);
+  padding-top:14px;margin-top:6px}
+@media (max-width:900px){
+  .detail{grid-template-columns:1fr}
+  .rules{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>飞控硬件</h1>
+    <div class="sub">V10 双翼三桨 · 1130za · 信号 / 供电 / 失效</div>
+    <div class="right">
+      <a class="btn" href="/">主页</a>
+      <a class="btn" href="/sim/">模拟</a>
+      <a class="btn" href="/fc/">进展</a>
+    </div>
+  </header>
+
+  <div class="legend">
+    <span class="sig"><i></i>信号 / 数据</span>
+    <span class="saf"><i></i>安全链</span>
+    <span class="mech"><i></i>机械（不经飞控）</span>
+    <span class="hint">点任一硬件看功能、接口与失效后果</span>
+  </div>
+
+  <div class="card">
+    <h2>控制拓扑 <span class="hint">传感器 → 主飞控 → 执行器；安全层旁路</span></h2>
+    <svg id="topo" viewBox="0 0 860 620" role="img" aria-label="飞控硬件拓扑图"></svg>
+  </div>
+
+  <div class="card">
+    <h2 id="dName">选择一件硬件</h2>
+    <div class="detail">
+      <div class="blk">
+        <div class="k">功能</div>
+        <div class="v" id="dRole">点上面拓扑图里的任意方块。</div>
+      </div>
+      <div class="blk">
+        <div class="k">接口 / 位置 / 电源</div>
+        <div class="v" id="dIface">—</div>
+      </div>
+      <div class="blk">
+        <div class="k">失效后果</div>
+        <div class="v" id="dFail">—</div>
+        <div class="chips" id="dLinks"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>供电三条线 <span class="hint">§5.5 · 不许混</span></h2>
+    <p class="lead">主电池 24S（6.114 kWh 总 / 4.891 可用）经主母线分出四路：动力、飞控、舵机、倾转。</p>
+    <svg id="pwr" viewBox="0 0 860 300" role="img" aria-label="供电拓扑"></svg>
+    <div class="rules">
+      <div class="rule">
+        <div class="t">① 飞控本体</div>
+        <div class="d">Power1 / Power2 双 BEC，带电压电流检测；两路独立，单路失效不断电。</div>
+        <div class="w">双 BEC 同时失效 = 飞控掉电，转安全监控器 + 伞</div>
+      </div>
+      <div class="rule">
+        <div class="t">② 舵机 8.4 V</div>
+        <div class="d">独立 BEC 只供副翼 ×2 与翼桨倾转舵机；飞控只接信号与地。</div>
+        <div class="w">把 8.4 V 灌进飞控舵机轨 = 烧飞控</div>
+      </div>
+      <div class="rule">
+        <div class="t">③ 倾转 24 V</div>
+        <div class="d">前桨倾转作动器独立 24 V，信号与反馈走 CAN1。</div>
+        <div class="w">断电靠 30 N·m 抱闸；抱闸失效回中弹簧回 3.6°</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>失效联动 <span class="hint">§8.1 · 检测 → 动作</span></h2>
+    <table>
+      <thead><tr><th style="width:22%">故障</th><th style="width:34%">检测</th><th>动作</th></tr></thead>
+      <tbody>
+        <tr><td class="n">前桨倾转卡滞</td><td class="g">指令 − 编码器 &gt; 3°/0.3 s</td><td class="g"><b style="color:#ffd7a8">先收油门</b>（不是先拉杆），再改姿态找地方落；卡在小角 + 满推最危险</td></tr>
+        <tr><td class="n">翼桨单发</td><td class="g">电流偏离 &gt; 20% / 0.3 s</td><td class="g">立即把对侧收到 0，<b>不差速硬抗</b>；直线落地</td></tr>
+        <tr><td class="n">翼桨倾转卡 0°</td><td class="g">位置反馈</td><td class="g">翼桨推力限 ≤30%，否则低头矩吃光前桨俯仰权限</td></tr>
+        <tr><td class="n">作动器断电</td><td class="g">电流 / CAN 丢失</td><td class="g">抱闸 30 N·m 锁住；抱闸也失效 → 回中弹簧回 0°</td></tr>
+        <tr><td class="n">副翼卡死</td><td class="g">舵机电流 / 位置</td><td class="g">对侧限幅跟随，用翼桨差速配平滚转；尽快落地</td></tr>
+        <tr><td class="n">RC 丢失</td><td class="g">链路 LQ / 心跳</td><td class="g">&gt;30 m 返航；10–30 m 直线降高盘旋；&lt;10 m 立即直线迫降（<b>低空返航就是摔</b>）</td></tr>
+        <tr><td class="n">飞控死机</td><td class="g">安全监控器心跳超时</td><td class="g">监控器独立断 3 路 ESC 并锁存；伞可独立开</td></tr>
+        <tr><td class="n">全机掉电</td><td class="g">—</td><td class="g"><b style="color:#ffc9c9">弹道伞</b>（独立电池 + 独立接收）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>全部硬件 <span class="hint">25 件 · 功能 / 接口 / 电源 / 失效</span></h2>
+    <div class="scroll">
+      <table>
+        <thead><tr><th style="width:14%">件</th><th style="width:24%">功能</th>
+          <th style="width:24%">接口 / 位置</th><th style="width:8%">电源</th><th>失效后果</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>
+    口径：<code>03_控制与飞控.md</code> §5 架构 / §7 感知 / §8 失效（2026-11-06）。
+    软件侧已闭环（单元测试 26/26、安全监控 15/15、SIL 16/16），<b>硬件 0/10 未采购、未台架</b>，
+    本页为设计口径，采购前须按实物复核（ESC 必须支持遥测、IMU 主备同批次、AS5600 地址冲突需 TCA9548A 或换 AS5048A）。
+  </footer>
+</div>
+
+<script>
+"use strict";
+/* ---------------- 硬件数据 ---------------- */
+const D = [
+ {id:'imu', t:'IMU ×3', s:'ICM-42688-P · 三路投票', x:12,y:88,w:176,h:38,k:'sen', pwr:'飞控板载',
+  role:'400 Hz 姿态内环唯一的角速率与姿态源；三颗互相投票。',
+  iface:'Cube 板载，减振 + 加温；±16 g / ±2000 dps',
+  fail:'同板三颗共享 PCB/电源/温振，不是真冗余。不一致切备份，仍不一致 → 稳定模式直线落地，禁自动。'},
+ {id:'baro', t:'气压计 ×2', s:'BMP581 ±0.3 m', x:12,y:132,w:176,h:38,k:'sen', pwr:'飞控板载',
+  role:'高度基准与趋势判断。', iface:'Cube 板载 ×2', fail:'地效内不可信，不能用于拉平；只能做趋势。'},
+ {id:'aspd', t:'空速管', s:'SDP3x-500Pa ±1.5%', x:12,y:176,w:176,h:38,k:'sen', pwr:'飞控 I2C1',
+  role:'速度环与失速保护的输入。', iface:'I2C1；上翼外段前缘 y ±2.3（桨流之外）',
+  fail:'失效 → 切 GPS 地速 + 姿态估计，禁空速失速保护，限速 16–20 m/s。'},
+ {id:'gnss', t:'GNSS', s:'M10 双频 5 Hz', x:12,y:220,w:176,h:38,k:'sen', pwr:'飞控 SERIAL3',
+  role:'航路、返航、地速。', iface:'SERIAL3；天线外置两根互成 90°',
+  fail:'水平 1.5 m / 垂直 3 m，<b>不做拉平</b>；失效 → 姿态模式目视返航。'},
+ {id:'mag', t:'罗盘', s:'RM3100 立杆', x:12,y:264,w:176,h:38,k:'sen', pwr:'飞控 I2C',
+  role:'航向；低速段的主航向源。', iface:'立杆，离 ESC 母线 ≥350 mm',
+  fail:'母线 300 A 下 200 mm 就有 3.4° 偏差 → 只做低速备份，巡航靠 GNSS 航迹。'},
+ {id:'rng', t:'下视测距', s:'LW20 · 0.1–12 m', x:12,y:308,w:176,h:38,k:'sen', pwr:'飞控串口',
+  role:'拉平唯一可信的高度源。', iface:'前机身下侧 s 0.10–0.18 装窗，俯角 0–10°',
+  fail:'无备份。测距失效必须禁自动落地，改手动。'},
+ {id:'enc', t:'倾转编码器 ×2', s:'17 bit 绝对式', x:12,y:352,w:176,h:38,k:'sen', pwr:'CAN1',
+  role:'倾转角反馈：卡滞检测与配平闭环。', iface:'CAN1（Cube 无 SSI/模拟编码器输入）',
+  fail:'跳变 → 冻结该通道，转「固定倾角 + 翼桨应急俯仰」（权限弱，只够低速）。'},
+ {id:'esctel', t:'ESC 遥测', s:'三路电流 / 转速', x:12,y:396,w:176,h:38,k:'sen', pwr:'CAN2',
+  role:'单桨失效检测、电量估算。', iface:'CAN2 / 串口；<b>ESC 必须支持遥测</b>',
+  fail:'没有遥测则翼桨单发检测不出来，只能靠人感觉。'},
+
+ {id:'fc', t:'Cube Orange 主飞控', s:'ArduPlane 4.6 · 400/50/10 Hz', x:214,y:88,w:200,h:332,k:'fc', pwr:'双 BEC',
+  role:'内环姿态、混控与限幅、failsafe、LUA 慢速调度全在这里；RC 直连，机载电脑不进内环。',
+  iface:'14 路 PWM（8 主 + 6 辅）· 2×CAN · 5×UART · 双电源口',
+  fail:'死机 → 独立安全监控器接管（断 ESC / 开伞）；机载电脑死机不影响飞行。'},
+
+ {id:'tilt', t:'前桨倾转作动器', s:'24 V · 15/30 N·m · 抱闸', x:446,y:88,w:190,h:52,k:'act', pwr:'24 V',
+  role:'<b>俯仰主通道</b>：改推力方向就是改俯仰力矩。',
+  iface:'MAIN1，−20° / +3.6° / +25°；反馈 CAN1',
+  fail:'卡滞：先收油门再改姿态；断电抱闸 30 N·m；抱闸失效回中弹簧回 3.6°。'},
+ {id:'ail', t:'副翼舵机 ×2', s:'60 kg·cm 金属齿', x:446,y:150,w:190,h:46,k:'act', pwr:'8.4 V BEC',
+  role:'<b>滚转主通道</b>；巡航时翼桨停转，滚转只剩副翼。', iface:'MAIN2/3，±25°；独立 8.4 V，信号与地回飞控',
+  fail:'卡死 → 对侧限幅跟随 + 翼桨差速配平，尽快落地；颤振 → 立即减速落地。'},
+ {id:'wtilt', t:'翼桨倾转舵机', s:'40 kg·cm · 共轴 20 °/s', x:446,y:204,w:190,h:46,k:'act', pwr:'8.4 V BEC',
+  role:'相位日程 0–45°：地面 0°、起爬 45°、巡航 0°、进近 20–45°；<b>不进俯仰内环</b>。',
+  iface:'MAIN4；碳扭矩管共轴，一个伺服',
+  fail:'卡 0° → 翼桨推力限 ≤30%（否则低头矩吃光前桨权限）；卡 45° → 只损失短距性能。'},
+ {id:'esc3', t:'3× 电调 + 电机', s:'前 30 kW + 翼 2×6 kW', x:446,y:258,w:190,h:46,k:'act', pwr:'主母线',
+  role:'推力与<b>偏航差速</b>；定距桨 T ∝ 油门²，25% 油门只有 6% 推力。',
+  iface:'MAIN5（400 Hz）/ MAIN6-7（LUA 直写差速）',
+  fail:'翼桨单发 → 立即把对侧收 0；过流/过温 → 限功率落地。'},
+ {id:'relay', t:'停桨继电器', s:'切 3 路 ESC 信号', x:446,y:312,w:190,h:40,k:'saf', pwr:'安全监控器',
+  role:'软件全线失效时的动力切断通路。', iface:'由独立安全监控器驱动，不经过主飞控软件',
+  fail:'继电器失效 → 只能靠弹道伞。'},
+
+ {id:'mon', t:'安全监控器', s:'小 MCU · 独立 5 V', x:670,y:88,w:170,h:64,k:'saf', pwr:'独立 5 V',
+  role:'只看姿态 / AGL / 电压 / 链路质量；超限独立执行「拉平 + 收油门 / 开伞」。',
+  iface:'SERIAL4 收主飞控 $V10S 心跳（10 Hz）',
+  fail:'不可省：所有策略都在主飞控软件里，飞控跑飞时一条都不会执行。'},
+ {id:'chute', t:'弹道伞', s:'独立电池 + 独立接收', x:670,y:162,w:170,h:56,k:'saf', pwr:'独立电池',
+  role:'全机掉电/失控的最后通路。', iface:'MAIN8 / CH10；载人版必配',
+  fail:'唯一兜底，独立于飞控与主电池。'},
+
+ {id:'rc', t:'ELRS 2.4 GHz ×2', s:'50 Hz · CRSF · 双接收', x:12,y:452,w:176,h:42,k:'lnk', pwr:'独立 5 V',
+  role:'主遥控，<b>直连飞控</b>，不经电脑转发。', iface:'SERIAL5 CRSF / RCIN；天线必须外置（碳纤维吃 20 dB）',
+  fail:'丢失按高度分层：&gt;30 m 返航 / 10–30 m 直线降高盘旋 / &lt;10 m 直线迫降。'},
+ {id:'dl', t:'433 MHz 数传', s:'备链路 · 三条命', x:12,y:500,w:176,h:42,k:'lnk', pwr:'独立 5 V',
+  role:'只跑「返航 / 降落 / 熄火」，不跑摇杆。', iface:'SERIAL1 MAVLink2；命令立即生效并锁存 3 s',
+  fail:'主链路正常时以主为准；868/915 在国内无免许可窗口，频段采购前核定。'},
+ {id:'rpi', t:'树莓派 5', s:'任务 / 日志 / 图传', x:12,y:548,w:176,h:42,k:'lnk', pwr:'独立 5 V 3 A',
+  role:'只发目标 / 模式 / 航点，只收状态 / 日志。', iface:'SERIAL2，921600 8N1 MAVLink2',
+  fail:'死机、重启、过热都不影响飞行；RC 随时接管。'},
+ {id:'man', t:'手动尾翼通道', s:'推杆 + 钢索 · 无舵机', x:214,y:452,w:200,h:64,k:'mech', pwr:'无（机械）',
+  role:'俯仰 / 偏航的机械备份：驾驶杆→左右 Ø8 铝推杆→升降舵；脚蹬→Ø3 钢索→方向舵。',
+  iface:'升降舵 ±20°、方向舵 ±25°（建议暂定）；<b>不进飞控</b>',
+  fail:'倾转机构失效时唯一可用的俯仰手段，但只能保静稳定、<b>拉不平</b>。'},
+];
+
+/* 边：sig 信号 / saf 安全 / mech 机械 */
+const E = [
+ {f:'rc',to:'fc',k:'sig',path:'M188,473 H200 V392 H214'},
+ {f:'dl',to:'fc',k:'sig',path:'M188,521 H206 V380 H214'},
+ {f:'rpi',to:'fc',k:'sig',path:'M188,569 H212 V368 H214'},
+ {f:'imu',to:'fc',k:'sig'}, {f:'baro',to:'fc',k:'sig'}, {f:'aspd',to:'fc',k:'sig'},
+ {f:'gnss',to:'fc',k:'sig'}, {f:'mag',to:'fc',k:'sig'}, {f:'rng',to:'fc',k:'sig'},
+ {f:'enc',to:'fc',k:'sig'}, {f:'esctel',to:'fc',k:'sig'},
+ {f:'fc',to:'tilt',k:'sig'}, {f:'fc',to:'ail',k:'sig'}, {f:'fc',to:'wtilt',k:'sig'},
+ {f:'fc',to:'esc3',k:'sig'}, {f:'fc',to:'chute',k:'sig',path:'M414,300 H650 V190 H670'},
+ {f:'fc',to:'mon',k:'saf',path:'M330,88 V72 H755 V88'},
+ {f:'mon',to:'relay',k:'saf',path:'M840,120 H850 V380 H541 V352'},
+ {f:'relay',to:'esc3',k:'saf'},
+ {f:'rc',to:'man',k:'mech'},
+];
+
+const BY = {}; D.forEach(d => BY[d.id] = d);
+const svg = document.getElementById('topo');
+const NS = 'http://www.w3.org/2000/svg';
+
+function el(tag, attrs, parent){
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function cx(n){ return n.x + n.w/2; }
+function cy(n){ return n.y + n.h/2; }
+
+/* 边先画（在节点下面） */
+const gEdges = el('g', {}, svg);
+const edgeEls = E.map(e => {
+  const a = BY[e.f], b = BY[e.to];
+  let d;
+  if (e.path) d = e.path;
+  else {
+    const x1 = (cx(a) < cx(b)) ? a.x + a.w : a.x;
+    const y1 = cy(a);
+    const x2 = (cx(a) < cx(b)) ? b.x : b.x + b.w;
+    const y2 = cy(b);
+    const dx = Math.max(24, Math.abs(x2 - x1) * 0.45);
+    d = `M${x1},${y1} C${x1+dx},${y1} ${x2-dx},${y2} ${x2},${y2}`;
+  }
+  const p = el('path', {d, class:'edge e-' + e.k, 'data-f':e.f, 'data-t':e.to}, gEdges);
+  return p;
+});
+
+/* 节点 */
+const gNodes = el('g', {}, svg);
+const nodeEls = {};
+D.forEach(n => {
+  const g = el('g', {class:'node k-' + n.k, 'data-id':n.id}, gNodes);
+  el('rect', {x:n.x, y:n.y, width:n.w, height:n.h, rx:9, class:'n-box'}, g);
+  const t1 = el('text', {x:n.x+11, y:n.y + n.h/2 - 6, class:'n-t1'}, g);
+  t1.textContent = n.t;
+  const t2 = el('text', {x:n.x+11, y:n.y + n.h/2 + 10, class:'n-t2'}, g);
+  t2.textContent = n.s;
+  g.addEventListener('click', () => select(n.id));
+  nodeEls[n.id] = g;
+});
+
+/* 选中 */
+let cur = null;
+function select(id){
+  if (cur === id){ clearSel(); return; }
+  cur = id;
+  const near = new Set([id]);
+  E.forEach(e => { if (e.f === id) near.add(e.to); if (e.to === id) near.add(e.f); });
+  for (const k in nodeEls){
+    nodeEls[k].classList.toggle('sel', k === id);
+    nodeEls[k].classList.toggle('dim', !near.has(k) && k !== id);
+  }
+  edgeEls.forEach((p, i) => {
+    const on = E[i].f === id || E[i].to === id;
+    p.classList.toggle('on', on);
+    p.classList.toggle('dim', !on);
+  });
+  const n = BY[id];
+  document.getElementById('dName').textContent = n.t;
+  document.getElementById('dRole').innerHTML = n.role;
+  document.getElementById('dIface').innerHTML = n.iface + '<br><span style="color:#8194a8">电源：' + n.pwr + '</span>';
+  document.getElementById('dFail').innerHTML = n.fail;
+  const box = document.getElementById('dLinks');
+  box.innerHTML = '<span class="chip" data-id="">全部</span>' +
+    [...near].filter(x => x !== id).map(x => `<span class="chip" data-id="${x}">${BY[x].t}</span>`).join('');
+  box.querySelectorAll('.chip').forEach(c => c.onclick = () => {
+    const t = c.getAttribute('data-id');
+    t ? select(t) : clearSel();
+  });
+}
+function clearSel(){
+  cur = null;
+  for (const k in nodeEls){ nodeEls[k].classList.remove('sel','dim'); }
+  edgeEls.forEach(p => p.classList.remove('on','dim'));
+  document.getElementById('dName').textContent = '选择一件硬件';
+  document.getElementById('dRole').textContent = '点上面拓扑图里的任意方块。';
+  document.getElementById('dIface').textContent = '—';
+  document.getElementById('dFail').textContent = '—';
+  document.getElementById('dLinks').innerHTML = '';
+}
+
+/* ---------------- 供电拓扑 ---------------- */
+(function powerDiagram(){
+  const s = document.getElementById('pwr');
+  const box = (x,y,w,h,t1,t2,fill,stroke)=>{
+    const g = document.createElementNS(NS,'g');
+    const r = document.createElementNS(NS,'rect');
+    r.setAttribute('x',x);r.setAttribute('y',y);r.setAttribute('width',w);r.setAttribute('height',h);
+    r.setAttribute('rx',9);r.setAttribute('fill',fill);r.setAttribute('stroke',stroke);r.setAttribute('stroke-width','1.4');
+    g.appendChild(r);
+    const a = document.createElementNS(NS,'text');
+    a.setAttribute('x',x+11);a.setAttribute('y',y+20);a.setAttribute('font-size','13');
+    a.setAttribute('font-weight','600');a.setAttribute('fill','#e9f0f7');a.textContent=t1;g.appendChild(a);
+    if (t2){
+      const b = document.createElementNS(NS,'text');
+      b.setAttribute('x',x+11);b.setAttribute('y',y+37);b.setAttribute('font-size','12');
+      b.setAttribute('fill','#8fa4b8');b.textContent=t2;g.appendChild(b);
+    }
+    s.appendChild(g);
+  };
+  const line = (d, color)=>{
+    const p = document.createElementNS(NS,'path');
+    p.setAttribute('d',d);p.setAttribute('fill','none');p.setAttribute('stroke',color);
+    p.setAttribute('stroke-width','1.8');p.setAttribute('opacity','.8');s.appendChild(p);
+  };
+  box(12,84,170,52,'24S 主电池','6.114 kWh / 可用 4.89','#2a2113','#8a6420');
+  box(214,84,150,52,'主母线','500 A 设计','#2a2113','#8a6420');
+  line('M182,110 H214','#f2a93b');
+  // 四路分支
+  const bx = 400;                       // 分支竖线 x
+  line(`M364,110 H${bx}`,'#f2a93b');
+  const ys = [44, 106, 168, 230];
+  line(`M${bx},44 V230`,'#f2a93b');
+  const rows = [
+    ['3× 电调 + 电机', '前 30 kW + 翼 2×6 kW','#132019','#2f6144'],
+    ['Power1/2 双 BEC', '→ Cube 飞控 + 电压电流检测','#16324e','#3b8eea'],
+    ['8.4 V BEC', '→ 副翼 ×2 + 翼桨倾转舵机','#132019','#2f6144'],
+    ['24 V 电源', '→ 前桨倾转作动器','#132019','#2f6144'],
+  ];
+  rows.forEach(([t1,t2,f,st], i)=>{
+    const y = ys[i];
+    line(`M${bx},${y+26} H${bx+34}`,'#f2a93b');
+    box(bx+34, y, 330, 52, t1, t2, f, st);
+  });
+  const warn = document.createElementNS(NS,'text');
+  warn.setAttribute('x','12');warn.setAttribute('y','18');warn.setAttribute('font-size','13');
+  warn.setAttribute('fill','#8194a8');
+  warn.textContent = '三条线不要混：8.4 V 只供舵机；倾转 24 V 独立；飞控只接信号与地。';
+  s.appendChild(warn);
+})();
+
+/* ---------------- 表 ---------------- */
+(function table(){
+  const tb = document.getElementById('tbody');
+  tb.innerHTML = D.map(n => `<tr>
+    <td class="n">${n.t}</td>
+    <td class="g">${n.role}</td>
+    <td class="g">${n.iface}</td>
+    <td class="g">${n.pwr}</td>
+    <td class="g">${n.fail}</td></tr>`).join('');
+})();
+
+/* 默认选中主飞控，进页面就有内容 */
+select('fc');
+</script>
+</body>
+</html>
