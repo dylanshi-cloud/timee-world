@@ -51,6 +51,7 @@ h1{font-size:clamp(28px,3vw,40px);line-height:1.1;margin:6px 0 0;font-weight:650
 .tag.p0{color:#f0a3a3;border-color:rgba(208,59,59,.4);background:rgba(208,59,59,.08)}
 .tag.p1{color:#9dc3f2;border-color:rgba(57,135,229,.4);background:rgba(57,135,229,.08)}
 .tag.p2{color:#c3c2b7}
+.tag.hold{color:#f2c079;border-color:rgba(242,169,59,.45);background:rgba(242,169,59,.1)}
 .gnote{font-size:12px;color:var(--muted);margin:0 0 8px}
 
 .list{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
@@ -178,13 +179,13 @@ const GROUPS = [
     ]
   },
   {
-    id:"D", title:"D · 台架与测试", prio:"P1", note:"不做完 10 项台架判据，不许装机。",
+    id:"D", title:"D · 台架与测试", prio:"P1", hold:true, note:"暂不采购：不做完 10 项台架判据，不许装机。",
     items:[
       {id:"psu", name:"台架电源 / 电池组", model:"24S 包或等效 + 防打火 ×1", qty:"1", note:"先做预充；台架不接整机线束"},
       {id:"meter", name:"电流 / 功率采集", model:"电流钳或功率计 ×1", qty:"1", note:"300 A 瞬态与线径温升"},
       {id:"tach", name:"转速计", model:"光电 / 霍尔 ×1", qty:"1", note:"三桨转速 vs 油门"},
       {id:"scope", name:"逻辑分析仪 / 示波器", model:"≥4 通道 ×1", qty:"1", note:"UART/CAN 时序、继电器动作、ESC 遥测"},
-      {id:"vib", name:"振动采集", model:"IMU 或加速度计 ×1", qty:"1", note:"全油门 FFT；确认无共振落在控制带宽"},
+      {id:"vib", name:"振动采集", model:"IMU 或加速度计 ×1", qty:"1", note:"全油门 FFT；这是台架件，不是飞控那三颗 IMU"},
       {id:"loadcell", name:"推力台架", model:"传感器 + 采集 ×1 套", qty:"1套", note:"三桨推力 / 电流 / 转速 vs 油门"}
     ]
   }
@@ -200,6 +201,7 @@ el.innerHTML = GROUPS.map(g=>`
     <div class="ghead">
       <h2>${g.title}</h2>
       <span class="tag ${g.prio.toLowerCase()}">${g.prio}</span>
+      ${g.hold ? '<span class="tag hold">暂不采购</span>' : ''}
     </div>
     <p class="gnote">${g.note}</p>
     <div class="list">
