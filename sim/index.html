@@ -28,10 +28,12 @@ header .right{margin-left:auto;display:flex;gap:8px}
 .btn:hover{color:var(--ink)}
 .btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
 
-main{display:grid;grid-template-columns:minmax(300px,36%) 1fr;gap:10px;
-  padding:10px;flex:1 1 auto;min-height:0}
+main{display:grid;grid-template-columns:minmax(300px,1.05fr) minmax(280px,.9fr) minmax(380px,1.35fr);
+  grid-template-rows:minmax(0,1fr) 184px;
+  grid-template-areas:"stage pfd side" "track track side";
+  gap:10px;padding:10px;flex:1 1 auto;min-height:0}
 /* 左：飞机模拟（缩小） */
-.stage{position:relative;background:#070b10;border:1px solid var(--line);
+.stage{grid-area:stage;position:relative;background:#070b10;border:1px solid var(--line);
   border-radius:12px;overflow:hidden;min-height:0}
 #c{display:block;width:100%;height:100%}
 .hud{position:absolute;left:8px;top:8px;max-width:calc(100% - 16px);font-size:12px;
@@ -43,9 +45,20 @@ main{display:grid;grid-template-columns:minmax(300px,36%) 1fr;gap:10px;
 .phase{position:absolute;right:8px;bottom:46px;font-size:13px;font-weight:600;
   color:#cfe3ff;background:rgba(20,40,70,.8);border:1px solid rgba(59,142,234,.45);
   border-radius:999px;padding:4px 11px}
+/* 中：主飞行显示 */
+.pfdcard{grid-area:pfd;display:flex;flex-direction:column;min-height:0;padding:10px 10px 12px}
+.pfdwrap{position:relative;flex:1 1 auto;min-height:0;border-radius:10px;overflow:hidden;background:#0a1016}
+.pfdwrap canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
+/* 下：飞行轨迹 */
+.trackcard{grid-area:track;display:flex;flex-direction:column;min-height:0;padding:10px 12px}
+.trackgrid{display:grid;grid-template-columns:minmax(220px,38%) 1fr;gap:12px;flex:1 1 auto;min-height:0}
+.cvwrap{position:relative;min-height:0;border-radius:9px;overflow:hidden;background:#0a1016;
+  border:1px solid rgba(255,255,255,.05)}
+.cvwrap canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
 /* 右：参数（大份额，字号 ≥12） */
-.panel{display:flex;flex-direction:column;gap:10px;min-height:0;overflow:auto;padding-right:2px}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.panel{grid-area:side;display:flex;flex-direction:column;gap:10px;min-height:0;overflow:auto;padding-right:2px}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media (min-width:1600px){.kpis{grid-template-columns:repeat(4,1fr)}}
 .tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;
   padding:12px 14px 11px;position:relative;overflow:hidden;min-width:0}
 .tile::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--accent)}
@@ -91,17 +104,20 @@ main{display:grid;grid-template-columns:minmax(300px,36%) 1fr;gap:10px;
 .chip .dot{width:7px;height:7px;border-radius:50%;background:var(--muted)}
 .chip.good .dot{background:var(--good)} .chip.warn .dot{background:var(--warn)}
 .chip.bad .dot{background:var(--bad)}
-@media (max-width:1050px){
-  main{grid-template-columns:minmax(240px,34%) 1fr}
-  .kpis{grid-template-columns:repeat(2,1fr)}
+@media (max-width:1100px){
+  html,body{overflow:auto}
+  main{grid-template-columns:1fr 1fr;grid-template-rows:minmax(300px,52vh) 180px auto;
+    grid-template-areas:"stage pfd" "track track" "side side";height:auto}
+  .panel{overflow:visible}
+  .pfdcard{min-height:300px}
   .grid3{grid-template-columns:1fr 1fr}
 }
 @media (max-width:760px){
-  html,body{overflow:auto}
-  main{grid-template-columns:1fr;height:auto}
-  .stage{height:44vh}
+  main{grid-template-columns:1fr;grid-template-rows:44vh 340px 170px auto;
+    grid-template-areas:"stage" "pfd" "track" "side"}
   .kpis{grid-template-columns:repeat(2,1fr)}
   .tri{grid-template-columns:1fr 1fr}
+  .trackgrid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -130,6 +146,11 @@ main{display:grid;grid-template-columns:minmax(300px,36%) 1fr;gap:10px;
       <button class="btn" id="camTop">俯视</button>
       <button class="btn" id="reset">重置</button>
     </div>
+  </section>
+
+  <section class="card pfdcard">
+    <h2>主飞行显示 <span class="hint">PFD · 姿态 / 空速 / 高度 / 航向</span></h2>
+    <div class="pfdwrap"><canvas id="pfd"></canvas></div>
   </section>
 
   <section class="panel">
@@ -244,6 +265,14 @@ main{display:grid;grid-template-columns:minmax(300px,36%) 1fr;gap:10px;
       </div>
     </div>
   </section>
+
+  <section class="card trackcard">
+    <h2>飞行轨迹 <span class="hint">俯视地标 · 高度剖面</span></h2>
+    <div class="trackgrid">
+      <div class="cvwrap"><canvas id="track"></canvas></div>
+      <div class="cvwrap"><canvas id="profile"></canvas></div>
+    </div>
+  </section>
 </main>
 
 <script>
@@ -258,6 +287,7 @@ const BATT_KWH = 4.891;            // 24S 6.114 kWh 总 / 4.891 可用
 /* ---------- 仿真状态 ---------- */
 let st, paused = false, cam = "chase", last = 0, simT = 0, phaseT = 0, phaseIdx = 0;
 let logLines = [];
+let trkPts = [], profPts = [], trkMarks = [], lastSample = -1;
 const PHASES = [
   {name:"起飞爬升", alt:120, V:23.5, hdg:0,   dur:38, note:"全油门爬升"},
   {name:"巡航",     alt:140, V:26.0, hdg:90,  dur:42, note:"高度保持"},
@@ -271,6 +301,7 @@ function reset(){
         thr:0.55, soc:1, aoa:4, nz:1, ele:0, ail:0, rud:0, tilt:0,
         pwr:0, stall:false, dist:0, q:0, cl:CL0, cd:0.04, hdgErr:0};
   simT = 0; phaseT = 0; phaseIdx = 0; logLines = [];
+  trkPts = []; profPts = []; trkMarks = []; lastSample = -1;
   log("开始自动航线演示", "g");
 }
 
@@ -288,6 +319,8 @@ function step(dt){
   if (phaseT > ph.dur){
     phaseT = 0; phaseIdx = (phaseIdx + 1) % PHASES.length;
     const np = PHASES[phaseIdx];
+    trkMarks.push({x:st.x, y:st.y, name:np.name});
+    if (trkMarks.length > 12) trkMarks.shift();
     document.getElementById("phase").textContent = np.name;
     log(`阶段切换 → ${np.name}：${np.note}`);
   }
@@ -334,6 +367,14 @@ function step(dt){
   st.y += vh * Math.sin(st.psi*rad) * dt;
   st.dist += st.V * dt;
 
+  // 航迹采样（0.5 s）
+  if (simT - lastSample >= 0.5){
+    lastSample = simT;
+    trkPts.push([st.x, st.y, st.alt]);
+    profPts.push([st.dist, st.alt]);
+    if (trkPts.length > 6000){ trkPts.shift(); profPts.shift(); }
+  }
+
   // 俯仰角
   st.th = st.gam + st.aoa * 0.72 + (st.stall ? 2.5 : 0);
 
@@ -351,13 +392,30 @@ function step(dt){
 
 /* ---------- 3D 渲染 ---------- */
 const cv = document.getElementById("c"), ctx = cv.getContext("2d");
+const pfdCv = document.getElementById("pfd"), pfdCtx = pfdCv.getContext("2d");
+const trkCv = document.getElementById("track"), trkCtx = trkCv.getContext("2d");
+const profCv = document.getElementById("profile"), profCtx = profCv.getContext("2d");
 let W = 0, H = 0, DPR = 1;
+let pfdW = 0, pfdH = 0, trkW = 0, trkH = 0, profW = 0, profH = 0;
+
+function fit(c, g){
+  const r = c.parentElement.getBoundingClientRect();
+  const d = Math.min(window.devicePixelRatio || 1, 2);
+  const w = Math.max(1, r.width), h = Math.max(1, r.height);
+  c.width = w * d; c.height = h * d;
+  g.setTransform(d, 0, 0, d, 0, 0);
+  return [w, h];
+}
+
 function resize(){
   const r = cv.parentElement.getBoundingClientRect();
   DPR = Math.min(window.devicePixelRatio || 1, 2);
   W = r.width; H = r.height;
   cv.width = W * DPR; cv.height = H * DPR;
   ctx.setTransform(DPR,0,0,DPR,0,0);
+  [pfdW, pfdH] = fit(pfdCv, pfdCtx);
+  [trkW, trkH] = fit(trkCv, trkCtx);
+  [profW, profH] = fit(profCv, profCtx);
 }
 window.addEventListener("resize", resize);
 
@@ -522,6 +580,325 @@ function drawScene(){
   }
 }
 
+/* ---------- PFD ---------- */
+function rrect(g,x,y,w,h,r){
+  r=Math.min(r,w/2,h/2);
+  g.beginPath();
+  g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r);
+  g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath();
+}
+
+function drawPFD(){
+  const g=pfdCtx, w=pfdW, h=pfdH;
+  if(!w||!h) return;
+  g.clearRect(0,0,w,h);
+  g.fillStyle="#0a1016"; g.fillRect(0,0,w,h);
+
+  const hdr=26, hdgH=26;
+  const spdW=Math.max(46,Math.min(62,w*0.17));
+  const altW=Math.max(50,Math.min(68,w*0.19));
+  const x0=spdW, x1=w-altW, y0=hdr+5, y1=h-hdgH-5;
+  const cx=(x0+x1)/2, cy=(y0+y1)/2;
+  const roll=st.phi, pitch=st.th, hdg=st.psi, ias=st.V, alt=st.alt;
+  const vs=st.V*Math.sin(st.gam*Math.PI/180);
+
+  // 顶栏
+  g.fillStyle="#101a23"; g.fillRect(0,0,w,hdr);
+  g.font="600 12px -apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif";
+  g.textBaseline="middle";
+  g.textAlign="left"; g.fillStyle=st.stall?"#e05252":"#22c55e";
+  g.fillText(st.stall?"STALL":"AUTO", 9, hdr/2+1);
+  g.textAlign="center"; g.fillStyle="#b9c6d4";
+  g.fillText(PHASES[phaseIdx].name, w/2, hdr/2+1);
+  g.textAlign="right";
+  g.fillStyle=st.soc<0.15?"#e05252":st.soc<0.3?"#f2a93b":"#22c55e";
+  g.fillText(st.soc<0.15?"LOW BATT":"BATT "+Math.round(st.soc*100)+"%", w-9, hdr/2+1);
+
+  // 姿态区
+  g.save();
+  rrect(g,x0,y0,x1-x0,y1-y0,9); g.clip();
+  const ppd=(y1-y0)/64;
+  g.translate(cx,cy); g.rotate(-roll*Math.PI/180); g.translate(0,pitch*ppd);
+  const sky=g.createLinearGradient(0,-(y1-y0),0,0);
+  sky.addColorStop(0,"#2b7fbe"); sky.addColorStop(1,"#17517f");
+  g.fillStyle=sky; g.fillRect(-2000,-2000,4000,2000);
+  const gnd=g.createLinearGradient(0,0,0,(y1-y0));
+  gnd.addColorStop(0,"#7a5434"); gnd.addColorStop(1,"#4e3522");
+  g.fillStyle=gnd; g.fillRect(-2000,0,4000,2000);
+  g.strokeStyle="rgba(240,247,255,.95)"; g.lineWidth=2;
+  g.beginPath(); g.moveTo(-2000,0); g.lineTo(2000,0); g.stroke();
+  g.lineWidth=1.4; g.font="500 11px -apple-system,sans-serif"; g.textAlign="center";
+  for(let d=-30;d<=30;d+=5){
+    if(d===0) continue;
+    const y=-d*ppd, half=(Math.abs(d)%10===0)?42:24;
+    g.strokeStyle="rgba(240,247,255,.85)";
+    g.beginPath(); g.moveTo(-half,y); g.lineTo(half,y); g.stroke();
+    if(Math.abs(d)%10===0){
+      g.fillStyle="rgba(240,247,255,.95)";
+      g.fillText(String(Math.abs(d)), half+13, y);
+      g.fillText(String(Math.abs(d)), -half-13, y);
+    }
+  }
+  g.restore();
+
+  // 坡度刻度 + 指针
+  g.save();
+  rrect(g,x0,y0,x1-x0,y1-y0,9); g.clip();
+  const R=Math.min((x1-x0)*0.42,(y1-y0)*0.42);
+  g.strokeStyle="rgba(240,247,255,.55)"; g.lineWidth=1.3;
+  for(const a of [-60,-45,-30,-20,-10,0,10,20,30,45,60]){
+    const ang=-Math.PI/2+a*Math.PI/180;
+    const len=(a===0||Math.abs(a)===30||Math.abs(a)===60)?9:5;
+    const ca=Math.cos(ang), sa=Math.sin(ang);
+    g.beginPath(); g.moveTo(cx+ca*R,cy+sa*R); g.lineTo(cx+ca*(R+len),cy+sa*(R+len)); g.stroke();
+  }
+  const ba=-Math.PI/2+roll*Math.PI/180;
+  const c1=Math.cos(ba), s1=Math.sin(ba), c2=Math.cos(ba+Math.PI/2), s2=Math.sin(ba+Math.PI/2);
+  g.beginPath();
+  g.moveTo(cx+c1*(R-12), cy+s1*(R-12));
+  g.lineTo(cx+c1*(R+1)+c2*5, cy+s1*(R+1)+s2*5);
+  g.lineTo(cx+c1*(R+1)-c2*5, cy+s1*(R+1)-s2*5);
+  g.closePath(); g.fillStyle="#f5c84c"; g.fill();
+  g.restore();
+
+  // 固定机头符号
+  g.strokeStyle="#f5c84c"; g.lineWidth=3; g.lineCap="round";
+  g.beginPath();
+  g.moveTo(cx-42,cy); g.lineTo(cx-12,cy);
+  g.moveTo(cx+12,cy); g.lineTo(cx+42,cy);
+  g.moveTo(cx,cy-6); g.lineTo(cx,cy+6);
+  g.stroke();
+  g.fillStyle="#f5c84c";
+  g.beginPath(); g.arc(cx,cy,2.4,0,Math.PI*2); g.fill();
+  g.lineCap="butt";
+
+  // 空速带
+  g.save();
+  g.fillStyle="rgba(9,15,21,.94)"; g.fillRect(0,y0,spdW,y1-y0);
+  g.beginPath(); g.rect(0,y0,spdW,y1-y0); g.clip();
+  const spx=(y1-y0)/70;
+  g.font="500 10px -apple-system,sans-serif"; g.textAlign="right"; g.textBaseline="middle";
+  for(let v=Math.max(0,Math.floor((ias-35)/5)*5); v<=ias+35; v+=5){
+    const y=cy-(v-ias)*spx;
+    if(y<y0-10||y>y1+10) continue;
+    const major=(v%10===0);
+    g.strokeStyle=major?"rgba(200,220,235,.65)":"rgba(200,220,235,.28)";
+    g.lineWidth=1;
+    g.beginPath(); g.moveTo(spdW-(major?13:7),y); g.lineTo(spdW-2,y); g.stroke();
+    if(major){ g.fillStyle="rgba(200,220,235,.8)"; g.fillText(String(v), spdW-16, y); }
+  }
+  const yVs=cy-(VS-ias)*spx;
+  if(yVs>y0&&yVs<y1){
+    g.strokeStyle="#e05252"; g.lineWidth=2;
+    g.beginPath(); g.moveTo(0,yVs); g.lineTo(spdW-2,yVs); g.stroke();
+    g.fillStyle="#e05252"; g.font="600 9px -apple-system,sans-serif";
+    g.textAlign="left"; g.fillText("Vs", 3, yVs-7);
+  }
+  rrect(g,2,cy-12,spdW-4,24,4); g.fillStyle="#e8f1fa"; g.fill();
+  g.fillStyle="#0b1015"; g.font="700 17px -apple-system,sans-serif";
+  g.textAlign="center"; g.fillText(String(Math.round(ias)), spdW/2, cy+1);
+  g.fillStyle="#8194a8"; g.font="600 9px -apple-system,sans-serif";
+  g.textAlign="left"; g.textBaseline="alphabetic"; g.fillText("IAS m/s", 4, y0+10);
+  g.restore();
+
+  // 高度带
+  g.save();
+  const altTapeW=altW-10;
+  g.fillStyle="rgba(9,15,21,.94)"; g.fillRect(x1,y0,altTapeW,y1-y0);
+  g.beginPath(); g.rect(x1,y0,altTapeW,y1-y0); g.clip();
+  const apx=(y1-y0)/320;
+  g.font="500 10px -apple-system,sans-serif"; g.textAlign="left"; g.textBaseline="middle";
+  for(let v=Math.max(0,Math.floor((alt-160)/20)*20); v<=alt+160; v+=20){
+    const y=cy-(v-alt)*apx;
+    if(y<y0-10||y>y1+10) continue;
+    const major=(v%100===0);
+    g.strokeStyle=major?"rgba(200,220,235,.65)":"rgba(200,220,235,.28)";
+    g.lineWidth=1;
+    g.beginPath(); g.moveTo(x1+2,y); g.lineTo(x1+(major?13:7),y); g.stroke();
+    if(major){ g.fillStyle="rgba(200,220,235,.8)"; g.fillText(String(v), x1+16, y); }
+  }
+  rrect(g,x1+2,cy-12,altTapeW-4,24,4); g.fillStyle="#e8f1fa"; g.fill();
+  g.fillStyle="#0b1015"; g.font="700 17px -apple-system,sans-serif";
+  g.textAlign="center"; g.fillText(String(Math.round(alt)), x1+altTapeW/2, cy+1);
+  g.fillStyle="#8194a8"; g.font="600 9px -apple-system,sans-serif";
+  g.textAlign="left"; g.textBaseline="alphabetic"; g.fillText("ALT m", x1+4, y0+10);
+  g.restore();
+
+  // 升降率条
+  const vx=w-6;
+  g.strokeStyle="rgba(200,220,235,.28)"; g.lineWidth=1;
+  g.beginPath(); g.moveTo(vx,cy-36); g.lineTo(vx,cy+36); g.stroke();
+  const vh=Math.max(-36,Math.min(36,vs/10*36));
+  g.strokeStyle=vs>=0?"#22c55e":"#f2a93b"; g.lineWidth=4;
+  g.beginPath(); g.moveTo(vx,cy); g.lineTo(vx,cy-vh); g.stroke();
+  g.lineWidth=1;
+  g.fillStyle="#8194a8"; g.font="600 9px -apple-system,sans-serif";
+  g.textAlign="center"; g.textBaseline="alphabetic";
+  g.fillText("VS", vx, cy+46);
+
+  // 航向带
+  const hy=h-hdgH;
+  g.fillStyle="rgba(9,15,21,.94)"; g.fillRect(0,hy,w,hdgH);
+  g.save(); g.beginPath(); g.rect(0,hy,w,hdgH); g.clip();
+  const hpx=w/90;
+  g.font="500 10px -apple-system,sans-serif"; g.textAlign="center"; g.textBaseline="middle";
+  for(let a=-45;a<=45;a+=5){
+    const val=((Math.round(hdg)+a)%360+360)%360;
+    const x=w/2+a*hpx, major=(val%30===0);
+    g.strokeStyle=major?"rgba(200,220,235,.6)":"rgba(200,220,235,.25)";
+    g.beginPath(); g.moveTo(x,hy+2); g.lineTo(x,hy+(major?10:6)); g.stroke();
+    if(major){
+      const lab=val===0?"N":val===90?"E":val===180?"S":val===270?"W":String(val);
+      g.fillStyle="rgba(200,220,235,.8)"; g.fillText(lab,x,hy+16);
+    }
+  }
+  rrect(g,w/2-24,hy+2,48,20,4); g.fillStyle="#e8f1fa"; g.fill();
+  g.fillStyle="#0b1015"; g.font="700 14px -apple-system,sans-serif";
+  g.fillText(String(Math.round(hdg)).padStart(3,"0"), w/2, hy+12);
+  g.fillStyle="#8194a8"; g.font="600 9px -apple-system,sans-serif";
+  g.textAlign="left"; g.fillText("HDG", 5, hy+12);
+  g.restore();
+
+  if(st.stall && Math.floor(simT*2)%2===0){
+    rrect(g,x0,y0,x1-x0,y1-y0,9);
+    g.strokeStyle="#e05252"; g.lineWidth=3; g.stroke();
+  }
+}
+
+/* ---------- 轨迹 / 高度剖面 ---------- */
+function niceStep(v){
+  const p=Math.pow(10,Math.floor(Math.log10(v||1)));
+  const n=v/p;
+  return (n<1.5?1:n<3?2:n<7?5:10)*p;
+}
+
+function drawTrack(){
+  const g=trkCtx, w=trkW, h=trkH;
+  if(!w||!h) return;
+  g.clearRect(0,0,w,h);
+  g.fillStyle="#0a1016"; g.fillRect(0,0,w,h);
+  if(trkPts.length<2){
+    g.fillStyle="#8194a8"; g.font="12px -apple-system,sans-serif";
+    g.textAlign="center"; g.textBaseline="middle";
+    g.fillText("等待航迹…", w/2, h/2);
+    return;
+  }
+  let minX=st.x,maxX=st.x,minY=st.y,maxY=st.y;
+  for(const p of trkPts){
+    if(p[0]<minX)minX=p[0]; if(p[0]>maxX)maxX=p[0];
+    if(p[1]<minY)minY=p[1]; if(p[1]>maxY)maxY=p[1];
+  }
+  for(const m of trkMarks){
+    if(m.x<minX)minX=m.x; if(m.x>maxX)maxX=m.x;
+    if(m.y<minY)minY=m.y; if(m.y>maxY)maxY=m.y;
+  }
+  const dx=Math.max(240,maxX-minX), dy=Math.max(240,maxY-minY);
+  const pad=20;
+  const s=Math.min((w-2*pad)/dx,(h-2*pad)/dy);
+  const ox=(w-dx*s)/2 - minX*s;
+  const oy=(h-dy*s)/2 + maxY*s;
+  const X=x=>ox+x*s, Y=y=>oy-y*s;
+
+  const step=niceStep(Math.max(dx,dy)/4);
+  g.strokeStyle="rgba(120,160,200,.13)"; g.lineWidth=1;
+  for(let x=Math.floor(minX/step)*step; x<=maxX+step; x+=step){
+    const px=X(x);
+    g.beginPath(); g.moveTo(px,0); g.lineTo(px,h); g.stroke();
+  }
+  for(let y=Math.floor(minY/step)*step; y<=maxY+step; y+=step){
+    const py=Y(y);
+    g.beginPath(); g.moveTo(0,py); g.lineTo(w,py); g.stroke();
+  }
+
+  const trace=()=>{
+    g.beginPath();
+    trkPts.forEach((p,i)=> i ? g.lineTo(X(p[0]),Y(p[1])) : g.moveTo(X(p[0]),Y(p[1])));
+  };
+  trace(); g.strokeStyle="rgba(57,135,229,.18)"; g.lineWidth=7; g.lineJoin="round"; g.stroke();
+  trace(); g.strokeStyle="#3987e5"; g.lineWidth=2; g.stroke();
+
+  for(const m of trkMarks){
+    const px=X(m.x), py=Y(m.y);
+    g.fillStyle="#172029"; g.strokeStyle="#8194a8"; g.lineWidth=1;
+    g.beginPath(); g.arc(px,py,3.2,0,Math.PI*2); g.fill(); g.stroke();
+    g.fillStyle="#b9c6d4"; g.font="9px -apple-system,sans-serif";
+    g.textAlign="left"; g.textBaseline="alphabetic"; g.fillText(m.name, px+5, py-5);
+  }
+
+  const px=X(st.x), py=Y(st.y);
+  g.save(); g.translate(px,py); g.rotate(st.psi*Math.PI/180);
+  g.beginPath();
+  g.moveTo(0,-8); g.lineTo(5.5,7); g.lineTo(0,3.5); g.lineTo(-5.5,7);
+  g.closePath(); g.fillStyle="#f5c84c"; g.fill();
+  g.restore();
+
+  g.fillStyle="#c3c2b7"; g.font="600 10px -apple-system,sans-serif";
+  g.textAlign="center"; g.textBaseline="alphabetic";
+  g.fillText("N", w-14, 13);
+  g.beginPath(); g.moveTo(w-14,17); g.lineTo(w-18,29); g.lineTo(w-10,29);
+  g.closePath(); g.fillStyle="rgba(195,194,183,.7)"; g.fill();
+
+  const barW=Math.min(80, step*s);
+  g.strokeStyle="rgba(195,194,183,.6)"; g.lineWidth=1.5;
+  g.beginPath(); g.moveTo(w-18-barW,h-10); g.lineTo(w-18,h-10); g.stroke();
+  g.fillStyle="#898781"; g.font="9px -apple-system,sans-serif";
+  g.textAlign="right"; g.fillText(step>=1000?(step/1000).toFixed(1)+" km":step+" m", w-18, h-15);
+
+  g.textAlign="left"; g.fillStyle="#c3c2b7"; g.font="11px -apple-system,sans-serif";
+  g.fillText(`航程 ${(st.dist/1000).toFixed(2)} km`, 9, 14);
+  g.fillStyle="#898781"; g.fillText(`高度 ${Math.round(st.alt)} m`, 9, 28);
+}
+
+function drawProfile(){
+  const g=profCtx, w=profW, h=profH;
+  if(!w||!h) return;
+  g.clearRect(0,0,w,h);
+  g.fillStyle="#0a1016"; g.fillRect(0,0,w,h);
+  if(profPts.length<2){
+    g.fillStyle="#8194a8"; g.font="12px -apple-system,sans-serif";
+    g.textAlign="center"; g.textBaseline="middle";
+    g.fillText("等待高度数据…", w/2, h/2);
+    return;
+  }
+  const L=36, R=10, T=14, B=20;
+  let maxD=Math.max(200, profPts[profPts.length-1][0]);
+  let maxA=60;
+  for(const p of profPts) if(p[1]>maxA) maxA=p[1];
+  maxA=Math.ceil((maxA+20)/20)*20;
+  const X=d=>L+(d/maxD)*(w-L-R);
+  const Y=a=>h-B-(a/maxA)*(h-T-B);
+
+  g.strokeStyle="rgba(120,160,200,.13)"; g.lineWidth=1;
+  g.font="9px -apple-system,sans-serif"; g.textAlign="right"; g.textBaseline="middle";
+  for(let i=0;i<=3;i++){
+    const a=maxA*i/3, y=Y(a);
+    g.beginPath(); g.moveTo(L,y); g.lineTo(w-R,y); g.stroke();
+    g.fillStyle="#898781"; g.fillText(String(Math.round(a)), L-4, y);
+  }
+
+  g.beginPath(); g.moveTo(X(0),Y(0));
+  for(const p of profPts) g.lineTo(X(p[0]),Y(p[1]));
+  g.lineTo(X(profPts[profPts.length-1][0]),Y(0)); g.closePath();
+  const grad=g.createLinearGradient(0,T,0,h-B);
+  grad.addColorStop(0,"rgba(57,135,229,.32)"); grad.addColorStop(1,"rgba(57,135,229,.02)");
+  g.fillStyle=grad; g.fill();
+
+  g.beginPath();
+  profPts.forEach((p,i)=> i ? g.lineTo(X(p[0]),Y(p[1])) : g.moveTo(X(p[0]),Y(p[1])));
+  g.strokeStyle="#3987e5"; g.lineWidth=2; g.stroke();
+
+  const lastPt=profPts[profPts.length-1];
+  g.beginPath(); g.arc(X(lastPt[0]),Y(lastPt[1]),3.5,0,Math.PI*2);
+  g.fillStyle="#f5c84c"; g.fill();
+
+  g.fillStyle="#898781"; g.font="9px -apple-system,sans-serif";
+  g.textAlign="center"; g.textBaseline="alphabetic";
+  g.fillText("0", L, h-5);
+  g.fillText(`${(maxD/1000).toFixed(1)} km`, w-R, h-5);
+  g.fillStyle="#c3c2b7"; g.font="11px -apple-system,sans-serif";
+  g.textAlign="left"; g.fillText(`高度剖面 · ${Math.round(st.alt)} m`, L, 11);
+}
+
 /* ---------- 面板刷新 ---------- */
 function fmt(v, d=1){ return v.toFixed(d); }
 function updateUI(){
@@ -610,10 +987,12 @@ function frame(t){
       stallLogged = st.stall;
     }
   }
-  drawScene(); updateUI();
+  if (!trkW || !trkH || !pfdW) resize();
+  drawScene(); updateUI(); drawPFD();
+  if (t - lastTrackDraw > 200){ lastTrackDraw = t; drawTrack(); drawProfile(); }
   requestAnimationFrame(frame);
 }
-let stallLogged = false;
+let stallLogged = false, lastTrackDraw = -1e9;
 
 /* ---------- 交互 ---------- */
 document.getElementById("pause").onclick = e => {
@@ -632,6 +1011,7 @@ document.getElementById("camSide").onclick  = ()=>setCam("side","camSide");
 document.getElementById("camTop").onclick   = ()=>setCam("top","camTop");
 
 resize(); reset();
+drawPFD(); drawTrack(); drawProfile();
 requestAnimationFrame(frame);
 </script>
 </body>
