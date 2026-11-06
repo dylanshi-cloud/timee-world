@@ -1,0 +1,47 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>车机终端</title>
+<style>
+ *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+ body{margin:0;height:100vh;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;gap:22px;background:#0b0f14;color:#dfe6ee;
+  font:20px/1.5 -apple-system,"PingFang SC",sans-serif}
+ h1{font-size:28px;font-weight:600;margin:0}
+ input{width:min(80vw,420px);padding:18px;font-size:22px;border-radius:14px;
+  border:1px solid #2a3542;background:#131a23;color:#dfe6ee;text-align:center;
+  letter-spacing:.14em}
+ button{width:min(80vw,420px);padding:20px;font-size:24px;border-radius:14px;
+  border:0;background:#2563eb;color:#fff;font-weight:600}
+ button.ghost{background:#1b2531;color:#9fb0c3;font-size:18px}
+ .err{color:#ff6b6b;font-size:18px;min-height:1.2em}
+ .sub{color:#7b8a9b;font-size:16px}
+</style></head><body>
+<h1>V10 车机终端</h1>
+<div class="sub" id="hint">输入访问令牌</div>
+<input id="tok" type="password" inputmode="latin" autocapitalize="off"
+       autocomplete="off" spellcheck="false" placeholder="令牌">
+<div class="err" id="err"></div>
+<button id="go">进入终端</button>
+<button class="ghost" id="forget" style="display:none">清除本机保存的令牌</button>
+<script>
+const TUNNEL = "https://cherry-cardiovascular-metropolitan-genre.trycloudflare.com";
+const K = "car_token";
+const tok = document.getElementById("tok");
+const err = document.getElementById("err");
+const forget = document.getElementById("forget");
+function go(t){
+  if(!/^[a-z0-9]{6,32}$/.test(t)){ err.textContent = "令牌格式不对"; return; }
+  localStorage.setItem(K, t);
+  location.replace(TUNNEL + "/t/" + t + "/");
+}
+const saved = localStorage.getItem(K);
+if(saved){
+  document.getElementById("hint").textContent = "已记住令牌";
+  tok.value = saved; tok.style.display = "none";
+  forget.style.display = "block";
+}
+document.getElementById("go").onclick = ()=> go(tok.value.trim());
+tok.addEventListener("keydown", e => { if(e.key === "Enter") go(tok.value.trim()); });
+forget.onclick = ()=>{ localStorage.removeItem(K); location.reload(); };
+</script></body></html>
