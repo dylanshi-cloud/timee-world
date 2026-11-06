@@ -53,6 +53,10 @@ h1{font-size:clamp(28px,3vw,40px);line-height:1.1;margin:6px 0 0;font-weight:650
 .tag.p2{color:#c3c2b7}
 .tag.hold{color:#f2c079;border-color:rgba(242,169,59,.45);background:rgba(242,169,59,.1)}
 .tag.est{color:#9ed3b2;border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.08)}
+.tag.must{color:#ffb4a2;border-color:rgba(255,99,72,.42);background:rgba(255,99,72,.1)}
+.mustTag{display:inline-block;margin-left:7px;font-size:10px;line-height:1.55;font-weight:600;
+  color:#ffb4a2;border:1px solid rgba(255,99,72,.42);background:rgba(255,99,72,.1);
+  border-radius:999px;padding:0 6px;vertical-align:1px;white-space:nowrap}
 .gnote{font-size:12px;color:var(--muted);margin:0 0 8px}
 
 .list{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
@@ -77,6 +81,17 @@ h1{font-size:clamp(28px,3vw,40px);line-height:1.1;margin:6px 0 0;font-weight:650
 .pricebar .pv{font-size:22px;font-weight:650;margin-top:3px;color:var(--ink);font-variant-numeric:tabular-nums}
 .pricebar .pn{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45}
 
+.minimal{background:var(--surface);border:1px solid rgba(255,99,72,.28);border-radius:12px;
+  padding:14px 16px;margin-top:12px}
+.minimal .mh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:15px;color:var(--ink)}
+.minimal .mh b{font-weight:620}
+.minimal .mh .cost{font-size:12px;color:#f2c079;margin-left:auto}
+.minimal p{margin:6px 0 0;font-size:12.5px;color:var(--muted);line-height:1.65}
+.minimal .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.minimal .chips span{font-size:12px;color:#ffc9bd;border:1px solid rgba(255,99,72,.3);
+  background:rgba(255,99,72,.07);border-radius:999px;padding:2px 9px;white-space:nowrap}
+.minimal .mwarn{color:#f4cf7a}
+
 .box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-top:18px}
 .box h2{font-size:15px;margin:0 0 8px;font-weight:620}
 .box ul{margin:0;padding-left:19px;color:var(--ink2);font-size:13px;line-height:1.75}
@@ -87,6 +102,7 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--grid);
 @media (max-width:820px){
   .stats{grid-template-columns:1fr 1fr}
   .pricebar{grid-template-columns:1fr}
+  .minimal .mh .cost{margin-left:0;flex-basis:100%}
   .item{grid-template-columns:26px minmax(0,1fr) 54px;gap:8px}
   .item .chk{grid-column:1;grid-row:1}
   .item .nm{grid-column:2;grid-row:1}
@@ -103,7 +119,7 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--grid);
   <div>
     <div class="eyebrow">V10 双翼三桨 · 飞控</div>
     <h1>飞控采购清单</h1>
-    <div class="sub">2026-11-06 · 先打通台架，再谈装机 · 勾选只存在本机浏览器</div>
+    <div class="sub">2026-11-07 · 先打通台架，再谈装机 · 勾选只存在本机浏览器</div>
   </div>
   <div class="right">
     <a class="btn" href="/sim/">飞行模拟</a>
@@ -136,6 +152,22 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--grid);
     <div class="pv">电机 / 桨 / 主电池</div>
     <div class="pn">另列；也不含结构件、运费与认证</div>
   </div>
+</section>
+
+<section class="minimal">
+  <div class="mh">
+    <b>起飞必需（不计冗余）</b>
+    <span class="tag must">13 / 29 项</span>
+    <span class="cost">暂估 ≈ ¥1.6 万 · 按清单整组价</span>
+  </div>
+  <p>去掉备份链路、下视测距、机载电脑和独立安全监控器，BEC 只留一路后，仍能起飞并完成倾转转平的最小硬件集。</p>
+  <div class="chips">
+    <span>飞控 Cube</span><span>GNSS M10</span><span>罗盘 RM3100</span><span>空速 SDP3x</span>
+    <span>ELRS 遥控</span><span>电调 ×3</span><span>前桨倾转</span><span>翼桨倾转 ×2</span>
+    <span>副翼舵机 ×2</span><span>绝对编码器 ×2</span><span>BEC ×1</span>
+    <span>预充 / 熔断 / 接触器</span><span>插头线束</span>
+  </div>
+  <p class="mwarn">这是“能飞起来”的最小集，不是放行配置：项目红线仍要求独立安全监控器、双电源与备链路；S 闸门未签字不得装机。</p>
 </section>
 
 <div class="shopbar">
@@ -221,18 +253,23 @@ const GROUPS = [
     ]
   }
 ];
+// 最小可飞集：去掉备份链路、下视测距、机载电脑与独立安全监控器，BEC 只留一路
+const MUST = new Set(["fc","gnss","mag","aspd","rc","esc","tilt_front","tilt_wing","aileron","enc","bec","precharge","conn"]);
 const KEY = "v10_buy_20261106";
 let checked = {};
 try{ checked = JSON.parse(localStorage.getItem(KEY) || "{}"); }catch(e){ checked = {}; }
 
 const all = GROUPS.flatMap(g=>g.items);
 const el = document.getElementById("groups");
-el.innerHTML = GROUPS.map(g=>`
+el.innerHTML = GROUPS.map(g=>{
+  const m = g.items.filter(it=>MUST.has(it.id)).length;
+  return `
   <section class="group">
     <div class="ghead">
       <h2>${g.title}</h2>
       <span class="tag ${g.prio.toLowerCase()}">${g.prio}</span>
       ${g.est ? `<span class="tag est">${g.est}</span>` : ''}
+      ${m ? `<span class="tag must">起飞必需 ${m}/${g.items.length}</span>` : ''}
       ${g.hold ? '<span class="tag hold">暂不采购</span>' : ''}
     </div>
     <p class="gnote">${g.note}</p>
@@ -240,12 +277,13 @@ el.innerHTML = GROUPS.map(g=>`
       ${g.items.map(it=>`
         <label class="item ${checked[it.id]?"done":""}" data-id="${it.id}">
           <input class="chk" type="checkbox" ${checked[it.id]?"checked":""}>
-          <span class="nm">${it.name}<span class="note">${it.note}</span><span class="price">暂估 ¥${it.price}</span></span>
+          <span class="nm">${it.name}${MUST.has(it.id)?'<span class="mustTag">起飞必需</span>':''}<span class="note">${it.note}</span><span class="price">暂估 ¥${it.price}</span></span>
           <span class="model">${it.model}</span>
           <span class="qty">${it.qty}</span>
         </label>`).join("")}
     </div>
-  </section>`).join("");
+  </section>`;
+}).join("");
 
 function refresh(){
   const done = all.filter(x=>checked[x.id]).length;
@@ -275,7 +313,7 @@ document.getElementById("copy").onclick = async ()=>{
     const left = g.items.filter(it=>!checked[it.id]);
     if(!left.length) continue;
     lines.push(`【${g.title}】`);
-    left.forEach(it=>lines.push(`- ${it.name}｜${it.model}｜数量 ${it.qty}｜暂估 ¥${it.price}｜${it.note}`));
+    left.forEach(it=>lines.push(`- ${MUST.has(it.id)?"[起飞必需] ":""}${it.name}｜${it.model}｜数量 ${it.qty}｜暂估 ¥${it.price}｜${it.note}`));
     lines.push("");
   }
   const txt = lines.join("\n");
