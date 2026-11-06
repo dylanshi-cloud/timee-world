@@ -3,376 +3,179 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>V10 载人电动飞行器</title>
-<meta name="description" content="V10 双翼三桨载人电动验证机项目门户：结构、气动、飞控、电气、仿真与采购进展。">
+<title>V10 飞控</title>
 <style>
 :root{
   color-scheme:dark;
-  --page:#0a0f15; --surface:#111820; --surface2:#151f29;
-  --ink:#eef2f6; --ink2:#b9c6d4; --muted:#7f92a6;
-  --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.06);
-  --accent:#3b8eea; --accent2:#7fc0ff;
-  --good:#22c55e; --warn:#f2a93b; --bad:#e05252;
+  --page:#0a0f15; --surface:#121820; --surface2:#172029;
+  --ink:#eef2f6; --ink2:#b9c6d4; --muted:#8194a8;
+  --line:rgba(255,255,255,.10);
+  --accent:#3b8eea; --good:#22c55e; --warn:#f2a93b;
 }
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--page);color:var(--ink);
-  font:15px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Segoe UI",sans-serif;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Segoe UI",sans-serif;
   -webkit-tap-highlight-color:transparent}
 a{color:inherit;text-decoration:none}
-.wrap{max-width:1200px;margin:0 auto;padding:22px clamp(14px,3vw,32px) 36px}
+.wrap{max-width:1180px;margin:0 auto;padding:26px 22px 40px}
+header{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+header h1{font-size:30px;margin:0;font-weight:680;letter-spacing:-.01em}
+header .sub{font-size:14px;color:var(--muted);padding-bottom:4px}
+header .right{margin-left:auto;display:flex;gap:10px;padding-bottom:4px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink2);
+  border-radius:10px;padding:10px 16px;font-size:14px}
+.btn:hover{color:var(--ink);border-color:rgba(255,255,255,.2)}
 
-/* nav */
-.top{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:20px}
-.brand{display:flex;align-items:center;gap:11px}
-.mark{display:grid;place-items:center;width:42px;height:42px;border-radius:11px;
-  background:linear-gradient(145deg,#2d6fb8,#1b4a80);border:1px solid rgba(127,192,255,.42);
-  font-size:14px;font-weight:750;letter-spacing:.02em;color:#eaf4ff}
-.bt{font-size:15px;font-weight:640;line-height:1.2}
-.bt small{display:block;font-size:11.5px;color:var(--muted);font-weight:400;margin-top:2px}
-nav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
-nav a{font-size:13px;color:var(--ink2);padding:8px 12px;border-radius:8px;border:1px solid transparent}
-nav a:hover{color:var(--ink);background:var(--surface);border-color:var(--line)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:16px 18px;position:relative;overflow:hidden}
+.tile::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--accent)}
+.tile.good::before{background:var(--good)}
+.tile .num{font-size:34px;font-weight:680;line-height:1.05;font-variant-numeric:tabular-nums}
+.tile .num small{font-size:17px;color:var(--muted);font-weight:500}
+.tile .lab{font-size:15px;color:var(--ink2);margin-top:6px}
+.tile .sub{font-size:13px;color:var(--muted);margin-top:2px}
 
-/* hero */
-.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.85fr);
-  gap:26px;align-items:center;background:
-    radial-gradient(1100px 320px at 10% -20%,rgba(59,142,234,.20),transparent 62%),
-    linear-gradient(135deg,#111f2e,#0d141c 68%);
-  border:1px solid rgba(59,142,234,.30);border-radius:18px;
-  padding:clamp(20px,3vw,34px);overflow:hidden;margin-bottom:12px}
-.hero::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.30;
-  background-image:linear-gradient(rgba(127,192,255,.07) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(127,192,255,.07) 1px,transparent 1px);
-  background-size:34px 34px;mask-image:linear-gradient(90deg,transparent,#000 45%,#000)}
-.chip{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:#f6d9a4;
-  border:1px solid rgba(242,169,59,.42);background:rgba(242,169,59,.10);
-  border-radius:999px;padding:5px 11px}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--warn);flex:0 0 auto}
-.hero h1{font-size:clamp(27px,3.5vw,43px);line-height:1.13;letter-spacing:-.02em;
-  margin:14px 0 10px;font-weight:720}
-.hero h1 span{color:var(--accent2)}
-.hero p{margin:0;max-width:40em;color:var(--ink2);font-size:14.5px;line-height:1.65}
-.hero p b{color:#dceaf8;font-weight:600}
-.cta{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
-.btn{display:inline-flex;align-items:center;gap:7px;border-radius:10px;
-  padding:10px 17px;font-size:14px;border:1px solid var(--line);color:var(--ink2);
-  background:var(--surface);font-weight:520}
-.btn:hover{color:var(--ink);border-color:rgba(255,255,255,.24)}
-.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:620}
-.btn.pri:hover{background:#4b9bf0;border-color:#4b9bf0}
-.heroArt{position:relative;z-index:1;display:flex;flex-direction:column;gap:8px}
-.artbox{background:rgba(8,14,20,.58);border:1px solid rgba(127,192,255,.20);
-  border-radius:14px;padding:12px 10px}
-.heroArt svg{display:block;width:100%;height:auto}
-.artcap{font-size:11.5px;color:var(--muted);line-height:1.5}
-.artcap b{color:var(--ink2);font-weight:550}
+.hero{display:block;background:linear-gradient(135deg,#14304d,#101a26 62%);
+  border:1px solid rgba(59,142,234,.38);border-radius:16px;padding:24px 26px;
+  margin-bottom:14px;display:flex;align-items:center;gap:26px}
+.hero:hover{border-color:rgba(59,142,234,.7)}
+.hero .txt{flex:1 1 auto}
+.hero h2{font-size:24px;margin:0 0 6px;font-weight:660}
+.hero p{margin:0;font-size:15px;color:var(--ink2);line-height:1.6}
+.hero p b{color:#cfe3ff;font-weight:600}
+.hero .go{flex:0 0 auto;background:var(--accent);color:#fff;border-radius:12px;
+  padding:16px 28px;font-size:17px;font-weight:640;white-space:nowrap}
+.hero .art{flex:0 0 auto;width:150px;opacity:.95}
 
-/* kpi */
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0 22px}
-.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.kpi .n{font-size:26px;font-weight:680;line-height:1.05;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
-.kpi .n small{font-size:13px;color:var(--muted);font-weight:500;letter-spacing:0}
-.kpi .l{font-size:12.5px;color:var(--ink2);margin-top:5px}
-.kpi .s{font-size:11.5px;color:var(--muted);margin-top:1px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:18px;display:block}
+.card:hover{border-color:rgba(255,255,255,.22)}
+.card h3{margin:0 0 6px;font-size:17px;font-weight:620}
+.card p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
+.card .tag{display:inline-block;font-size:12px;color:var(--accent);
+  border:1px solid rgba(59,142,234,.35);border-radius:999px;padding:2px 9px;margin-top:10px}
 
-/* section */
-.sec{margin-bottom:22px}
-.sechead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:11px}
-.sechead h2{font-size:19px;margin:0;font-weight:660;letter-spacing:-.01em}
-.sechead .hint{font-size:12px;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:13px;
-  padding:15px 15px 14px;display:flex;flex-direction:column;gap:7px;min-height:164px;
-  transition:border-color .15s,transform .15s}
-.card:hover{border-color:rgba(127,192,255,.34);transform:translateY(-1px)}
-.card .k{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);
-  letter-spacing:.09em;font-variant-numeric:tabular-nums}
-.card .st{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;
-  border-radius:999px;padding:2px 8px;border:1px solid var(--line);color:var(--ink2);letter-spacing:0}
-.st.good{color:#9de7b4;border-color:rgba(34,197,94,.38);background:rgba(34,197,94,.09)}
-.st.warn{color:#f6d9a4;border-color:rgba(242,169,59,.38);background:rgba(242,169,59,.09)}
-.st.run{color:#a8cdf4;border-color:rgba(59,142,234,.38);background:rgba(59,142,234,.09)}
-.st .d{width:6px;height:6px;border-radius:50%;background:currentColor}
-.card h3{margin:0;font-size:16px;font-weight:620;letter-spacing:-.005em}
-.card p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.55;flex:1 1 auto}
-.card .bar{height:5px;background:#222c36;border-radius:3px;overflow:hidden;margin-top:2px}
-.card .bar i{display:block;height:100%;border-radius:3px;background:var(--accent)}
-.card .bar i.good{background:var(--good)} .card .bar i.warn{background:var(--warn)}
-.card .foot{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:18px 20px;margin-bottom:16px}
+.stage h3{margin:0 0 12px;font-size:15px;font-weight:600;color:var(--ink2)}
+.rows{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.row .rh{display:flex;align-items:baseline;gap:8px;font-size:14px;color:var(--ink2)}
+.row .rh b{margin-left:auto;color:var(--ink);font-size:17px;font-weight:620;
   font-variant-numeric:tabular-nums}
+.bar{height:8px;background:#222a33;border-radius:5px;overflow:hidden;margin-top:7px}
+.fill{height:100%;background:var(--accent);border-radius:5px}
+.fill.good{background:var(--good)} .fill.warn{background:var(--warn)}
+.row .note{font-size:12px;color:var(--muted);margin-top:5px}
 
-/* split */
-.split{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:12px;margin-bottom:22px}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:17px 18px}
-.panel h2{font-size:16px;margin:0 0 12px;font-weight:640}
-.task{display:grid;grid-template-columns:minmax(0,1fr) 46px;gap:4px 12px;
-  padding:10px 0;border-top:1px solid var(--line2)}
-.task:first-of-type{border-top:0;padding-top:2px}
-.task .t{font-size:13.5px;color:var(--ink);line-height:1.35}
-.task .t small{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
-.task .p{font-size:14px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink2)}
-.task .b{grid-column:1 / -1;height:5px;background:#222c36;border-radius:3px;overflow:hidden}
-.task .b i{display:block;height:100%;background:var(--accent);border-radius:3px}
-.nums{display:grid;grid-template-columns:1fr 1fr;gap:9px 12px}
-.num{background:var(--surface2);border:1px solid var(--line2);border-radius:10px;padding:10px 11px}
-.num .v{font-size:19px;font-weight:660;font-variant-numeric:tabular-nums;line-height:1.15}
-.num .v small{font-size:11px;color:var(--muted);font-weight:500}
-.num .k{font-size:11px;color:var(--muted);margin-top:2px}
-.panel .note{font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:10px}
-.panel .more{display:inline-block;font-size:12.5px;color:var(--accent2);margin-top:10px}
-.mini{border-top:1px solid var(--line2);margin-top:13px;padding-top:11px}
-.mini .mh{font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:7px}
-.mrow{display:flex;gap:8px;font-size:12px;color:var(--ink2);line-height:1.5;padding:2px 0}
-.mrow b{color:var(--accent2);font-weight:600;font-variant-numeric:tabular-nums;flex:0 0 42px}
-
-/* decision */
-.decide{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-  background:linear-gradient(120deg,rgba(242,169,59,.10),rgba(17,24,32,.6) 60%);
-  border:1px solid rgba(242,169,59,.32);border-radius:14px;padding:15px 18px;margin-bottom:20px}
-.decide .tag{font-size:11px;color:#f6d9a4;border:1px solid rgba(242,169,59,.4);
-  border-radius:999px;padding:3px 9px;white-space:nowrap}
-.decide .dt{font-size:14.5px;font-weight:620}
-.decide p{margin:0;flex:1 1 300px;font-size:12.5px;color:var(--ink2);line-height:1.55}
-.decide p b{color:#f6d9a4;font-weight:600}
-.decide a{font-size:13px;color:var(--ink);border:1px solid var(--line);border-radius:9px;
-  padding:8px 13px;background:rgba(255,255,255,.03);white-space:nowrap}
-
-footer{font-size:11.5px;color:var(--muted);line-height:1.7;border-top:1px solid var(--line);
+footer{font-size:12px;color:var(--muted);line-height:1.7;border-top:1px solid var(--line);
   padding-top:14px}
-footer b{color:var(--ink2);font-weight:550}
-
-@media (max-width:1000px){
-  .grid{grid-template-columns:repeat(2,1fr)}
-  .hero{grid-template-columns:1fr}
-  .heroArt{display:none}
-}
-@media (max-width:760px){
+@media (max-width:900px){
   .kpis{grid-template-columns:1fr 1fr}
-  .split{grid-template-columns:1fr}
-  .card{min-height:0}
-  nav a{padding:7px 9px}
-  .decide a{margin-left:0}
-}
-@media (max-width:520px){
-  .grid{grid-template-columns:1fr}
-  .hero h1{font-size:26px}
+  .cards{grid-template-columns:1fr}
+  .rows{grid-template-columns:1fr 1fr}
+  .hero{flex-wrap:wrap}
+  .hero .art{display:none}
 }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <header class="top">
-    <a class="brand" href="/">
-      <span class="mark">V10</span>
-      <span class="bt">载人电动飞行器<small>双翼三桨 · 1130za</small></span>
-    </a>
-    <nav>
-      <a href="/sim/">飞行模拟</a>
-      <a href="/fc/">飞控进展</a>
-      <a href="/buy/">采购清单</a>
-      <a href="/car">车机</a>
-      <a href="/v10/">文档</a>
-    </nav>
+  <header>
+    <h1>V10 飞控</h1>
+    <div class="sub">双翼三桨 · 1130za · 载人验证机</div>
+    <div class="right">
+      <a class="btn" href="/sim/">飞行模拟</a>
+      <a class="btn" href="/hw/">飞控硬件</a>
+      <a class="btn" href="/fc/">飞控进展</a>
+    </div>
   </header>
 
-  <section class="hero">
-    <div>
-      <span class="chip"><span class="dot"></span>S1 设计冻结中 · 16 / 20</span>
-      <h1>把一架载人验证机<br>从图纸推到<span>首飞</span></h1>
-      <p>气动、结构、飞控、电气、仿真、台架在同一条主线上推进。飞控软件已闭环，
-         <b>硬件未上机</b>；当前卡在 S1 最后 3 项与 1 项警告。</p>
-      <div class="cta">
-        <a class="btn pri" href="/sim/">打开飞行模拟 →</a>
-        <a class="btn" href="/fc/">飞控进展</a>
-        <a class="btn" href="/buy/">采购清单</a>
-      </div>
-    </div>
-    <div class="heroArt">
-      <div class="artbox">
-        <svg viewBox="0 0 420 210" role="img" aria-label="双翼三桨布局俯视示意">
-          <defs>
-            <linearGradient id="wg" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#2a5f92"/><stop offset="1" stop-color="#183b5c"/>
-            </linearGradient>
-          </defs>
-          <g stroke="rgba(127,192,255,.16)" stroke-width="1">
-            <path d="M0 52h420M0 105h420M0 158h420"/>
-            <path d="M84 0v210M210 0v210M336 0v210"/>
-          </g>
-          <!-- lower wing -->
-          <path d="M64 126h292l18 12-18 12H64l-16-12z" fill="url(#wg)" stroke="#79b6ea" stroke-width="1.6"/>
-          <!-- upper wing -->
-          <path d="M84 66h252l16 10-16 10H84l-14-10z" fill="url(#wg)" stroke="#8fc6f5" stroke-width="1.6"/>
-          <!-- fuselage -->
-          <path d="M188 34h44l8 68-8 74h-44l-8-74z" fill="#1d2b38" stroke="#a7d0f4" stroke-width="1.8"/>
-          <!-- canopy -->
-          <path d="M197 52h26l4 24h-34z" fill="rgba(127,192,255,.18)" stroke="#9fcdf5" stroke-width="1.2"/>
-          <!-- front prop -->
-          <ellipse cx="210" cy="24" rx="30" ry="5" fill="none" stroke="#f2a93b" stroke-width="2"/>
-          <circle cx="210" cy="24" r="2.6" fill="#f2a93b"/>
-          <!-- wing props -->
-          <ellipse cx="120" cy="90" rx="17" ry="4" fill="none" stroke="#7fc0ff" stroke-width="1.8"/>
-          <ellipse cx="300" cy="90" rx="17" ry="4" fill="none" stroke="#7fc0ff" stroke-width="1.8"/>
-          <!-- tail -->
-          <path d="M196 176h28l8 17h-44z" fill="#1d2b38" stroke="#a7d0f4" stroke-width="1.5"/>
-          <!-- callouts -->
-          <g font-size="9" fill="#7f92a6" font-family="-apple-system,PingFang SC,sans-serif">
-            <text x="16" y="142">下翼</text>
-            <text x="16" y="84">上翼</text>
-            <text x="330" y="36">前桨</text>
-            <text x="330" y="112">翼桨</text>
-          </g>
-        </svg>
-      </div>
-      <div class="artcap"><b>布局</b> 上翼 +220 mm · 前桨倾转 + 双翼桨 · 尾翼三面</div>
-    </div>
-  </section>
-
   <section class="kpis">
-    <div class="kpi"><div class="n">16<small> / 20</small></div><div class="l">S1 设计冻结</div><div class="s">剩 S1-06 / 10 / 11</div></div>
-    <div class="kpi"><div class="n">26<small> / 26</small></div><div class="l">飞控单元测试</div><div class="s">安全监控 15 / 15</div></div>
-    <div class="kpi"><div class="n">16<small> / 16</small></div><div class="l">SIL 失效场景</div><div class="s">100 s 回放 0 误切</div></div>
-    <div class="kpi"><div class="n">0<small> / 10</small></div><div class="l">硬件台架判据</div><div class="s">全部未采购</div></div>
+    <div class="tile good"><div class="num">26<small>/26</small></div>
+      <div class="lab">单元测试</div><div class="sub">飞控 Lua 逻辑</div></div>
+    <div class="tile good"><div class="num">15<small>/15</small></div>
+      <div class="lab">安全监控单测</div><div class="sub">失效判定与切换</div></div>
+    <div class="tile good"><div class="num">16<small>/16</small></div>
+      <div class="lab">SIL 失效场景</div><div class="sub">r9 8/8 · r12 8/8</div></div>
+    <div class="tile"><div class="num">0</div>
+      <div class="lab">回放误切</div><div class="sub">5000 帧 / 100 s</div></div>
   </section>
 
-  <section class="sec">
-    <div class="sechead"><h2>工作版图</h2><span class="hint">8 条线 · 状态取自 18:43 状态机</span></div>
-    <div class="grid">
-
-      <a class="card" href="/v10/">
-        <div class="k">01 总体 / 构型 <span class="st good"><span class="d"></span>已放行</span></div>
-        <h3>总体与构型</h3>
-        <p>S0 十项全部放行；r15 目标构型。关键链已进入 S1-05，机构全行程运动学完成。</p>
-        <div class="bar"><i class="good" style="width:100%"></i></div>
-        <div class="foot"><span>S0 10 / 10</span><span>r15</span></div>
-      </a>
-
-      <a class="card" href="/v10/">
-        <div class="k">02 结构 <span class="st warn"><span class="d"></span>冻结中</span></div>
-        <h3>结构设计</h3>
-        <p>整机 BRep 零干涉；下翼根部按 D42=A 改梁 + 撑杆。S1-15 配平能力仍为警告。</p>
-        <div class="bar"><i class="warn" style="width:80%"></i></div>
-        <div class="foot"><span>S1 16 / 20</span><span>S2-A 2 / 13</span></div>
-      </a>
-
-      <a class="card" href="/sim/">
-        <div class="k">03 气动 / 翼面 <span class="st run"><span class="d"></span>进行中</span></div>
-        <h3>气动与翼面</h3>
-        <p>S1-06 已到 92%：双翼干扰、下洗、平尾遮蔽、桨洗。CLmax 判据口径待 D43 拍板。</p>
-        <div class="bar"><i style="width:92%"></i></div>
-        <div class="foot"><span>S1-06 92%</span><span>S2-B 0 / 8</span></div>
-      </a>
-
-      <a class="card" href="/fc/">
-        <div class="k">04 飞控 <span class="st good"><span class="d"></span>已闭环</span></div>
-        <h3>飞控软件</h3>
-        <p>三层回路 + 独立安全监控。单元 26/26、安全 15/15、SIL 16/16，回放无假切。</p>
-        <div class="bar"><i class="good" style="width:100%"></i></div>
-        <div class="foot"><span>26 / 26</span><span>16 / 16</span></div>
-      </a>
-
-      <a class="card" href="/v10/">
-        <div class="k">05 电气 / 能源 <span class="st run"><span class="d"></span>进行中</span></div>
-        <h3>电气与能源</h3>
-        <p>24S 母线、300 A 瞬态已算。预充 / 熔断配合、线径温升、电机温升尚未闭合。</p>
-        <div class="bar"><i style="width:42%"></i></div>
-        <div class="foot"><span>S2-E 5 / 12</span><span>24S</span></div>
-      </a>
-
-      <a class="card" href="/v10/">
-        <div class="k">06 机构 / 起落架 <span class="st run"><span class="d"></span>进行中</span></div>
-        <h3>机构与起落架</h3>
-        <p>前桨倾转、翼桨倾转、舱门与电池底舱口盖全行程已建；起落架打地间隙已定。</p>
-        <div class="bar"><i style="width:60%"></i></div>
-        <div class="foot"><span>S2-C 6 / 10</span><span>S2-D 4 / 7</span></div>
-      </a>
-
-      <a class="card" href="/sim/">
-        <div class="k">07 仿真 / 验证 <span class="st run"><span class="d"></span>工具就绪</span></div>
-        <h3>仿真与验证</h3>
-        <p>蒙特卡洛 20 / 1000；全失效场景与全包线配平在跑。HIL 等 Cube 与台架到位。</p>
-        <div class="bar"><i style="width:27%"></i></div>
-        <div class="foot"><span>S5 4 / 15</span><span>MC 20 / 1000</span></div>
-      </a>
-
-      <a class="card" href="/buy/">
-        <div class="k">08 采购 / 台架 <span class="st warn"><span class="d"></span>未采购</span></div>
-        <h3>采购与台架</h3>
-        <p>29 项清单，P0 14 项先买。台架 10 项判据 0 项通过；安全监控器硬件是强制项。</p>
-        <div class="bar"><i class="warn" style="width:2%"></i></div>
-        <div class="foot"><span>P0 14 项</span><span>台架 0 / 10</span></div>
-      </a>
-
+  <a class="hero" href="/sim/">
+    <div class="txt">
+      <h2>飞控模拟 · 实时演示</h2>
+      <p>姿态、动力、操纵面与能量实时联动：<b>MTOW 198.57 kg</b>、<b>CLmax 1.266</b>、<b>Vs 18.7 m/s</b>、
+         24S <b>6.11 kWh / 可用 4.89</b>。左侧飞机视图可切追尾 / 侧视 / 俯视，右侧参数为飞控口径。</p>
     </div>
+    <svg class="art" viewBox="0 0 150 90" aria-hidden="true">
+      <g fill="none" stroke="#8fc4f5" stroke-width="2.2" stroke-linejoin="round">
+        <path d="M18 34h114" /><path d="M48 56h54" /><path d="M96 24h28"/>
+        <path d="M30 34h90v22H30z" />
+      </g>
+      <path d="M30 34h90v22H30z" fill="rgba(59,142,234,.22)" stroke="#8fc4f5" stroke-width="2"/>
+      <circle cx="20" cy="24" r="12" fill="rgba(120,190,255,.10)" stroke="#5aa9e6" stroke-width="1.5"/>
+      <circle cx="130" cy="24" r="12" fill="rgba(120,190,255,.10)" stroke="#5aa9e6" stroke-width="1.5"/>
+    </svg>
+    <div class="go">打开模拟 →</div>
+  </a>
+
+  <section class="cards">
+    <a class="card" href="/hw/">
+      <h3>飞控硬件</h3>
+      <p>25 件硬件的功能、接口与相互关系：控制拓扑图、供电三条线、失效联动。</p>
+      <span class="tag">硬件</span>
+    </a>
+    <a class="card" href="/fc/">
+      <h3>飞控进展</h3>
+      <p>单元测试、SIL、硬件与 S1/S2/S5 关卡进度，下一步清单。</p>
+      <span class="tag">看板</span>
+    </a>
+    <a class="card" href="/car">
+      <h3>车机入口</h3>
+      <p>车载终端短链：3D 模型、拍板清单、飞控进展三合一入口。</p>
+      <span class="tag">远程</span>
+    </a>
+    <a class="card" href="/v10/">
+      <h3>设计前置条件</h3>
+      <p>S 闸门前置条件对比表，设计冻结前的证据附录。</p>
+      <span class="tag">文档</span>
+    </a>
   </section>
 
-  <section class="split">
-    <div class="panel">
-      <h2>当前在做</h2>
-
-      <div class="task">
-        <div class="t">S1-06 · 气动 v2<small>双翼干扰 / 下洗 / 平尾遮蔽 / 桨洗 · 11-15 到期</small></div>
-        <div class="p">92%</div>
-        <div class="b"><i style="width:92%"></i></div>
+  <section class="stage">
+    <h3>关卡进度</h3>
+    <div class="rows">
+      <div class="row">
+        <div class="rh">S1 结构冻结<b>16 / 20</b></div>
+        <div class="bar"><div class="fill" style="width:80%"></div></div>
+        <div class="note">含 1 项警告（S1-15 配平能力）</div>
       </div>
-
-      <div class="task">
-        <div class="t">S1-11 · 关键接口公差链<small>按 200 mm 插入 + 导向环复算 I-05 · 11-15 到期</small></div>
-        <div class="p">75%</div>
-        <div class="b"><i style="width:75%"></i></div>
+      <div class="row">
+        <div class="rh">S2-E 电气<b>6 / 12</b></div>
+        <div class="bar"><div class="fill" style="width:50%"></div></div>
+        <div class="note">按 D41=C 复算</div>
       </div>
-
-      <div class="task">
-        <div class="t">S1-20 · 乘员头隙<small>含头盔与动态余量；80 mm 最终口径待统一</small></div>
-        <div class="p">60%</div>
-        <div class="b"><i style="width:60%"></i></div>
+      <div class="row">
+        <div class="rh">S5 试飞准备<b>4 / 15</b></div>
+        <div class="bar"><div class="fill" style="width:27%"></div></div>
+        <div class="note">S1 闸门签字后推进</div>
       </div>
-
-      <div class="task">
-        <div class="t">S1-10 · 1.70 m / 70 kg 人机<small>净空 ≥1100 mm / 头隙 / 进出 · 11-15 到期</small></div>
-        <div class="p">40%</div>
-        <div class="b"><i style="width:40%"></i></div>
-      </div>
-
-      <div class="task">
-        <div class="t">S5-04 · 1000 次蒙特卡洛<small>还差 988 次；需并行化 · 2027-04-04 到期</small></div>
-        <div class="p">20%</div>
-        <div class="b"><i style="width:20%"></i></div>
+      <div class="row">
+        <div class="rh">硬件到位<b>0 / 10</b></div>
+        <div class="bar"><div class="fill warn" style="width:2%"></div></div>
+        <div class="note">全部未采购</div>
       </div>
     </div>
-
-    <div class="panel">
-      <h2>关键数字</h2>
-      <div class="nums">
-        <div class="num"><div class="v">198.57<small> kg</small></div><div class="k">MTOW</div></div>
-        <div class="num"><div class="v">1.266</div><div class="k">CLmax</div></div>
-        <div class="num"><div class="v">18.7<small> m/s</small></div><div class="k">失速速度</div></div>
-        <div class="num"><div class="v">6.11<small> kWh</small></div><div class="k">24S 总能量</div></div>
-      </div>
-      <div class="note">仿真口径：S1-06 v3 / D27=B；可用能量 4.89 kWh。与 150 kg 无人验证机数字不混用。</div>
-      <div class="mini">
-        <div class="mh">最近拍板 · 累计 47 项</div>
-        <div class="mrow"><b>D42 A</b><span>下翼根部改梁 + 撑杆</span></div>
-        <div class="mrow"><b>D41 C</b><span>尾翼公差控制 + 首件实测</span></div>
-        <div class="mrow"><b>D40 B</b><span>电池包只做本机快拆</span></div>
-      </div>
-      <a class="more" href="/sim/">看实时模拟 →</a>
-    </div>
-  </section>
-
-  <section class="decide">
-    <span class="tag">待拍板 1 项</span>
-    <div class="dt">D43 · S1-06 判据口径</div>
-    <p>「CLmax / 失速速度误差 ≤5%」按方法自洽签字，定量验证移入 S2。建议 <b>A</b>；未拍板前 S1-06 保持 92%。</p>
-    <a href="/car">去拍板 →</a>
   </section>
 
   <footer>
-    <b>V10 载人电动飞行器</b> · 项目门户。数据 2026-11-06 18:43；页面只做展示，不替代状态机与证据链。<br>
-    仿真为演示用飞行动力学，不作为适航或放飞依据；S 闸门未签字不做物理制造。采购不等于制造放行。
+    V10 载人验证机 · 飞控主页。模拟页为演示用飞行动力学（点质量 + 姿态跟随），参数取自 S1-06 v3（D27=B 口径），
+    不作为适航或放飞依据；实物制造以 S 闸门签字为准。<br>
+    更新：2026-11-06
   </footer>
-
 </div>
 </body>
 </html>
