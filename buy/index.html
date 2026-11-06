@@ -123,7 +123,7 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--grid);
 <section class="pricebar">
   <div>
     <div class="pk">飞控硬件 · A+B+C</div>
-    <div class="pv">≈ ¥1.85 万</div>
+    <div class="pv">≈ ¥1.82 万</div>
     <div class="pn">中值；区间 ¥1.3–2.4 万。23 项，±30%，未询价</div>
   </div>
   <div>
@@ -157,7 +157,7 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--grid);
     <li><b>ESC 必须支持遥测</b>：没有 ESC 遥测，前桨失效与翼桨单发检测会静默跳过。台架第 1 项要验证“断信号 1 s 内停转”。</li>
     <li><b>编码器不要两片 AS5600 同挂 I2C</b>：固定地址都是 0x36；选 AS5048A（SPI）、MT6701 或 DroneCAN。</li>
     <li><b>安全监控器是强制项</b>：独立电源、独立判据、只切三路 ESC 信号；不触发弹道伞。硬件预算约 ¥245（见 fc/safety/README.md）。</li>
-    <li><b>价格为暂估</b>：2026-11 国内电商 / 厂家口径，按中值汇总，±30%，未询价、未含运费关税；下单前逐项询价。不含电机、桨、主电池、结构件。</li>
+    <li><b>价格为暂估</b>：2026-11 国内电商 / 厂家口径，按中值汇总，±30%，未询价、未含运费关税；下单前逐项询价。C 组沿用 fc/safety 的 ¥245 BOM，区间上沿含零买溢价。不含电机、桨、主电池、结构件。</li>
     <li><b>降本优先级</b>：GNSS 选 M10 + RM3100 分体（省约 ¥700）→ 测距选 TFmini-S（省约 ¥1,200）→ 机载电脑选 RPi5（省约 ¥2,000）。<b>ESC、倾转作动器、编码器不要降</b>，省下的钱会在单发检测和相位漂移上赔回来。</li>
   </ul>
 </section>
@@ -198,15 +198,15 @@ const GROUPS = [
     ]
   },
   {
-    id:"C", title:"C · 独立安全监控器", prio:"P0", est:"≈ ¥560", note:"强制项：主飞控软件死了，这一层仍能切三路 ESC 信号。",
+    id:"C", title:"C · 独立安全监控器", prio:"P0", est:"≈ ¥270", note:"强制项：主飞控软件死了，这一层仍能切三路 ESC 信号。",
     items:[
-      {id:"mcu", name:"监控器 MCU", model:"RP2040 Pico ×1", qty:"1", price:"30–60", note:"MicroPython + 硬件看门狗；不需要无线"},
-      {id:"batt", name:"独立电源", model:"2S 800 mAh LiPo + 5V/3A 降压 ×1", qty:"1", price:"80–150", note:"主母线掉电时监控器仍工作"},
-      {id:"bec2", name:"备份供电", model:"5V/5A BEC ×1", qty:"1", price:"60–120", note:"与 2S 电池二极管并联，任一路在就不断电"},
-      {id:"relay", name:"信号继电器", model:"3 路常开 ×1 套", qty:"1套", price:"35–80", note:"SRD-05VDC ×3 或 1 只 3 组触点；只切信号线，不切功率地"},
-      {id:"alarm", name:"声光告警", model:"90 dB 蜂鸣器 + 双色 LED ×1", qty:"1", price:"20–50", note:"原因编码用闪烁次数"},
-      {id:"estop", name:"人工急停", model:"自锁蘑菇头 ×1", qty:"1", price:"30–80", note:"接 GP7，锁存；复位必须断监控器电源"},
-      {id:"sconn", name:"线束 / 插头 / 壳", model:"JST-GH + 3D 打印 ×1 套", qty:"1套", price:"100–220", note:"只共地，不共 5 V"}
+      {id:"mcu", name:"监控器 MCU", model:"RP2040 Pico ×1", qty:"1", price:"35–50", note:"MicroPython + 硬件看门狗；不需要无线"},
+      {id:"batt", name:"独立电源", model:"2S 800 mAh LiPo + 5V/3A 降压 ×1", qty:"1", price:"55–80", note:"主母线掉电时监控器仍工作"},
+      {id:"bec2", name:"备份供电", model:"5V/5A BEC ×1", qty:"1", price:"45–70", note:"与 2S 电池二极管并联，任一路在就不断电"},
+      {id:"relay", name:"信号继电器", model:"3 路常开 ×1 套", qty:"1套", price:"15–30", note:"SRD-05VDC ×3 或 1 只 3 组触点；只切信号线，不切功率地"},
+      {id:"alarm", name:"声光告警", model:"90 dB 蜂鸣器 + 双色 LED ×1", qty:"1", price:"8–20", note:"原因编码用闪烁次数"},
+      {id:"estop", name:"人工急停", model:"自锁蘑菇头 ×1", qty:"1", price:"12–25", note:"接 GP7，锁存；复位必须断监控器电源"},
+      {id:"sconn", name:"线束 / 插头 / 壳", model:"JST-GH + 3D 打印 ×1 套", qty:"1套", price:"30–60", note:"只共地，不共 5 V"}
     ]
   },
   {
