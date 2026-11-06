@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>V10 载人 · 首飞前置条件（务实版）</title>
+<style>
+  :root{
+    color-scheme: dark;
+    --bg:#070c11; --surface:#0d151d; --surface-2:#111b24; --surface-3:#16222c;
+    --ink:#f0efec; --ink-2:#c3c2b7; --muted:#98a1ad; --faint:#6b7684;
+    --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.15);
+    --accent:#3987e5; --accent-2:#6da7ec;
+    --have:#3fb950; --partial:#e3b341; --missing:#f85149; --unknown:#8b949e;
+    --done:#3fb950; --doing:#e3b341; --todo:#f85149; --na:#6b7684;
+    --radius:12px;
+    --sans:system-ui,-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 12% -10%,rgba(57,135,229,.10),transparent 60%),
+      radial-gradient(900px 520px at 92% 0%,rgba(248,81,73,.05),transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font:15px/1.55 var(--sans);
+    -webkit-font-smoothing:antialiased;
+  }
+  .shell{max-width:1720px;margin:0 auto;padding:22px 26px 90px}
+  .top{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:2px 0 14px}
+  h1{font-size:26px;line-height:1.25;margin:0;letter-spacing:.02em}
+  .sub{color:var(--muted);font-size:13px;margin-top:6px;max-width:1000px}
+  .sub b{color:var(--ink-2);font-weight:600}
+  .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .btn{font:inherit;font-size:12.5px;color:var(--ink-2);background:var(--surface-2);
+       border:1px solid var(--line);border-radius:9px;padding:7px 11px;cursor:pointer;
+       transition:.15s;white-space:nowrap}
+  .btn:hover{border-color:var(--line-2);color:var(--ink)}
+  .btn.primary{border-color:rgba(57,135,229,.45);background:rgba(57,135,229,.12);color:#cfe3ff}
+  .btn:disabled{opacity:.45;cursor:default}
+  .stamp{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);
+         padding:6px 10px;border:1px solid var(--line);border-radius:99px;background:var(--surface)}
+  .stamp i{width:7px;height:7px;border-radius:50%;background:var(--have);display:block;
+           box-shadow:0 0 0 4px rgba(63,185,80,.14)}
+
+  .kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+  @media (max-width:1250px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media (max-width:720px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .kpi{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;
+       padding:12px 14px 11px;overflow:hidden}
+  .kpi:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--k,var(--accent))}
+  .kpi .kl{font-size:12px;color:var(--muted);letter-spacing:.04em}
+  .kpi .kv{font:600 27px/1.2 var(--mono);margin-top:4px;color:var(--k,var(--ink));letter-spacing:-.02em}
+  .kpi .kv small{font-size:13px;font-weight:400;color:var(--muted)}
+  .kpi .kn{font-size:11.5px;color:var(--faint);margin-top:2px}
+
+  .hint{margin-top:12px;border:1px solid rgba(57,135,229,.22);border-radius:12px;
+        background:linear-gradient(150deg,rgba(57,135,229,.08),rgba(13,21,29,.9));
+        padding:10px 14px;font-size:12.8px;color:var(--muted);line-height:1.6}
+  .hint b{color:var(--ink-2);font-weight:600}
+  .hint .saved{color:var(--accent-2);margin-left:8px;font-size:12px}
+
+  .summary{display:grid;grid-template-columns:290px minmax(0,1fr);gap:11px;margin-top:12px}
+  @media (max-width:900px){.summary{grid-template-columns:1fr}}
+  .panel{background:linear-gradient(165deg,rgba(17,27,36,.94),rgba(13,21,29,.86));
+         border:1px solid var(--line);border-radius:var(--radius);padding:13px 15px 14px;min-width:0}
+  .panel .ph{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:6px}
+  .panel .pt{font-size:12px;letter-spacing:.16em;color:var(--accent-2);font-weight:600}
+  .panel .pn{font-size:11.5px;color:var(--faint)}
+  .donutwrap{display:flex;align-items:center;gap:8px}
+  .donutwrap svg{flex:0 0 176px;width:176px;height:176px}
+  .dlg{display:flex;flex-direction:column;gap:6px;font-size:12.5px;min-width:96px}
+  .dlg .row{display:flex;align-items:center;gap:7px;color:var(--muted)}
+  .dlg .row i{width:9px;height:9px;border-radius:2px;display:block;flex:0 0 9px}
+  .dlg .row b{margin-left:auto;color:var(--ink-2);font:600 13px/1 var(--mono)}
+
+  .bars{display:flex;flex-direction:column;gap:9px}
+  .brow{display:grid;grid-template-columns:88px minmax(0,1fr) 46px;gap:9px;align-items:center}
+  .brow .bn{font-size:12.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brow .btr{height:18px;border-radius:5px;background:rgba(255,255,255,.045);overflow:hidden;display:flex}
+  .brow .btr i{display:block;height:100%;transition:width .35s}
+  .brow .bp{font:600 12.5px/1 var(--mono);color:var(--muted);text-align:right}
+  .brow .bp.hi{color:var(--have)} .brow .bp.mid{color:var(--partial)} .brow .bp.lo{color:var(--missing)}
+  .bnote{font-size:11.5px;color:var(--faint);margin-top:8px;line-height:1.5}
+
+  .toolbar{position:sticky;top:0;z-index:40;margin-top:14px;padding:10px 0 9px;
+           background:linear-gradient(180deg,rgba(7,12,17,.98) 75%,rgba(7,12,17,0));
+           display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .fbtn{font:inherit;font-size:12.5px;color:var(--ink-2);background:var(--surface-2);
+        border:1px solid var(--line);border-radius:99px;padding:6px 11px;cursor:pointer;transition:.15s;white-space:nowrap}
+  .fbtn:hover{border-color:var(--line-2);color:var(--ink)}
+  .fbtn.on{border-color:rgba(57,135,229,.55);background:rgba(57,135,229,.14);color:#cfe3ff}
+  .fbtn .n{font:600 11px/1 var(--mono);color:var(--faint);margin-left:5px}
+  .fbtn.on .n{color:var(--accent-2)}
+  .sep{width:1px;height:22px;background:var(--line-2);margin:0 3px}
+  .search{font:inherit;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--line);
+          border-radius:9px;padding:7px 11px;min-width:220px;outline:none}
+  .search:focus{border-color:rgba(57,135,229,.55)}
+  .search::placeholder{color:var(--faint)}
+  .count{font-size:12px;color:var(--faint);margin-left:auto;font-variant-numeric:tabular-nums}
+
+  .tree{margin-top:4px}
+  .catnode{margin-bottom:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+  .catrow{display:grid;grid-template-columns:22px minmax(0,1fr) 240px 52px;gap:12px;align-items:center;
+          padding:12px 14px;cursor:pointer;background:linear-gradient(90deg,rgba(57,135,229,.075),rgba(57,135,229,0) 60%);
+          transition:.15s;user-select:none}
+  .catrow:hover{background:linear-gradient(90deg,rgba(57,135,229,.12),rgba(57,135,229,.015) 60%)}
+  .caret{display:inline-grid;place-items:center;width:18px;height:18px;color:var(--faint);
+         font-size:11px;transition:transform .18s;flex:0 0 18px}
+  .catnode.open > .catrow .caret{transform:rotate(90deg)}
+  .catrow .cname{font-size:15.5px;font-weight:600;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .catrow .cmeta{font-size:11.8px;color:var(--faint);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cbarwrap{height:8px;border-radius:99px;background:rgba(255,255,255,.055);overflow:hidden;display:flex}
+  .cbarwrap i{display:block;height:100%;transition:width .35s}
+  .catrow .cpct{font:600 13px/1 var(--mono);text-align:right;color:var(--muted)}
+  .catrow .cpct.hi{color:var(--have)} .catrow .cpct.mid{color:var(--partial)} .catrow .cpct.lo{color:var(--missing)}
+
+  .tchildren{display:none;border-top:1px solid var(--line)}
+  .catnode.open > .tchildren{display:block}
+
+  .leaf{border-top:1px solid rgba(255,255,255,.045)}
+  .leaf:first-child{border-top:0}
+  .lrow{display:grid;grid-template-columns:18px 18px 42px minmax(0,1fr) 60px 74px 100px 44px;
+        gap:9px;align-items:center;padding:7px 14px 7px 34px;cursor:pointer;position:relative}
+  .lrow:hover{background:rgba(255,255,255,.025)}
+  .leaf.open > .lrow{background:rgba(57,135,229,.07)}
+  .lrow:before{content:"";position:absolute;left:24px;top:0;bottom:0;width:1px;background:rgba(255,255,255,.07)}
+  .lrow:after{content:"";position:absolute;left:24px;top:50%;width:9px;height:1px;background:rgba(255,255,255,.07)}
+  .leaf.open .lrow:before{background:rgba(57,135,229,.35)}
+  .leaf.is-na{opacity:.55}
+  .leaf.open .caret{transform:rotate(90deg)}
+  .lrow .caret{width:16px;height:16px;font-size:10px}
+  .chk{width:15px;height:15px;cursor:pointer;accent-color:var(--done);justify-self:center;margin:0}
+  .chk:indeterminate{accent-color:var(--doing)}
+  .lid{font:600 11.5px/1 var(--mono);color:var(--faint);letter-spacing:.05em;white-space:nowrap}
+  .lt{font-size:13.8px;color:var(--ink);line-height:1.35;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .leaf.open .lt{white-space:normal}
+  .evpill{font-size:10.5px;line-height:1;border-radius:99px;padding:3px 6px;border:1px solid transparent;white-space:nowrap;justify-self:start}
+  .evpill.have{color:#56d364;background:rgba(63,185,80,.12);border-color:rgba(63,185,80,.35)}
+  .evpill.partial{color:#e3b341;background:rgba(227,179,65,.12);border-color:rgba(227,179,65,.35)}
+  .evpill.missing{color:#ff9b94;background:rgba(248,81,73,.12);border-color:rgba(248,81,73,.35)}
+  .evpill.unknown{color:#b1bac4;background:rgba(139,148,158,.12);border-color:rgba(139,148,158,.35)}
+  .gatechip{font:600 10.5px/1 var(--mono);color:var(--faint);border:1px dashed var(--line-2);
+            border-radius:99px;padding:3px 7px;white-space:nowrap;text-align:center;overflow:hidden;text-overflow:ellipsis}
+  .pstat{font:inherit;font-size:11.5px;background:var(--surface-2);color:var(--ink-2);
+         border:1px solid var(--line);border-radius:7px;padding:4px 4px;width:100%;cursor:pointer;outline:none}
+  .pstat:focus{border-color:rgba(57,135,229,.5)}
+  .pstat[data-st="done"]{color:#56d364;border-color:rgba(63,185,80,.45);background:rgba(63,185,80,.09)}
+  .pstat[data-st="doing"]{color:#e3b341;border-color:rgba(227,179,65,.45);background:rgba(227,179,65,.09)}
+  .pstat[data-st="todo"]{color:#ff9b94;border-color:rgba(248,81,73,.4);background:rgba(248,81,73,.07)}
+  .pstat[data-st="na"]{color:#b1bac4;border-color:rgba(139,148,158,.4)}
+  .lpct{font:600 11.5px/1 var(--mono);color:var(--faint);text-align:right;white-space:nowrap}
+
+  .ldetail{display:none;padding:2px 16px 14px 78px}
+  .leaf.open > .ldetail{display:block}
+  .dgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px 22px;
+         background:rgba(255,255,255,.018);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+  @media (max-width:1000px){.dgrid{grid-template-columns:1fr}}
+  .ditem b{display:block;font-size:10.5px;letter-spacing:.1em;color:var(--faint);margin-bottom:2px}
+  .ditem p{margin:0;font-size:12.6px;line-height:1.55;color:var(--ink-2)}
+  .ditem p.crit{color:#cfe3ff}
+  .ditem p.act{color:#9ecbff}
+  .dnote{margin-top:8px;display:flex;gap:10px;align-items:flex-start}
+  .dnote label{font-size:10.5px;letter-spacing:.1em;color:var(--faint);padding-top:7px;white-space:nowrap}
+  .dnote textarea{flex:1;min-height:44px;resize:vertical;font:inherit;font-size:12.5px;line-height:1.5;
+                  color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;
+                  padding:7px 9px;outline:none}
+  .dnote textarea:focus{border-color:rgba(57,135,229,.5)}
+  .dnote textarea::placeholder{color:var(--faint)}
+  .empty{display:none;padding:38px 10px;text-align:center;color:var(--faint);font-size:13px}
+
+  .foot{margin-top:24px;padding-top:14px;border-top:1px solid var(--line);font-size:11.8px;color:var(--faint);line-height:1.65}
+  .foot b{color:var(--muted)}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(14px);
+         background:rgba(13,21,29,.97);border:1px solid rgba(63,185,80,.4);color:#7ee787;
+         border-radius:10px;padding:9px 14px;font-size:13px;opacity:0;pointer-events:none;transition:.2s;z-index:99}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.err{border-color:rgba(248,81,73,.5);color:#ff9b94}
+
+  .baseline{margin-top:10px;border:1px solid rgba(227,179,65,.32);border-radius:11px;
+            background:linear-gradient(135deg,rgba(227,179,65,.10),rgba(13,21,29,.92));
+            padding:10px 14px;font-size:12.4px;line-height:1.6;color:#d8c9a8}
+  .baseline b{color:#f0d9a5}
+
+  .blockers{margin-top:14px;border:1px solid rgba(248,81,73,.28);border-radius:13px;
+            background:linear-gradient(150deg,rgba(248,81,73,.075),rgba(13,21,29,.93));
+            padding:13px 15px 14px}
+  .blockers .bh{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+  .blockers .bt{font-size:15px;font-weight:600;color:#ffd2ce;letter-spacing:.01em}
+  .blockers .bt b{font:700 20px/1 var(--mono);color:#ff9b94;margin:0 3px}
+  .blockers .bn{font-size:11.8px;color:var(--faint);margin-top:3px}
+  .bcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:8px}
+  .bcard{font:inherit;text-align:left;color:var(--ink);cursor:pointer;
+         background:rgba(255,255,255,.025);border:1px solid rgba(248,81,73,.22);
+         border-left:3px solid rgba(248,81,73,.65);border-radius:9px;padding:9px 11px;transition:.15s}
+  .bcard:hover{background:rgba(248,81,73,.075);border-color:rgba(248,81,73,.45);transform:translateY(-1px)}
+  .bct{display:flex;align-items:baseline;gap:7px;min-width:0}
+  .bid{font:600 10.5px/1 var(--mono);color:#ff9b94;white-space:nowrap}
+  .btt{font-size:13.2px;font-weight:600;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bcw{font-size:11.8px;color:var(--muted);line-height:1.5;margin-top:3px;
+       display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .bca{font-size:11px;color:#ff9b94;margin-top:4px;opacity:.8}
+  .bempty{font-size:12.5px;color:var(--have);padding:6px 2px}
+  .fbtn.blk.on{border-color:rgba(248,81,73,.55);background:rgba(248,81,73,.13);color:#ffb4ae}
+  .fbtn.blk.on .n{color:#ff9b94}
+  .blkmini{font-size:9.5px;line-height:1;color:#ff9b94;background:rgba(248,81,73,.15);
+           border:1px solid rgba(248,81,73,.42);border-radius:4px;padding:2px 4px;margin-right:5px;
+           vertical-align:1px;white-space:nowrap}
+  .leaf.flash .lrow{background:rgba(248,81,73,.20)!important;transition:background .2s}
+  .ditem p.blkwhy{color:#ffb4ae}
+
+  @media (max-width:900px){
+    .catrow{grid-template-columns:22px minmax(0,1fr) 52px;gap:8px}
+    .catrow .cbarwrap{display:none}
+    .lrow{grid-template-columns:18px 18px 38px minmax(0,1fr) 88px;grid-template-areas:"c k i t s" ". . e g p";gap:5px 8px;padding:8px 12px 8px 30px}
+    .lrow .caret{grid-area:c}.lrow .chk{grid-area:k}.lrow .lid{grid-area:i}
+    .lrow .lt{grid-area:t;white-space:normal}.lrow .pstat{grid-area:s}
+    .lrow .evpill{grid-area:e;justify-self:start}.lrow .gatechip{grid-area:g}
+    .lrow .lpct{grid-area:p;text-align:left}
+    .ldetail{padding-left:30px}
+  }
+  @media print{
+    body{background:#fff;color:#111}
+    .controls,.toolbar,.toast,.hint .saved{display:none}
+    .shell{max-width:none;padding:8mm}
+    .panel,.kpi,.catnode,.dgrid{background:#fff;border-color:#ccc}
+    .catrow{background:#f4f4f4}
+    .tchildren{display:block!important}
+    .ldetail{display:block!important}
+    .pstat{border-color:#bbb;color:#111}
+    .lt,.catrow .cname,.ditem p,.lrow{color:#111!important}
+    .lid,.lpct,.catrow .cmeta,.ditem b,.bnote,.panel .pn{color:#555!important}
+    .evpill,.gatechip{color:#333!important;border-color:#bbb!important;background:#f3f3f3!important}
+    .baseline,.blockers{background:#fff!important;border-color:#ccc!important;color:#111!important}
+    .baseline b,.blockers .bt,.btt{color:#111!important}
+    .blockers .bn,.bcw,.bca,.baseline{color:#555!important}
+    .bcard{background:#fff!important;border-color:#ccc!important;color:#111!important}
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="top">
+    <div>
+      <h1>V10 载人 · 首飞前置条件（务实版）</h1>
+      <div class="sub">
+        融合 Mac 全量清单与 Win r9 检查项：保留「需要 / 现状 / 验收判据 / 下一步 / 责任 / 闸门」和可勾选进度，
+        新增<b>首飞阻断视图</b>。载人基线 <b>196 kg</b>，Win 的 95 kg 数字只作参考、不用于载人放行。
+      </div>
+    </div>
+    <div class="controls">
+      <span class="stamp"><i></i>2026-11-05 · V10 r15 / S1 进行中</span>
+      <button class="btn primary" id="exportBtn">导出进度</button>
+      <button class="btn" id="importBtn">导入进度</button>
+      <input type="file" id="importFile" accept=".json,application/json" style="display:none">
+      <button class="btn" id="printBtn">打印</button>
+      <button class="btn" id="resetBtn">重置</button>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="hint">
+    <b>进度口径：</b>首次打开按证据推定（已具备→完成、部分→进行中、缺失/待确认→未开始），
+    勾选或改状态后以你的实际进度为准。完成度 =（已完成 + 0.5×进行中）÷ 适用项，不适用项不计入。
+    <span class="saved" id="savedLabel">尚未保存</span>
+  </div>
+
+  <div class="baseline">
+    <b>基线口径：</b>本表只判载人 V10（r12 <b>196.326 kg</b> / r15 目标 <b>199.15 kg</b>，70 kg 乘员）。
+    Win 清单基于 r9 无人 95 kg，只借用检查项、判据和组织方式；凡标「Win 参考」的数字，载人放行前必须按 196 kg 基线重算，不得直接引用。
+  </div>
+
+  <section class="blockers">
+    <div class="bh">
+      <div>
+        <div class="bt">现在真正卡首飞的 <b id="blkCount">—</b> 条</div>
+        <div class="bn">按「不解决不能放飞」排序；点一条直接定位到清单。勾成已完成或改为不适用后，会自动移出。</div>
+      </div>
+    </div>
+    <div class="bcards" id="blkCards"></div>
+  </section>
+
+  <div class="summary">
+    <div class="panel">
+      <div class="ph"><span class="pt">实际进度</span><span class="pn"><span id="donutCount">104</span> 项 · 可勾选</span></div>
+      <div class="donutwrap">
+        <svg id="donut" viewBox="0 0 200 200" aria-label="实际状态分布"></svg>
+        <div class="dlg" id="donutlg"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="ph"><span class="pt">各大项进度</span><span class="pn">绿=完成 · 黄=进行中 · 红=未开始 · 灰=不适用</span></div>
+      <div class="bars" id="bars"></div>
+      <div class="bnote" id="evNote">证据侧覆盖（固定）：已具备 7 · 部分 21 · 缺失 72 · 待确认 4。证据状态与你的实际进度分开记录，互不覆盖。</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="fbtn on" data-status="all">全部 <span class="n" id="n-all">104</span></button>
+    <button class="fbtn blk" data-status="blk">只看卡点 <span class="n" id="n-blk"></span></button>
+    <button class="fbtn" data-status="undone">未完成 <span class="n" id="n-undone"></span></button>
+    <button class="fbtn" data-status="todo">未开始 <span class="n" id="n-todo"></span></button>
+    <button class="fbtn" data-status="doing">进行中 <span class="n" id="n-doing"></span></button>
+    <button class="fbtn" data-status="done">已完成 <span class="n" id="n-done"></span></button>
+    <button class="fbtn" data-status="na">不适用 <span class="n" id="n-na"></span></button>
+    <span class="sep"></span>
+    <button class="btn" id="expandAll">全部展开</button>
+    <button class="btn" id="collapseAll">全部折叠</button>
+    <button class="btn" id="copyUndone">复制未完成</button>
+    <input class="search" id="search" type="search" placeholder="搜索条件 / 现状 / 判据 / 备注…">
+    <span class="count" id="count"></span>
+  </div>
+
+  <div class="tree" id="tree"></div>
+  <div class="empty" id="empty">没有匹配的条件。清空筛选或搜索试一下。</div>
+
+  <div class="foot">
+    <b>使用说明：</b>点大项行折叠/展开；点条目行展开详情；左侧方框勾选=完成，半选=进行中；右侧下拉可改成「未开始/进行中/已完成/不适用」。
+    备注会随进度一起保存在本机。换电脑、换浏览器或清缓存前，先「导出进度」。<br>
+    <b>判定口径：</b>「已具备」= 项目内有可用成果或正式文件；「部分具备」= 有设计/估算/局部验证但未可放行；
+    「缺失」= 文档与状态中无对应成果或未启动；「待确认」= 文档没有记录，<b>不代表实际没有</b>。<br>
+    <b>红线：</b>S1 未签字不冻结制造图纸；S 闸门未过不下料、机加工、铺膜、部装、装机、通电、滑行、放飞。
+    本清单只用于暴露缺口、排优先级和记录实际进度，不替代 S 放行包与试验签字。<br>
+    <b>合并说明：</b>Win 清单 <a href="refs/Win_前置条件清单_20261105.html">`refs/Win_前置条件清单_20261105.html`</a> 基于 r9 无人 95 kg。本版只采纳其检查项、判据和阻断排序；
+    凡引用其数字处均标「Win 参考」，载人放行前必须按 196 kg 基线重算，禁止与 95 kg 数据混用。<br>
+    <b>证据：</b>`agent/state/AGENT_STATUS.md`、`sim/progress/progress.json`、`工作包_WBS.md`、`总进度计划_载人验证机.md`、
+    `成本BOM_TCO初稿.md`、`playbooks/06–08`、`model/r9m_20261105`、`短舱结构_r14`、Win <a href="refs/Win_前置条件清单_20261105.html">`前置条件清单_20261105.html`</a>（r9 95 kg，参考）。
+  </div>
+</div>
+<div class="toast" id="toast">已保存</div>
+
+<script>
+const CATS = {
+  A:{name:'设计与冻结', color:'#3987e5'},
+  B:{name:'采购·制造·装配', color:'#d29922'},
+  C:{name:'起降条件', color:'#2ea043'},
+  D:{name:'飞行条件', color:'#7ee787'},
+  E:{name:'飞控条件', color:'#a371f7'},
+  F:{name:'试验验证', color:'#f0883e'},
+  G:{name:'人员·法规·组织', color:'#79c0ff'},
+  H:{name:'保障·后勤', color:'#8b949e'}
+};
+const SMETA = {
+  have:{label:'已具备', short:'具备', color:'#3fb950'},
+  partial:{label:'部分具备', short:'部分', color:'#e3b341'},
+  missing:{label:'缺失', short:'缺失', color:'#f85149'},
+  unknown:{label:'待确认', short:'待确认', color:'#8b949e'}
+};
+const PMETA = {
+  done:{label:'已完成', color:'#3fb950', w:1},
+  doing:{label:'进行中', color:'#e3b341', w:.5},
+  todo:{label:'未开始', color:'#f85149', w:0},
+  na:{label:'不适用', color:'#6b7684', w:0}
+};
+const DEF = {have:'done', partial:'doing', missing:'todo', unknown:'todo'};
+
+const DATA = [
+  // A 设计与冻结
+  {id:'A1',cat:'A',t:'唯一质量/性能基线',need:'全项目只读一套质量、CG、性能数据，禁止多口径混用',now:'analysis/baseline.json：r12 196.326 kg、r15 目标 199.15 kg、70 kg 乘员',crit:'baseline.json 为唯一质量源；下游文档不再出现多口径；旧表已标「历史口径」。',act:'每版模型重建后更新；文档旧表标「历史口径」',owner:'Mac',g:'S1',s:'have'},
+  {id:'A2',cat:'A',t:'全机几何与装配模型',need:'可制造的整机 3D，干涉、装配序列、可达性可查',now:'r9m 95 件 / 230 L；r14 短舱 112 件 / 24.98 kg；r15 未冻结',crit:'r15 整机 BRep 0 处未解释干涉；装配序列与工具可达通过；裸框 ≤22.5 kg。',act:'r15 减重到裸框 ≤22.5 kg，10 对干涉清零，倾转 10 件并入',owner:'Mac',g:'S1/S2-A',s:'partial'},
+  {id:'A3',cat:'A',t:'气动数据库 v2',need:'双翼干扰、下洗、平尾遮蔽、桨洗、失速顺序',now:'只有一阶估算与单点数据，无可用气动数据库',crit:'覆盖 8/20/30 m/s、25/50/100% 油门与失速前后；失速顺序、下洗、遮蔽有出处。',act:'W4 气动 + W10-7；先补失速顺序与 0 油门状态',owner:'Mac',g:'S1',s:'missing'},
+  {id:'A4',cat:'A',t:'结构 FEM 基线',need:'4/−2 g、6/−3 g、座椅 9 g、电池 9/6 g 全机与关键件',now:'手算与局部校核，FEM 基线未建',crit:'四组载荷工况全过；关键件应力 ≤ 许用、变形在限值内；报告归档到 S2-A。',act:'W10-3；先做前梁、尾梁承口、起落架、座椅硬点',owner:'Mac',g:'S2-A',s:'missing'},
+  {id:'A5',cat:'A',t:'控制权限全矩阵',need:'8/20/30 m/s × 25/50/100% 推力下的俯仰/滚转/偏航权限',now:'单点已有（如俯仰 8 m/s +108/−118 N·m），全矩阵缺',crit:'3 速度 × 3 油门矩阵完整；0 油门与巡航停桨行有明确结论；每格有权限/需求对比。',act:'补全矩阵，必须标出「0 油门/巡航停桨」行',owner:'Mac',g:'S1',s:'partial'},
+  {id:'A6',cat:'A',t:'质量/CG 包线',need:'空载 + 50/60/70 kg，SM 10–15%，实称闭环',now:'r14 布局估算 SM 11–14%，未实称；D14 已改 70 kg 乘员',crit:'空载 + 50/60/70 kg 四套实称 CG；SM 10–15%；偏差 ≤±10 mm。',act:'r16 出三套实称组合；电池 x 1.40–1.50 不再后移',owner:'Mac',g:'S1/S3',s:'partial'},
+  {id:'A7',cat:'A',t:'电气/热/EMC 设计',need:'24S/100 V、300 A 峰值：预充、熔断、接触器、线径、温升',now:'架构已冻结；S2-E 5/11，原理图/线束/热预算未出',crit:'高压原理图、线束图、预充/熔断配合、热预算出图并过 S2-E。',act:'W5-7 高压电气设计 + W10-11 电气热仿真',owner:'Mac+Win',g:'S2-E',s:'partial'},
+  {id:'A8',cat:'A',t:'机构全行程',need:'前桨倾转、翼桨 0–45°、起落架、舱门、电池托架全行程无卡滞',now:'S2-C 6/10；r7b 倾转 10 件尚未并入 r15',crit:'五个机构全行程仿真与台架通过；无卡滞/干涉；硬限位与锁销有效。',act:'并入 r15；堵转/断电锁定、硬限位、地面锁销',owner:'Mac',g:'S2-C',s:'partial'},
+  {id:'A9',cat:'A',t:'人机/视野/95 百分位',need:'1.70 m / 70 kg 乘员进出、头隙、腿空间、前视视野',now:'r8 假人已核头隙/腿部；舱宽与靠背仍待 D10 拍板',crit:'1.70 m/95 百分位假人进出、头隙 ≥1100 mm、视野满足；签字。',act:'定舱宽与靠背，做 95 百分位复核',owner:'Mac',g:'S1',s:'partial'},
+  {id:'A10',cat:'A',t:'S1 设计冻结签字',need:'20 项全过并签字，才能冻结图纸、放行定制件下单',now:'12/20，截止 2026-11-15；S1-01/02/04/05 未过',crit:'S1 20/20 全过并由用户签字；图纸冻结。',act:'先清关键链 S1-01 → S1-05',owner:'用户',g:'S1',s:'missing'},
+  {id:'A11',cat:'A',t:'制造图纸/BOM/公差链冻结',need:'可直接下料的图纸、BOM、公差链与接口定义',now:'未冻结；依赖 S1 与 r15/r16 几何',crit:'图纸、BOM、公差链版本冻结；可直接下料，无需二次解释。',act:'S1 后出图，S2-A 前完成公差链',owner:'Mac',g:'S2-A',s:'missing'},
+  {id:'A12',cat:'A',t:'仿真前置制度/S 闸门',need:'每个实体动作前有预测、判据、证据包与签字',now:'S0 已放行；S0–S6 共 12 门体系在运行',crit:'每个实体动作有对应 S 包签字记录；无跳门、无口头放行。',act:'保持「无签字不开工」纪律',owner:'用户+Mac',g:'—',s:'have'},
+
+  // B 采购·制造·装配
+  {id:'B1',cat:'B',t:'长周期件下单',need:'前 30 kW 电机+电调、翼 2×6 kW、24S 电池、Cube Orange',now:'计划 W2 下单；文档无 PO 或到货记录',crit:'PO 发出并取得交期承诺；到货验收记录齐全。',act:'≥3 家 RFQ，W2 前发 PO；交期 10–14 周',owner:'用户+Win',g:'W2/K1',s:'missing'},
+  {id:'B2',cat:'B',t:'标准材料采购',need:'6061-T6 管/板按 GB/T 6893 标准系列映射',now:'映射表未出，未下单',crit:'GB/T 6893 映射表完成；管材到货，材质单/批次可追溯。',act:'W7-1 映射 + 采购清单；S1 后可订原材料',owner:'Win',g:'W3',s:'missing'},
+  {id:'B3',cat:'B',t:'定制机加工件',need:'翼鞍座夹箍、尾梁承口、倾转座、接头',now:'未下单；按图加工属制造，需 S2-A 签字',crit:'定制件首件检验合格；尺寸、材料、表面处理符合图纸。',act:'图纸冻结 → S2-A → 下单，交期 3–5 周',owner:'Win/外协',g:'S2-A/W4',s:'missing'},
+  {id:'B4',cat:'B',t:'桨/轮/刹车/舵机选型',need:'桨径与转速、低压大容积胎或弹性弯腿、刹车、舵机',now:'起落架几何已定；具体型号与减震路线未定',crit:'桨/轮/刹车/舵机型号冻结；样品或台架件到货并测试。',act:'W6-1 二选一，出选型表并锁交期',owner:'Win',g:'S1',s:'missing'},
+  {id:'B5',cat:'B',t:'工装',need:'站块、样板卡规、钻模、称重架，约 20–40 h',now:'未开工，无工装清单',crit:'工装清单与图纸完成；站块、卡规、钻模可用并校准。',act:'W7-2；工装工作量计入总工时',owner:'Win',g:'S2-F',s:'missing'},
+  {id:'B6',cat:'B',t:'制造场地与设备',need:'弯管、切割、钻孔、3D 打印/复材、装配台',now:'项目文档没有记录现有设备清单',crit:'场地/设备清单确认；「有/可外协/缺」三态清楚，缺口有替代方案。',act:'盘一次现有条件，列「有/没有/可外协」',owner:'Win',g:'—',s:'unknown'},
+  {id:'B7',cat:'B',t:'装配顺序/可达性',need:'含电池推进/拉出、机翼对接、舱盖、工具可达',now:'原则有（外段先滑入），装配顺序文件未冻结',crit:'装配顺序文件冻结；电池推拉、机翼对接、舱盖装拆演示通过。',act:'W7-3 出装配顺序并做可达性仿真',owner:'Win',g:'S3',s:'partial'},
+  {id:'B8',cat:'B',t:'首件检验计划',need:'关键件首件检验、记录、超差处置',now:'无',crit:'首件检验计划批准；关键尺寸、材料、探伤项目明确。',act:'随图纸出首件检验表',owner:'Win',g:'S3',s:'missing'},
+  {id:'B9',cat:'B',t:'称重/CG 标定',need:'称重设备、CG 流程、±10 mm 放行闸门',now:'无设备、无流程',crit:'称重设备校准；流程演练；CG 偏差 ≤±10 mm。',act:'W7-4 出流程，S3 前备好设备',owner:'Win',g:'S3',s:'missing'},
+  {id:'B10',cat:'B',t:'供应商/交期/替代料',need:'≥3 家报价、交期承诺、替代料与二供',now:'BOM 待询价清单 7 项全部「未询价」',crit:'关键件 ≥3 家报价、交期、替代料落地；BOM 回填。',act:'W2 前完成 RFQ 回填 BOM',owner:'Win',g:'W2',s:'missing'},
+  {id:'B11',cat:'B',t:'制造人员/工时',need:'300–600 h 装配 + 机加/复材外协',now:'未排人力与工时',crit:'人力/工时排定；外协合同签署；关键工序有替补。',act:'确认自制/外协边界与可用工时',owner:'Win',g:'—',s:'unknown'},
+  {id:'B12',cat:'B',t:'防腐/电偶/薄壁工艺',need:'6061+镀镉钢涂密封胶、薄壁管衬套、相贯节点',now:'工艺注意事项有，工艺卡未出',crit:'工艺卡含防腐、电偶、薄壁衬套要求；检验点可执行。',act:'写进制造工艺文件与检验点',owner:'Win',g:'S2-F',s:'partial'},
+
+  // C 起降
+  {id:'C1',cat:'C',t:'起降场地',need:'150–250 m 草地/硬土/铺装，可用长度 ≥200 m',now:'B2 已定 200 m 目标；具体场地未落实',crit:'场地合同/许可到手；可用长度 ≥200 m；覆盖试飞窗口。',act:'至少 2 个候选场地，W20 前锁定',owner:'用户',g:'B2/P1',s:'missing'},
+  {id:'C2',cat:'C',t:'场地净空/障碍/承载',need:'进近净空、地面承载、平整度、周边障碍与人群',now:'未勘测',crit:'勘测报告：净空、承载、平整度、障碍、人群隔离全部合格。',act:'现场勘测 + 照片 + 障碍物记录',owner:'用户+Win',g:'S5',s:'missing'},
+  {id:'C3',cat:'C',t:'起落架几何',need:'主轮 Ø350×125、尾轮 Ø180×60、轮距 1.2 m、接地点 z=0',now:'r9m 已落地；10 组有意接触全部解释，0 条未解释',crit:'起落架几何复核通过；接地点 z=0、轮距/间隙符合；无未解释接触。',act:'r15 布局变动后复核主腿/翼肋/刹车卡钳',owner:'Mac',g:'S2-D',s:'have'},
+  {id:'C4',cat:'C',t:'减震/刹车/尾轮转向',need:'2 g 触地能量路径、刹车、尾轮转向与地面操纵',now:'W6-1/2 未定；胎 vs 弯腿未选；无刹车、尾轮固定无转向、无减震（Win 已列为阻断）',crit:'减震/刹车/转向方案冻结；样件或台架验证通过。',act:'定减震路线，出刹车与转向方案',owner:'Mac+Win',g:'S2-D',s:'missing'},
+  {id:'C5',cat:'C',t:'起落架载荷/落震',need:'2/3 g 落震、150 mm 行程、触地载荷闭环',now:'S2-D 4/7，落震仿真与试验未做',crit:'落震仿真 + 试验 2/3 g 通过；触地载荷闭环。',act:'先仿真后落震台架，纳入 S4',owner:'Mac+Win',g:'S2-D/S4',s:'missing'},
+  {id:'C6',cat:'C',t:'起降性能',need:'起飞滑跑 38.8 m、着陆 113 m（一阶）；实测 147–170 m；载人 196 kg 基线重算',now:'仅一阶估算，G2 未定量；Win r9 口径已断档，载人需按 196 kg 重算',crit:'G2 台架数据回填；起降距离与 200 m 场地匹配并留余量；载人质量下复算。',act:'动力台架后按 196 kg 重算，留 200 m 场地余量',owner:'Mac',g:'G2/S1',s:'partial'},
+  {id:'C7',cat:'C',t:'尾坐角/桨尖离地',need:'静态尾坐角、桨尖与机腹离地间隙',now:'r14 实测水平 146 mm、12.5° 尾坐 284 mm',crit:'尾坐角、桨尖、机腹间隙实测满足限值。',act:'r15 机翼/起落架变动后复测',owner:'Mac',g:'S2-C',s:'partial'},
+  {id:'C8',cat:'C',t:'气象窗口/风限',need:'起降 ≤5 m/s、巡航 ≤6 m/s 阵风，能见度与温度限',now:'需求里有数值，未形成运行标准',crit:'飞行手册给出风、能见度、温度限值；首飞卡引用。',act:'写进飞行手册与首飞卡',owner:'用户+Mac',g:'S5',s:'missing'},
+  {id:'C9',cat:'C',t:'滑行/刹车/转向试验',need:'低速滑行、刹车距离、转向半径、尾坐可控',now:'S4 未开始',crit:'滑行、刹车、转向试验通过；记录归档。',act:'出滑行试验卡与安全边界',owner:'Win+用户',g:'S4',s:'missing'},
+  {id:'C10',cat:'C',t:'外场设施',need:'跑道标记、风速计、消防、救援通道、隔离区',now:'无',crit:'外场设施清单齐套；风速计、消防、救援通道可用。',act:'随场地一起准备',owner:'用户',g:'S5',s:'missing'},
+  {id:'C11',cat:'C',t:'起降空域/场地许可',need:'场地使用许可与飞行计划',now:'B4 用户选择「暂不处理」',crit:'场地许可 + 飞行计划批复到手并在有效期。',act:'首飞前必须补，4–8 周',owner:'用户',g:'B4',s:'missing'},
+
+  // D 飞行
+  {id:'D1',cat:'D',t:'动力系统装机',need:'前 30 kW + 翼 2×6 kW 电机、桨、电调全套装机',now:'未采购',crit:'三套动力装机、对中、称重完成；通电无异常。',act:'K2 到货后装机、称重、对中',owner:'Win',g:'S3',s:'missing'},
+  {id:'D2',cat:'D',t:'电池包',need:'24S 6.11 kWh、BMS、箱体、防火隔板',now:'定制电池未询价；S2-E 初版后才可下单',crit:'电池包到货验收；容量、内阻、绝缘、BMS 通信合格。',act:'询价 3 家组包厂，锁循环寿命',owner:'外协+Win',g:'S2-E/W3',s:'missing'},
+  {id:'D3',cat:'D',t:'高压电气',need:'预充、熔断、接触器、绝缘监测、线径与高压标识',now:'设计未出，硬件未采购',crit:'高压台架通过：预充、熔断、接触器、绝缘监测。',act:'W5-7；300 A 峰值按载人重做',owner:'Win',g:'S2-E',s:'missing'},
+  {id:'D4',cat:'D',t:'静推/滑跑/爬升实测',need:'静推 1425 N、T/W 0.74、滑跑距离与爬升率',now:'G2 未做',crit:'台架静推 ≥1425 N；滑跑/爬升预测回填性能表。',act:'动力台架 → G2 → 回填性能表',owner:'Win+Mac',g:'G2',s:'missing'},
+  {id:'D5',cat:'D',t:'结构静力/疲劳/屈曲',need:'无永久变形、关键件应变记录、薄壁管屈曲',now:'未做',crit:'静力试验无永久变形；应变在预测范围内。',act:'S2-A/F 仿真 + 整机静力 S4',owner:'Mac+Win',g:'S4',s:'missing'},
+  {id:'D6',cat:'D',t:'翼面脉膜 1 m 盒段',need:'4/6 g + 扭转 + 淋雨；膜鼓胀、颤振、节点疲劳',now:'S2-B 0/8，全翼制造前置未开',crit:'1 m 盒段 4/6 g、扭转、淋雨全过；全翼放行。',act:'先做 1 m 盒段，再过 FZ3/FZ3b',owner:'Mac+Win',g:'S2-B',s:'missing'},
+  {id:'D7',cat:'D',t:'颤振/GVT',need:'副翼质量平衡、铰链间隙 ≤1 mm；颤振速度判据统一后再定试验目标（现有 1.2 Vne 与 Win 1.25 Vmax 两套口径）',now:'未做；现有判据 1.2 Vne，Win 用 V_ne ≥1.25 Vmax，两套口径未统一',crit:'先统一速度判据；GVT + 颤振分析到统一目标无颤振；模态分离 ≥20%；副翼质量平衡合格。',act:'S4 前统一 1.2 Vne / 1.25 Vmax 口径；GVT 计划 + 颤振分析 + 副翼质量平衡',owner:'Win+外协',g:'S4',s:'missing'},
+  {id:'D8',cat:'D',t:'失速/尾旋/包线',need:'失速 18.4 m/s、失速改出、包线逐点扩展',now:'SIL 有失速保护逻辑，实飞未验证',crit:'失速、改出、包线逐点通过；无不可控状态。',act:'S6 逐点：先仿真、后飞',owner:'试飞组',g:'S6',s:'missing'},
+  {id:'D9',cat:'D',t:'通信/遥测',need:'链路 ≥1.5 km、遥测/图传/记录',now:'方案有，硬件未装，未拉距',crit:'地面拉距 ≥1.5 km；遥测/记录全程稳定。',act:'选型 + 地面拉距 + EMC 同测',owner:'Win',g:'S4',s:'partial'},
+  {id:'D10',cat:'D',t:'迫降/终止程序',need:'无整机伞，迫降必须全程可控；触发条件与口令',now:'程序有（前桨失效→翼桨 45°），未全场景验证/演练',crit:'迫降程序全场景 SIL + 演练通过；触发条件与口令明确。',act:'SIL 覆盖 + 外场演练 + 首飞卡',owner:'Mac+试飞组',g:'S5',s:'partial'},
+  {id:'D11',cat:'D',t:'飞行气象标准',need:'风、能见度、温度、降水运行限值',now:'未定',crit:'运行气象标准批准并写入飞行手册。',act:'写飞行手册，首飞卡只放行窗口内',owner:'用户+Mac',g:'S5',s:'missing'},
+  {id:'D12',cat:'D',t:'乘员约束/座椅 9 g',need:'五点带、座椅与硬点 9 g 拉脱',now:'设计/假人有，拉脱试验无',crit:'座椅/安全带 9 g 拉脱合格。',act:'S4 座椅/安全带拉脱',owner:'Win',g:'S4',s:'partial'},
+  {id:'D13',cat:'D',t:'飞行保险',need:'机身、第三者、乘员保险',now:'未投保',crit:'保单生效，覆盖试飞期与乘员。',act:'W20 前落地；先询价再定保额',owner:'用户',g:'P1',s:'missing'},
+  {id:'D14',cat:'D',t:'飞行空域批复',need:'空域批文/飞行计划，试飞期有效',now:'未申请（B4 暂不处理）',crit:'空域批文/飞行计划生效。',act:'W20 前启动，审批 4–8 周',owner:'用户',g:'P1',s:'missing'},
+
+  // E 飞控
+  {id:'E1',cat:'E',t:'飞控硬件',need:'Cube Orange（H743 / ArduPlane），双接收',now:'未采购；型号已冻结',crit:'Cube 到货；固件版本与接口核对；台架通电正常。',act:'随 K1 下单，W7 前到货',owner:'Win',g:'W3',s:'missing'},
+  {id:'E2',cat:'E',t:'传感器套件',need:'双 IMU、气压、磁罗盘、GNSS、空速、迎角、下视测距',now:'清单与参数有，硬件无',crit:'全套传感器装齐；标定与零位记录完成。',act:'按 S1 接口清单采购；迎角必装',owner:'Win',g:'S1',s:'partial'},
+  {id:'E3',cat:'E',t:'双接收/RC/失控保护',need:'双接收、失控动作、返航点、链路监测',now:'参数已设（THR_FAILSAFE=2 等），未装机验证',crit:'双接收、失控动作、返航点台架与装机验证通过。',act:'台架联调 + 失控注入',owner:'Win',g:'S4',s:'partial'},
+  {id:'E4',cat:'E',t:'固件/参数/Lua 控制律',need:'ArduPlane 4.6/4.7 + Lua 分层处置',now:'v10_fc.lua + r9/r12 param；20/20 测试通过',crit:'固件/参数与基线一致；测试 20/20 通过。',act:'随基线与参数表更新',owner:'Mac',g:'S1',s:'have'},
+  {id:'E5',cat:'E',t:'SIL 6-DOF/故障注入',need:'阵风、10% 半翼失升、前桨失效、失速',now:'r9/r12 各 8/8；覆盖主要失效场景',crit:'SIL 场景全过；结果归档到 S 包。',act:'补全质量包线与更多故障组合',owner:'Mac',g:'S1',s:'have'},
+  {id:'E6',cat:'E',t:'HIL 硬件在环',need:'飞控实物 + 传感器/执行器模型 + 故障注入',now:'W10-10 未做',crit:'HIL 闭环通过；故障注入可复现。',act:'台架到货后搭 HIL',owner:'Win+Mac',g:'S5',s:'missing'},
+  {id:'E7',cat:'E',t:'1000 次蒙特卡洛',need:'质量、风、故障、传感器偏差散布',now:'未做',crit:'1000 次蒙特卡洛完成；失效概率与包线满足判据。',act:'S5 前跑，出失效概率与包线',owner:'Mac',g:'S5',s:'missing'},
+  {id:'E8',cat:'E',t:'增益调度',need:'SM 10–15%、50/60/70 kg 质量点',now:'TC0/K(V) 调度已实现，未按最终质量包线标定',crit:'各质量点增益标定；阶跃/阵风响应在限内。',act:'r16 质量确认后重新标定',owner:'Mac',g:'S5',s:'partial'},
+  {id:'E9',cat:'E',t:'控制权限矩阵',need:'全速度/油门权限与配平需求对比',now:'与 A5 同一缺口：单点有，全矩阵无',crit:'全矩阵完成并评审；无 0 权限盲区。',act:'与 A5 合并完成',owner:'Mac',g:'S1',s:'partial'},
+  {id:'E10',cat:'E',t:'ESC 遥测/单发检测',need:'电流+转速回传；单侧失效 0.2 s 停桨',now:'电调未选型；无遥测则单发检测不触发',crit:'电调遥测可用；单发检测 0.2 s 内触发。',act:'电调选型硬性要求：电流+转速遥测',owner:'Win',g:'S2-E',s:'missing'},
+  {id:'E11',cat:'E',t:'独立安全监控器',need:'独立于主飞控的告警/终止路径',now:'强制项，未做；Win 明确「不可省」',crit:'独立监控器台架验证；能独立告警与终止。',act:'方案 + 台架验证',owner:'Mac+Win',g:'S5',s:'missing'},
+  {id:'E12',cat:'E',t:'飞控电源冗余',need:'双电源、飞控不进 100 V 主母线、掉电保持',now:'原则有，电源树未设计',crit:'电源树双路冗余；掉电/切换试验通过。',act:'出电源树与故障树',owner:'Mac+Win',g:'S2-E',s:'partial'},
+  {id:'E13',cat:'E',t:'EMC 快查',need:'满油门罗盘偏差 <2°、空速/链路无异常',now:'W5-6 未做',crit:'罗盘偏差 <2°；链路、空速无异常。',act:'半小时台架，先做廉价保险',owner:'Win',g:'S2-E',s:'missing'},
+  {id:'E14',cat:'E',t:'参数装订/首飞卡',need:'限值、失控保护、返航点、口令一页纸',now:'参数文件有，装机装订与首飞卡无',crit:'参数装订核对表双人签字；首飞卡一页纸。',act:'S5 首飞前完成并双人核对',owner:'Win+Mac',g:'S5',s:'partial'},
+  {id:'E15',cat:'E',t:'飞行员在环',need:'有人驾驶 SIL + 试飞员评估',now:'未做',crit:'试飞员完成在环评估并签字。',act:'S5 前安排试飞员进环',owner:'试飞组',g:'S5',s:'missing'},
+
+  // F 试验
+  {id:'F1',cat:'F',t:'S4 预测包',need:'预测值、测点/量程/采样率、判据、安全边界、应急预案',now:'0/9；没有预测值不上试验台',crit:'每项试验有预测包并签字；无预测不上台。',act:'每项试验前单独出包并签字',owner:'Mac+用户',g:'S4',s:'missing'},
+  {id:'F2',cat:'F',t:'称重/CG',need:'与 baseline 偏差 ≤±10 mm',now:'未做',crit:'称重/CG 偏差 ≤±10 mm。',act:'设备 + 流程 + 记录表',owner:'Win',g:'S3/S4',s:'missing'},
+  {id:'F3',cat:'F',t:'整机静力',need:'+4/−2 g，关键件 6 g，无永久变形',now:'未做',crit:'整机静力 +4/−2 g 无永久变形。',act:'静力架 + 应变测点',owner:'Win+Mac',g:'S4',s:'missing'},
+  {id:'F4',cat:'F',t:'落震',need:'2 g / 3 g，150 mm 行程，触地载荷闭环',now:'未做',crit:'落震 2/3 g 通过；载荷闭环。',act:'落震台 + 高速摄影',owner:'Win',g:'S4',s:'missing'},
+  {id:'F5',cat:'F',t:'系留/动力台架',need:'全功率、温升、拉力、桨动平衡',now:'未做',crit:'系留/动力全功率通过；温升合格。',act:'200 kg 级拉力台 + 采集',owner:'Win',g:'S4/G2',s:'missing'},
+  {id:'F6',cat:'F',t:'座椅/安全带拉脱',need:'9 g 四点/肩带/腰带',now:'未做',crit:'座椅/安全带 9 g 拉脱合格。',act:'拉脱工装 + 假人',owner:'Win',g:'S4',s:'missing'},
+  {id:'F7',cat:'F',t:'电池保持',need:'9 g 前向 / 6 g 下，托盘/绑带/挡块',now:'未做',crit:'电池 9 g 前向 / 6 g 下保持合格。',act:'与电池包方案一起做',owner:'Win',g:'S4',s:'missing'},
+  {id:'F8',cat:'F',t:'EMC',need:'罗盘 <2°、链路 ≥1.5 km',now:'未做',crit:'EMC 罗盘 <2°；链路 ≥1.5 km。',act:'整机通电后第一项',owner:'Win',g:'S4',s:'missing'},
+  {id:'F9',cat:'F',t:'GVT/颤振',need:'到 1.2 Vne，无颤振、模态分离',now:'未做',crit:'GVT/颤振到 1.2 Vne 通过。',act:'激振 + 模态识别',owner:'Win+外协',g:'S4',s:'missing'},
+  {id:'F10',cat:'F',t:'滑行/跳跃/首飞',need:'先低速滑跑/跳跃，再 3 m / 2 min 首飞',now:'未做',crit:'滑行/跳跃/首飞按卡执行并完整记录。',act:'双人指挥、限飞包线、终止条件',owner:'试飞组',g:'S5',s:'missing'},
+  {id:'F11',cat:'F',t:'试验设备',need:'拉力台、静力架、落震台、采集、激振',now:'未采购；预算 1–3 万（量级）',crit:'试验设备到场/校准；量程满足。',act:'随台架方案采购/借用',owner:'Win',g:'S4',s:'missing'},
+  {id:'F12',cat:'F',t:'试验回填模型',need:'试验后回填气动/结构/推进/飞控模型',now:'W10-15 未做，无回填流程',crit:'试验数据回填模型并更新基线。',act:'建立试验-模型对照表',owner:'Mac',g:'S5',s:'missing'},
+
+  // G 人员·法规·组织
+  {id:'G1',cat:'G',t:'试飞员/操纵员',need:'资质、培训、体检、机型熟悉',now:'文档未记录人选与资质',crit:'试飞员资质、体检、机型培训合格。',act:'确认人，定培训与带飞计划',owner:'用户',g:'S5',s:'unknown'},
+  {id:'G2',cat:'G',t:'双人指挥/观察/记录',need:'首飞岗位分工与口令',now:'未指定',crit:'首飞岗位分工与口令演练完成。',act:'写进首飞卡并演练',owner:'用户',g:'S5',s:'missing'},
+  {id:'G3',cat:'G',t:'空域批文',need:'申请主体、批文、飞行计划、有效期',now:'未申请',crit:'空域批文到手并在有效期。',act:'W20 前启动，至少 2 个候选场地',owner:'用户',g:'P1',s:'missing'},
+  {id:'G4',cat:'G',t:'保险',need:'机身、第三者、乘员',now:'未投保',crit:'保单生效。',act:'与场地/空域同步询价',owner:'用户',g:'P1',s:'missing'},
+  {id:'G5',cat:'G',t:'登记/适航路径',need:'超轻/实验类路径判定、登记要求；载人还需运行许可/飞行员执照（若走载人）',now:'未判定；B4 被用户选择暂不处理；Win 列明登记/适航/空域/保险均未启动',crit:'登记/适航路径有书面结论；适用条款按最终构型与使用地区核定。',act:'首飞前取得法律意见，不能无限搁置',owner:'用户',g:'B4',s:'missing'},
+  {id:'G6',cat:'G',t:'应急/消防/医疗',need:'消防器材、救护、应急预案、联系人',now:'无',crit:'消防、救护、应急演练完成。',act:'外场清单 + 演练',owner:'用户',g:'S5',s:'missing'},
+  {id:'G7',cat:'G',t:'预算/资金',need:'BOM + 工装 + 试验 + 审批预算与实际资金',now:'BOM 6.5–15.5 万为量级估算，未询价；实际预算未立',crit:'预算批准，资金到位。',act:'RFQ 回填后立项目预算',owner:'用户',g:'W2',s:'partial'},
+  {id:'G8',cat:'G',t:'团队分工',need:'设计、制造、试验、飞手岗位明确',now:'Mac/Win11 + AI，9 条轨道；试飞岗位缺',crit:'岗位分工文件生效。',act:'补试飞与外场岗位',owner:'用户',g:'—',s:'have'},
+  {id:'G9',cat:'G',t:'文档/证据包',need:'版本、release、S 包、变更记录可追溯',now:'aggregate / sync / S 包模板已运行',crit:'release / S 包归档完整可追溯。',act:'持续执行，release 必带 S 包',owner:'Mac',g:'—',s:'have'},
+  {id:'G10',cat:'G',t:'操作/维护手册/培训',need:'飞行手册、维护卡、培训大纲',now:'无',crit:'手册/培训大纲批准并试讲。',act:'S5 前成稿并试讲',owner:'用户+Mac',g:'S5',s:'missing'},
+
+  // H 保障·后勤
+  {id:'H1',cat:'H',t:'充电/储能/防火',need:'充电器、防火箱、电池存储与运输规范',now:'未选型；锂电池防火未准备',crit:'充电、防火、存储方案落地；消防演练完成。',act:'随电池方案采购并做消防演练',owner:'用户+Win',g:'S2-E',s:'missing'},
+  {id:'H2',cat:'H',t:'备件',need:'桨、电调、电池、轮、传感器、易损件',now:'未备',crit:'备件到货并登记。',act:'首批备件清单，按 10% 备件率',owner:'Win',g:'S3',s:'missing'},
+  {id:'H3',cat:'H',t:'运输',need:'6 m 翼展拆装接口、拖车/包装、装卸人力',now:'无方案；6 m 翼展是硬约束',crit:'运输方案验证：6 m 翼展拆装、装车、固定。',act:'定拆装接口与运输箱，算运输尺寸',owner:'用户+Win',g:'S3',s:'missing'},
+  {id:'H4',cat:'H',t:'存放/机库',need:'干燥、安全、可锁、能推进推出',now:'文档未记录',crit:'存放条件确认可用。',act:'确认现有条件',owner:'用户',g:'—',s:'unknown'},
+  {id:'H5',cat:'H',t:'外场工具/保障',need:'工具、千斤顶、配重、牵引、电源',now:'无',crit:'外场工具/保障清单齐套。',act:'外场保障清单',owner:'Win',g:'S4',s:'missing'},
+  {id:'H6',cat:'H',t:'数据/日志/黑匣子',need:'飞行日志、遥测记录、事故记录',now:'方案有，硬件无',crit:'日志/记录系统首飞前验证。',act:'随航电采购，首飞前验证记录',owner:'Win',g:'S4',s:'missing'},
+
+  // —— 务实版新增：Win r9 清单借鉴项（数字标 Win 参考，载人需重算）——
+  {id:'A13',cat:'A',t:'4 m 拆装构型 / 副翼连续性',need:'明确 4 m 可拆构型是否允许飞行；若允许，必须在 y 1.40–1.95 内段补副翼，否则拆掉外段后滚转=0',now:'副翼只在上翼外段 y 2.05–2.90；拆外段即失去滚转；构型决策未落纸',crit:'书面构型决策：要么内段副翼完成设计/试验，要么飞行手册明确禁止 4 m 构型飞行',act:'在副翼详设前拍板；若保留 4 m，内段副翼与主翼同步设计',owner:'用户+Mac',g:'S1',s:'missing',src:'Mac',ref:'03 §9 / 01 §B5'},
+
+  {id:'C12',cat:'C',t:'自动起降感知 / 复飞判据',need:'下视测距 0.1–12 m、离地/触地三条件、复飞判据（<10 m 且下沉>1.5 m/s 或横偏>2 m 或 V<1.15 Vs）',now:'方案 LW20/TFmini，安装位 s 0.10–0.18；未采购安装；判据已定未实现',crit:'测距装齐并标定；触地检测/复飞判据 SIL + 试飞通过；或明确首飞只做手动起降',act:'先决定首飞是否用自动起降；若要，采购测距并实现判据',owner:'Win+Mac',g:'S4/S5',s:'partial',src:'Win+Mac',ref:'Win 2026-11-05 · 03 §7.4'},
+
+  {id:'D15',cat:'D',t:'无推力即无俯仰',need:'落地全程保持推力下限；拉平需要额外推力；三选一：① 接受推力下限+检查单 ② 加小升降舵/配平片 ③ 翼桨 45° 动力拉平',now:'固定平尾只保静稳定，油门 0 时前桨倾转俯仰权限=0；方案未拍板；Win r9 口径为落地≥25% 推力、拉平约 68% 油门，载人需按 196 kg 重算',crit:'方案签字；推力下限写进检查单；SIL + 试飞验证所选方案；发动机/电调/主母线失效时有明确处置',act:'先做三方案 trade（质量/复杂度/失效后果），S5 前拍板',owner:'用户+Mac',g:'S1/S5',s:'missing',src:'Win+Mac',ref:'03 §9.1 / Win 2026-11-05'},
+
+  {id:'D16',cat:'D',t:'弹道伞 / 整机回收',need:'载人应急回收：整机弹道伞，或明确接受受控迫降；若装伞，需独立电源/接收/开伞链路',now:'r9 已取消整机伞；载人版无回收手段；受控迫降依赖推力与操纵，未验证',crit:'书面决策；若装伞，安装/称重/CG/开伞试验通过；若不装，迫降程序 SIL+演练+手册签认',act:'用户拍板；把质量/CG/成本/失效概率摆在一起比较',owner:'用户+Mac',g:'S1/S5',s:'missing',src:'Win+Mac',ref:'03 §8.4 / Win 2026-11-05'},
+
+  {id:'E16',cat:'E',t:'副翼通道设计 / 建模',need:'副翼 ±25/−15°，外段 0.215 m²/侧（Win 参考，r9 95 kg 口径；载人需重算）；铰链挂在 65% 弦后梁，2024-T3 0.5 mm 蒙皮 + Ø10×1 前缘管 + 2 肋；质量平衡 ≥15% 副翼弦；铰链间隙 ≤1 mm',now:'只有尺寸与力矩估算，CAD 里没有；舵机/铰链/质量平衡未设计；4 m 构型另有缺口（A13）',crit:'副翼 CAD 进 r15；铰链/舵机/质量平衡设计冻结；载人质量与速度下滚转权限满足；地面振动/颤振通过',act:'按 196 kg 重算面积/力矩；进 r15；铰链肋 y 2.08/2.45/2.88；质量平衡与 GVT 一起做',owner:'Mac+Win',g:'S1/S2-B',s:'missing',src:'Win+Mac',ref:'03 §2 / Win 2026-11-05'},
+
+  {id:'E17',cat:'E',t:'三桨差速混控',need:'ArduPlane 无原生三桨构型；LUA 直接写两路翼桨油门 + 单发收油；偏航差速 ±0.30；单发检测 0.2 s 内停对侧',now:'方案有，混控未写；电调未选型，无电流/转速遥测则单发检测不触发',crit:'LUA 混控 + 台架/SIL 通过；单发 0.2 s 停桨；偏航权限满足 8/30 m/s',act:'先写 LUA 与台架脚本；电调选型硬性要求电流+转速回传；SIL 注入单发',owner:'Mac+Win',g:'S2-E/S4',s:'missing',src:'Win+Mac',ref:'03 §6.3 / Win 2026-11-05'},
+
+  {id:'E18',cat:'E',t:'倾转作动器选型',need:'24 V 15/30 N·m、抱闸、绝对编码器、DroneCAN；Cube 无 SSI/模拟编码器口，需解决接口',now:'未选型；前桨倾转 r7b 机构有实体，但作动器/编码器/抱闸未定',crit:'作动器选型冻结；接口/供电/抱闸/编码器台架通过；堵转/断电锁定验证',act:'选 DroneCAN 一体化作动器或加编码器转换；与 A8 一起进 r15',owner:'Win+Mac',g:'S2-C',s:'missing',src:'Win',ref:'Win 2026-11-05 / 03 §3.3'},
+
+  {id:'E19',cat:'E',t:'翼桨同步倾转机构',need:'Ø50 扭矩管、轴承、40 kg·cm 舵机、锁；0–45° 同步，20°/s；卡滞/断电锁定',now:'未建模；r7b 只有前桨倾转 10 件，翼桨同步轴没有',crit:'机构 CAD 进 r15；全行程/负载/卡滞/锁止台架通过；与副翼/差速耦合验证',act:'与 A8 合并；先出扭矩管/轴承/舵机布置，再进 r15',owner:'Mac+Win',g:'S2-C',s:'missing',src:'Win',ref:'Win 2026-11-05 / 03 §4'},
+
+  {id:'E20',cat:'E',t:'地面站 / 日志 / 回放',need:'参数版本、飞行日志、遥测记录、回放；事故可追溯',now:'方案有，地面站未搭；日志硬件/流程无',crit:'地面站能装订/回读参数；日志全程记录并可回放；首飞前演练',act:'随航电采购；首飞前做一次全链路记录演练',owner:'Win+Mac',g:'S4',s:'missing',src:'Win',ref:'Win 2026-11-05 / 03 §11.3'},
+
+  {id:'F13',cat:'F',t:'地面试验链（总）',need:'台架推力、落震 2/3 g、盒段 4/6 g、整机静力 +4/−2 g、称重/CG/惯量——按顺序形成证据链',now:'一项未做；S4 0/9；没有预测值不上台',crit:'五项按 S4 预测包完成并签字；数据回填模型；无跳项',act:'先动力台架与称重，再落震/盒段，最后整机静力；每项单独出预测包',owner:'Win+Mac',g:'S4',s:'missing',src:'Win+Mac',ref:'02 §10.1 / 03 §10.1 / Win 2026-11-05'},
+
+  {id:'G11',cat:'G',t:'实名登记',need:'>250 g 民用无人机实名登记（具体重量门槛按现行条例核定）',now:'未办',crit:'登记完成，登记号贴在机体',act:'按现行《无人驾驶航空器飞行管理暂行条例》核对门槛并办理',owner:'用户',g:'P1',s:'missing',src:'Win',ref:'Win 2026-11-05'},
+
+  {id:'G12',cat:'G',t:'运输 / 存放',need:'6.0 m 翼展、4.117 m 长、1.472 m 高；拖车/机库、快卸接口、装卸人力',now:'无方案；6 m 翼展是硬约束；需 4.5 m 拖车/机库',crit:'运输方案验证：6 m 翼展拆装、装车、固定；存放条件可用',act:'定拆装接口与运输箱；算运输尺寸与人力',owner:'用户+Win',g:'S3',s:'missing',src:'Win+Mac',ref:'Win 2026-11-05 / 评审 P1'}
+];
+
+const KEY = 'v10_precond_progress_v2';
+const byId = {};
+DATA.forEach(x=>byId[x.id]=x);
+
+// 首飞阻断：与“证据状态/实际进度”分开记；完成或改不适用后自动移出
+const BLK = {
+  A10:{p:0, why:'S1 只过 12/20，未签字就不能冻结图纸、下料、下单'},
+  E16:{p:1, why:'副翼只有方案，CAD/铰链/质量平衡都没有；巡航停桨后滚转=0'},
+  E17:{p:2, why:'ArduPlane 无三桨混控，LUA 没写；偏航没有原生通道'},
+  D15:{p:3, why:'油门 0 时前桨倾转没有俯仰权限；落地/拉平方案未拍板'},
+  D7:{p:4, why:'颤振/质量平衡未做，副翼是硬要求项；两套速度判据还没统一'},
+  F13:{p:5, why:'台架/落震/盒段/整机静力/称重一项未做，没有证据链'},
+  E11:{p:6, why:'独立安全监控器是强制项，现在没有'},
+  D16:{p:7, why:'载人无整机伞/回收手段；受控迫降未验证'},
+  C4:{p:8, why:'无减震、无刹车、尾轮不能转向；着陆/地面操纵不安全'},
+  C6:{p:9, why:'起降距离只有一阶估算，G2 未做；场地净空未评估'},
+  G5:{p:10, why:'登记/适航路径未判定；合法起飞前提未闭环'},
+  A13:{p:11, why:'4 m 构型拆外段即失去副翼，滚转=0；构型未拍板'},
+  D10:{p:12, why:'迫降/终止程序未全场景验证，载人没有弹射/伞备份'}
+};
+const srcOf = x => x.src || 'Mac';
+const isBlk = x => !!BLK[x.id];
+const unresolvedBlockers = () => DATA
+  .filter(x=>isBlk(x) && !['done','na'].includes(stOf(x)))
+  .sort((a,b)=>BLK[a.id].p-BLK[b.id].p);
+
+let migratedFromV1 = false;
+let state = loadState();
+let filter = {q:'', status:'all'};
+
+function loadState(){
+  try{
+    let s = JSON.parse(localStorage.getItem(KEY));
+    if(!s){
+      const old = JSON.parse(localStorage.getItem('v10_precond_progress_v1'));
+      if(old && typeof old==='object' && old.items){
+        s = {items: old.items, collapsed:{}, open:{}, updated: old.updated || null};
+        try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){}
+        migratedFromV1 = true;
+      }
+    }
+    if(s && typeof s==='object'){
+      return {
+        items: s.items || {},
+        collapsed: s.collapsed || {},
+        open: s.open || {},
+        updated: s.updated || null
+      };
+    }
+  }catch(e){}
+  return {items:{}, collapsed:{}, open:{}, updated:null};
+}
+
+function saveState(){
+  state.updated = new Date().toISOString();
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+  updateSavedLabel();
+}
+
+function updateSavedLabel(){
+  const el = document.querySelector('#savedLabel');
+  if(!state.updated){ el.textContent = '尚未保存'; return; }
+  const d = new Date(state.updated);
+  const pad = n=>String(n).padStart(2,'0');
+  el.textContent = `已保存 · ${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function stOf(x){
+  const e = state.items[x.id];
+  return e && e.st ? e.st : DEF[x.s];
+}
+function noteOf(x){
+  const e = state.items[x.id];
+  return e && typeof e.note==='string' ? e.note : '';
+}
+function setSt(id, st){
+  state.items[id] = state.items[id] || {};
+  state.items[id].st = st;
+  saveState();
+  renderAll();
+}
+function setNote(id, note){
+  state.items[id] = state.items[id] || {};
+  state.items[id].note = note;
+  saveState();
+}
+
+const esc = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const pct = (a,b) => b ? Math.round(a/b*100) : 0;
+
+function progress(list){
+  const act = list.filter(x=>stOf(x)!=='na');
+  const c = {done:0,doing:0,todo:0,na:0};
+  list.forEach(x=>c[stOf(x)]++);
+  const score = act.reduce((a,x)=>a+PMETA[stOf(x)].w,0);
+  return {c, n:list.length, active:act.length, pct:pct(score,act.length)};
+}
+
+function renderKPIs(){
+  const p = progress(DATA);
+  const nb = unresolvedBlockers().length;
+  const items = [
+    ['清单项', p.n, `${Object.keys(CATS).length} 个大项 · 阻断 ${nb} 条`, '#3987e5'],
+    ['已完成', p.c.done, '勾选为完成', '#3fb950'],
+    ['进行中', p.c.doing, '半选/下拉', '#e3b341'],
+    ['未开始', p.c.todo, '尚未启动', '#f85149'],
+    ['不适用', p.c.na, '不计入完成度', '#8b949e'],
+    ['完成度', p.pct+'<small>%</small>', '已完成 + 0.5×进行中', '#6da7ec']
+  ];
+  document.querySelector('#kpis').innerHTML = items.map(([l,v,n,col])=>
+    `<div class="kpi" style="--k:${col}"><div class="kl">${l}</div><div class="kv" style="--k:${col}">${v}</div><div class="kn">${n}</div></div>`
+  ).join('');
+}
+
+function renderDonut(){
+  const p = progress(DATA);
+  const order = ['done','doing','todo','na'];
+  const C = 2*Math.PI*78;
+  let off = 0, segs = '';
+  order.forEach(k=>{
+    const len = p.c[k]/p.n*C;
+    if(len>0){
+      segs += `<circle cx="100" cy="100" r="78" fill="none" stroke="${PMETA[k].color}" stroke-width="21"
+        stroke-dasharray="${len.toFixed(2)} ${(C-len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}"
+        transform="rotate(-90 100 100)"></circle>`;
+      off += len;
+    }
+  });
+  document.querySelector('#donut').innerHTML = `
+    <circle cx="100" cy="100" r="78" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="21"></circle>
+    ${segs}
+    <text x="100" y="94" text-anchor="middle" fill="#f0efec" font-size="28" font-weight="600" font-family="ui-monospace,Menlo,monospace">${p.pct}%</text>
+    <text x="100" y="114" text-anchor="middle" fill="#98a1ad" font-size="10.5" letter-spacing="1.5">ACTUAL PROGRESS</text>`;
+  document.querySelector('#donutlg').innerHTML = order.map(k=>
+    `<div class="row"><i style="background:${PMETA[k].color}"></i>${PMETA[k].label}<b>${p.c[k]}</b></div>`
+  ).join('');
+  document.querySelector('#donutCount').textContent = p.n;
+}
+
+function renderBlockers(){
+  const list = unresolvedBlockers();
+  document.querySelector('#blkCount').textContent = list.length;
+  document.querySelector('#blkCards').innerHTML = list.length ? list.map(x=>`
+    <button class="bcard" data-focus="${x.id}">
+      <div class="bct"><span class="bid">${x.id}</span><span class="btt">${esc(x.t)}</span></div>
+      <div class="bcw">${esc(BLK[x.id].why)}</div>
+      <div class="bca">定位 →</div>
+    </button>`).join('') : `<div class="bempty">当前没有未闭合的首飞阻断项。</div>`;
+}
+
+function renderEvidenceNote(){
+  const c = {have:0,partial:0,missing:0,unknown:0};
+  DATA.forEach(x=>c[x.s]++);
+  document.querySelector('#evNote').textContent =
+    `证据侧覆盖（固定）：已具备 ${c.have} · 部分 ${c.partial} · 缺失 ${c.missing} · 待确认 ${c.unknown}。证据状态与你的实际进度分开记录，互不覆盖。`;
+}
+
+function renderBars(){
+  document.querySelector('#bars').innerHTML = Object.keys(CATS).map(k=>{
+    const list = DATA.filter(x=>x.cat===k);
+    const p = progress(list);
+    const segs = ['done','doing','todo','na'].map(s=>{
+      const w = p.n ? p.c[s]/p.n*100 : 0;
+      return `<i style="width:${w}%;background:${PMETA[s].color}" title="${PMETA[s].label} ${p.c[s]}"></i>`;
+    }).join('');
+    const cls = p.pct>=50?'hi':p.pct>=25?'mid':'lo';
+    return `<div class="brow">
+      <div class="bn" title="${CATS[k].name}">${CATS[k].name}</div>
+      <div class="btr">${segs}</div>
+      <div class="bp ${cls}">${p.pct}%</div>
+    </div>`;
+  }).join('');
+}
+
+function updateChips(){
+  const c = {done:0,doing:0,todo:0,na:0};
+  DATA.forEach(x=>c[stOf(x)]++);
+  document.querySelector('#n-all').textContent = DATA.length;
+  document.querySelector('#n-undone').textContent = c.todo + c.doing;
+  document.querySelector('#n-todo').textContent = c.todo;
+  document.querySelector('#n-doing').textContent = c.doing;
+  document.querySelector('#n-done').textContent = c.done;
+  document.querySelector('#n-na').textContent = c.na;
+  document.querySelector('#n-blk').textContent = unresolvedBlockers().length;
+}
+
+function renderSummary(){
+  renderKPIs();
+  renderDonut();
+  renderBars();
+  updateChips();
+  renderBlockers();
+  renderEvidenceNote();
+}
+
+function matches(x){
+  const st = stOf(x);
+  if(filter.status==='blk'){
+    if(!isBlk(x) || st==='done' || st==='na') return false;
+  }else if(filter.status==='undone'){
+    if(st!=='todo' && st!=='doing') return false;
+  }else if(filter.status!=='all' && st!==filter.status){
+    return false;
+  }
+  if(filter.q){
+    const bw = isBlk(x) ? BLK[x.id].why : '';
+    const hay = (x.id+' '+x.t+' '+x.need+' '+x.now+' '+x.crit+' '+x.act+' '+x.owner+' '+x.g+' '+noteOf(x)+' '+CATS[x.cat].name+' '+srcOf(x)+' '+(x.ref||'')+' '+bw).toLowerCase();
+    if(!hay.includes(filter.q.toLowerCase())) return false;
+  }
+  return true;
+}
+
+function leafHTML(x){
+  const st = stOf(x);
+  const ev = SMETA[x.s];
+  const isNa = st==='na';
+  const open = !!state.open[x.id];
+  const chk = st==='done' ? 'checked' : '';
+  return `<div class="leaf ${isNa?'is-na':''} ${open?'open':''}" data-id="${x.id}">
+    <div class="lrow">
+      <span class="caret">▶</span>
+      <input class="chk" type="checkbox" ${chk} ${isNa?'disabled':''} title="${isNa?'不适用':'勾选=已完成；半选=进行中'}">
+      <span class="lid">${x.id}</span>
+      <span class="lt" title="${esc(x.t)}${isBlk(x)?' · 首飞阻断：'+esc(BLK[x.id].why):''}">${isBlk(x)?'<b class="blkmini">阻断</b>':''}${esc(x.t)}</span>
+      <span class="evpill ${x.s}" title="证据状态：${ev.label}">${ev.short}</span>
+      <span class="gatechip" title="对应闸门/阶段">${esc(x.g)}</span>
+      <select class="pstat" data-st="${st}" title="实际进度">
+        <option value="todo" ${st==='todo'?'selected':''}>未开始</option>
+        <option value="doing" ${st==='doing'?'selected':''}>进行中</option>
+        <option value="done" ${st==='done'?'selected':''}>已完成</option>
+        <option value="na" ${st==='na'?'selected':''}>不适用</option>
+      </select>
+      <span class="lpct">${isNa?'—':PMETA[st].w*100+'%'}</span>
+    </div>
+    <div class="ldetail">
+      <div class="dgrid">
+        <div class="ditem"><b>需要什么</b><p>${esc(x.need)}</p></div>
+        <div class="ditem"><b>当前现状</b><p>${esc(x.now)}</p></div>
+        <div class="ditem"><b>验收判据</b><p class="crit">${esc(x.crit)}</p></div>
+        <div class="ditem"><b>下一步</b><p class="act">${esc(x.act)}</p></div>
+        <div class="ditem"><b>责任</b><p>${esc(x.owner)}</p></div>
+        <div class="ditem"><b>闸门 / 阶段</b><p>${esc(x.g)}</p></div>
+        <div class="ditem"><b>来源 / 依据</b><p>${esc(srcOf(x))}${x.ref?' · '+esc(x.ref):''}</p></div>
+        ${isBlk(x)?`<div class="ditem"><b>为什么阻断</b><p class="blkwhy">${esc(BLK[x.id].why)}</p></div>`:''}
+      </div>
+      <div class="dnote">
+        <label>备注</label>
+        <textarea data-note="${x.id}" placeholder="记录实际进度、卡点、负责人或日期…">${esc(noteOf(x))}</textarea>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderTree(){
+  const activeFilter = !!filter.q || filter.status!=='all';
+  let html = '', shown = 0;
+  Object.keys(CATS).forEach(k=>{
+    const all = DATA.filter(x=>x.cat===k);
+    const list = all.filter(matches);
+    if(!list.length) return;
+    shown += list.length;
+    const p = progress(all);
+    const open = activeFilter ? true : !state.collapsed[k];
+    const cls = p.pct>=50?'hi':p.pct>=25?'mid':'lo';
+    const segs = ['done','doing','todo','na'].map(s=>
+      `<i style="width:${p.n?p.c[s]/p.n*100:0}%;background:${PMETA[s].color}"></i>`
+    ).join('');
+    html += `<section class="catnode ${open?'open':''}" data-cat="${k}">
+      <div class="catrow">
+        <span class="caret">▶</span>
+        <div>
+          <div class="cname">${k} · ${CATS[k].name}</div>
+          <div class="cmeta">${p.n} 项 · 完成 ${p.c.done} · 进行 ${p.c.doing} · 未开始 ${p.c.todo} · 不适用 ${p.c.na}</div>
+        </div>
+        <div class="cbarwrap">${segs}</div>
+        <div class="cpct ${cls}">${p.pct}%</div>
+      </div>
+      <div class="tchildren">${list.map(leafHTML).join('')}</div>
+    </section>`;
+  });
+  document.querySelector('#tree').innerHTML = html;
+  document.querySelector('#empty').style.display = shown ? 'none' : 'block';
+  document.querySelector('#count').textContent = `显示 ${shown} / ${DATA.length} 项`;
+}
+
+function renderAll(){
+  renderSummary();
+  renderTree();
+  updateSavedLabel();
+}
+
+// 事件委托
+document.querySelector('#tree').addEventListener('click', e=>{
+  if(e.target.closest('select,textarea,input')) return;
+  const cat = e.target.closest('.catrow');
+  if(cat){
+    const key = cat.closest('.catnode').dataset.cat;
+    state.collapsed[key] = !state.collapsed[key];
+    saveState();
+    renderTree();
+    return;
+  }
+  const row = e.target.closest('.lrow');
+  if(row){
+    const id = row.closest('.leaf').dataset.id;
+    state.open[id] = !state.open[id];
+    saveState();
+    renderTree();
+  }
+});
+
+document.querySelector('#tree').addEventListener('change', e=>{
+  const cb = e.target.closest('.chk');
+  if(cb){
+    const id = cb.closest('.leaf').dataset.id;
+    const cur = stOf(byId[id]);
+    setSt(id, cb.checked ? 'done' : (cur==='done' ? 'todo' : 'todo'));
+    return;
+  }
+  const sel = e.target.closest('.pstat');
+  if(sel){
+    const id = sel.closest('.leaf').dataset.id;
+    setSt(id, sel.value);
+  }
+});
+
+document.querySelector('#tree').addEventListener('input', e=>{
+  const ta = e.target.closest('textarea[data-note]');
+  if(ta) setNote(ta.dataset.note, ta.value);
+});
+
+// 首飞阻断卡片 → 定位到条目
+function focusItem(id){
+  filter = {q:'', status:'all'};
+  document.querySelector('#search').value = '';
+  document.querySelectorAll('[data-status]').forEach(b=>b.classList.toggle('on', b.dataset.status==='all'));
+  const x = byId[id];
+  if(!x) return;
+  state.collapsed[x.cat] = false;
+  state.open[id] = true;
+  saveState(); renderAll();
+  requestAnimationFrame(()=>{
+    const el = document.querySelector(`.leaf[data-id="${id}"]`);
+    if(el){
+      el.scrollIntoView({behavior:'smooth', block:'center'});
+      el.classList.add('flash');
+      setTimeout(()=>el.classList.remove('flash'), 1400);
+    }
+  });
+}
+document.querySelector('#blkCards').addEventListener('click', e=>{
+  const card = e.target.closest('[data-focus]');
+  if(card) focusItem(card.dataset.focus);
+});
+
+// 筛选
+document.querySelectorAll('[data-status]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('[data-status]').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    filter.status = b.dataset.status;
+    renderTree();
+  });
+});
+document.querySelector('#search').addEventListener('input', e=>{
+  filter.q = e.target.value.trim();
+  renderTree();
+});
+
+// 展开/折叠
+document.querySelector('#expandAll').addEventListener('click',()=>{
+  DATA.forEach(x=>delete state.open[x.id]);
+  Object.keys(CATS).forEach(k=>state.collapsed[k]=false);
+  saveState(); renderTree();
+});
+document.querySelector('#collapseAll').addEventListener('click',()=>{
+  DATA.forEach(x=>delete state.open[x.id]);
+  Object.keys(CATS).forEach(k=>state.collapsed[k]=true);
+  saveState(); renderTree();
+});
+
+// 导出/导入/重置/复制
+function download(name, text, type){
+  const blob = new Blob([text], {type:type||'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+}
+document.querySelector('#exportBtn').addEventListener('click',()=>{
+  const items = {};
+  DATA.forEach(x=>items[x.id] = {st:stOf(x), note:noteOf(x)});
+  const d = new Date(), pad = n=>String(n).padStart(2,'0');
+  const name = `V10_首飞前置条件进度_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.json`;
+  download(name, JSON.stringify({version:2, baseline:'V10 manned 196 kg', exported:new Date().toISOString(), items}, null, 2));
+  toast('已导出 ' + name);
+});
+
+document.querySelector('#importBtn').addEventListener('click',()=>document.querySelector('#importFile').click());
+document.querySelector('#importFile').addEventListener('change', async e=>{
+  const f = e.target.files && e.target.files[0];
+  if(!f) return;
+  try{
+    const obj = JSON.parse(await f.text());
+    if(!obj || typeof obj.items!=='object') throw new Error('缺少 items');
+    const next = {};
+    Object.entries(obj.items).forEach(([id,v])=>{
+      if(byId[id] && v && ['todo','doing','done','na'].includes(v.st)){
+        next[id] = {st:v.st, note: typeof v.note==='string' ? v.note : ''};
+      }
+    });
+    if(!Object.keys(next).length) throw new Error('没有可导入的有效条目');
+    state.items = next;
+    saveState(); renderAll();
+    toast(`已导入 ${Object.keys(next).length} 条进度`);
+  }catch(err){
+    toast('导入失败：' + err.message, true);
+  }finally{
+    e.target.value = '';
+  }
+});
+
+document.querySelector('#resetBtn').addEventListener('click',()=>{
+  if(!confirm('清空本机保存的进度和备注，回到按证据推定的初始状态？')) return;
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  state = {items:{}, collapsed:{}, open:{}, updated:null};
+  renderAll();
+  toast('已重置为证据推定状态');
+});
+
+document.querySelector('#copyUndone').addEventListener('click',async()=>{
+  const lines = ['V10 未完成前置条件（' + new Date().toLocaleString('zh-CN',{hour12:false}) + '）',''];
+  Object.keys(CATS).forEach(k=>{
+    const list = DATA.filter(x=>x.cat===k && ['todo','doing'].includes(stOf(x)));
+    if(!list.length) return;
+    lines.push('## ' + CATS[k].name);
+    list.forEach(x=>lines.push(`- ${isBlk(x)?'【首飞阻断】':''}[${stOf(x)==='doing'?'进行中':'未开始'}] ${x.id} ${x.t}｜判据：${x.crit}｜下一步：${x.act}｜责任：${x.owner}｜闸门：${x.g}`));
+    lines.push('');
+  });
+  const text = lines.join('\n');
+  try{ await navigator.clipboard.writeText(text); toast('未完成清单已复制'); }
+  catch(e){ download('V10_未完成清单.txt', text, 'text/plain'); }
+});
+
+document.querySelector('#printBtn').addEventListener('click',()=>{
+  DATA.forEach(x=>state.open[x.id]=true);
+  Object.keys(CATS).forEach(k=>state.collapsed[k]=false);
+  renderTree();
+  setTimeout(()=>window.print(), 120);
+});
+
+function toast(msg, err){
+  const t = document.querySelector('#toast');
+  t.textContent = msg;
+  t.classList.toggle('err', !!err);
+  t.classList.add('on');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=>t.classList.remove('on'), 2000);
+}
+
+renderAll();
+if(migratedFromV1) toast('已从旧看板带入已勾选进度');
+</script>
+</body>
+</html>
