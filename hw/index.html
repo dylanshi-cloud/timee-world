@@ -43,7 +43,13 @@ header .right{margin-left:auto;display:flex;gap:9px;padding-bottom:3px}
 .card h2 .hint{font-size:13px;color:var(--muted);font-weight:400}
 .card .lead{font-size:13px;color:var(--muted);margin:0 0 10px}
 
+.svgscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 #topo{width:100%;height:auto;display:block;touch-action:manipulation}
+#flow{width:100%;height:auto;display:block}
+@media (max-width:820px){
+  #topo{min-width:820px}
+  #flow{min-width:760px}
+}
 #topo text{font-family:inherit;user-select:none}
 .n-box{fill:#141d27;stroke:#2c3b4a;stroke-width:1.4;transition:fill .12s,stroke .12s}
 .n-t1{font-size:13px;font-weight:600;fill:#e9f0f7}
@@ -61,6 +67,8 @@ header .right{margin-left:auto;display:flex;gap:9px;padding-bottom:3px}
 .k-sen .n-box{fill:#141d27;stroke:#2f4356}
 .k-act .n-box{fill:#132019;stroke:#2f6144}
 .k-lnk .n-box{fill:#1d1a2b;stroke:#5b4b8a}
+.k-grnd .n-box{fill:#101c2b;stroke:#2f5f8f}
+.n-tag.grnd{fill:#7cc4ff}
 .edge{fill:none;stroke-width:1.6;opacity:.72;transition:opacity .12s,stroke-width .12s}
 .e-sig{stroke:#4c9ae8}
 .e-saf{stroke:#e05252;stroke-dasharray:5 4}
@@ -88,6 +96,8 @@ td.n{color:var(--ink);font-weight:600;white-space:nowrap}
 td.g{color:var(--ink2)}
 tr:hover td{background:rgba(255,255,255,.025)}
 .scroll{overflow:auto;max-height:520px;border:1px solid var(--line);border-radius:12px}
+.scroll > table{min-width:760px}
+.scroll > table.t-sensor{min-width:900px}
 
 .src{display:inline-block;font-size:11.5px;border-radius:999px;padding:1px 8px;white-space:nowrap}
 .src.board{color:#7ee2a8;border:1px solid rgba(34,197,94,.45);background:rgba(34,197,94,.12)}
@@ -108,6 +118,8 @@ footer{font-size:13px;color:var(--muted);line-height:1.7;border-top:1px solid va
 @media (max-width:900px){
   .detail{grid-template-columns:1fr}
   .rules{grid-template-columns:1fr}
+  .card h2{flex-wrap:wrap}
+  .card h2 .hint{flex-basis:100%}
 }
 </style>
 </head>
@@ -128,12 +140,109 @@ footer{font-size:13px;color:var(--muted);line-height:1.7;border-top:1px solid va
     <span class="sig"><i></i>信号 / 数据</span>
     <span class="saf"><i></i>安全链</span>
     <span class="mech"><i></i>机械（不经飞控）</span>
-    <span class="hint">点任一硬件看功能与失效；方块右上角绿字「板载」= Cube 自带</span>
+    <span class="hint">点任一硬件看功能与失效；「板载」= Cube 自带，「地面」= 不上机、只收 MAVLink</span>
   </div>
 
   <div class="card">
-    <h2>控制拓扑 <span class="hint">传感器 → 主飞控 → 执行器；安全层旁路</span></h2>
-    <svg id="topo" viewBox="0 0 860 620" role="img" aria-label="飞控硬件拓扑图"></svg>
+    <h2>控制拓扑 <span class="hint">传感器 → 主飞控 → 执行器；屏幕只读 MAVLink，安全层旁路</span></h2>
+    <div class="svgscroll"><svg id="topo" viewBox="0 0 860 620" role="img" aria-label="飞控硬件拓扑图"></svg></div>
+  </div>
+
+  <div class="card">
+    <h2>传感器数据链路 <span class="hint">传感器 → 总线 → 飞控驱动 → EKF → MAVLink → 屏幕</span></h2>
+    <p class="lead">传感器<b>不直接连屏幕</b>，也不直接进控制律：每类传感器先从 Cube 的某个物理口收进来，由 ArduPlane 驱动解成标准数据，EKF3 融合后再分给 400 / 50 / 10 Hz 三层回路。屏幕只订阅飞控输出的 MAVLink 消息，不参与控制。</p>
+    <div class="svgscroll"><svg id="flow" viewBox="0 0 860 262" role="img" aria-label="传感器数据链路图">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#4c9ae8"/>
+        </marker>
+      </defs>
+
+      <g>
+        <rect x="12" y="34" width="142" height="96" rx="9" fill="#141d27" stroke="#2f4356" stroke-width="1.4"/>
+        <text x="24" y="56" font-size="13" font-weight="600" fill="#e9f0f7">传感器</text>
+        <text x="24" y="76" font-size="11.5" fill="#8fa4b8">IMU · 气压 · 空速</text>
+        <text x="24" y="93" font-size="11.5" fill="#8fa4b8">GNSS · 罗盘 · 测距</text>
+        <text x="24" y="110" font-size="11.5" fill="#8fa4b8">倾转编码器 · ESC 遥测</text>
+        <text x="24" y="124" font-size="11.5" fill="#8fa4b8">RC · Power1/2</text>
+      </g>
+      <line x1="156" y1="82" x2="180" y2="82" stroke="#4c9ae8" stroke-width="1.8" marker-end="url(#ar)"/>
+
+      <g>
+        <rect x="184" y="34" width="142" height="96" rx="9" fill="#141d27" stroke="#2f4356" stroke-width="1.4"/>
+        <text x="196" y="56" font-size="13" font-weight="600" fill="#e9f0f7">物理链路</text>
+        <text x="196" y="76" font-size="11.5" fill="#8fa4b8">SPI（板载 IMU）</text>
+        <text x="196" y="93" font-size="11.5" fill="#8fa4b8">I2C · UART · CAN</text>
+        <text x="196" y="110" font-size="11.5" fill="#8fa4b8">模拟电压 / 电流</text>
+        <text x="196" y="124" font-size="11.5" fill="#8fa4b8">CRSF 无线帧</text>
+      </g>
+      <line x1="328" y1="82" x2="352" y2="82" stroke="#4c9ae8" stroke-width="1.8" marker-end="url(#ar)"/>
+
+      <g>
+        <rect x="356" y="34" width="176" height="96" rx="9" fill="#16324e" stroke="#3b8eea" stroke-width="1.6"/>
+        <text x="368" y="56" font-size="13" font-weight="600" fill="#e9f0f7">Cube 口 + 驱动</text>
+        <text x="368" y="76" font-size="11.5" fill="#9fc0e2">I2C1/2 · SERIAL1–5</text>
+        <text x="368" y="93" font-size="11.5" fill="#9fc0e2">CAN1/2 · Power1/2</text>
+        <text x="368" y="110" font-size="11.5" fill="#9fc0e2">ArduPlane 驱动解析</text>
+        <text x="368" y="124" font-size="11.5" fill="#9fc0e2">单位 / 标定 / 健康检查</text>
+      </g>
+      <line x1="534" y1="82" x2="558" y2="82" stroke="#4c9ae8" stroke-width="1.8" marker-end="url(#ar)"/>
+
+      <g>
+        <rect x="562" y="34" width="140" height="96" rx="9" fill="#132019" stroke="#2f6144" stroke-width="1.4"/>
+        <text x="574" y="56" font-size="13" font-weight="600" fill="#e9f0f7">估计与控制</text>
+        <text x="574" y="76" font-size="11.5" fill="#9ed3b2">EKF3 融合</text>
+        <text x="574" y="93" font-size="11.5" fill="#9ed3b2">姿态 400 Hz</text>
+        <text x="574" y="110" font-size="11.5" fill="#9ed3b2">速度 50 Hz</text>
+        <text x="574" y="124" font-size="11.5" fill="#9ed3b2">导航 10 Hz</text>
+      </g>
+      <line x1="704" y1="82" x2="728" y2="82" stroke="#4c9ae8" stroke-width="1.8" marker-end="url(#ar)"/>
+
+      <g>
+        <rect x="732" y="34" width="116" height="96" rx="9" fill="#1d1a2b" stroke="#5b4b8a" stroke-width="1.4"/>
+        <text x="744" y="56" font-size="13" font-weight="600" fill="#e9f0f7">MAVLink2</text>
+        <text x="744" y="76" font-size="11.5" fill="#c4b5fd">SERIAL1</text>
+        <text x="744" y="93" font-size="11.5" fill="#c4b5fd">SERIAL2</text>
+        <text x="744" y="110" font-size="11.5" fill="#c4b5fd">ELRS 回传</text>
+      </g>
+      <line x1="790" y1="132" x2="790" y2="162" stroke="#4c9ae8" stroke-width="1.8" marker-end="url(#ar)"/>
+
+      <g>
+        <rect x="640" y="166" width="208" height="56" rx="9" fill="#101c2b" stroke="#2f5f8f" stroke-width="1.4"/>
+        <text x="652" y="188" font-size="13" font-weight="600" fill="#e9f0f7">屏幕（只读）</text>
+        <text x="652" y="207" font-size="11.5" fill="#8fa4b8">座舱屏 · 地面站 · 车机 · 遥控器屏</text>
+      </g>
+
+      <text x="12" y="248" font-size="12" fill="#8194a8">屏幕不接任何传感器、PWM 或 CAN；只订阅 MAVLink，掉屏不影响飞行。遥控器屏由 ELRS 接收机直出 CRSF 遥测，不经过机载电脑。</text>
+    </svg></div>
+
+    <div class="scroll" style="margin-top:12px;max-height:none">
+      <table class="t-sensor">
+        <thead><tr><th style="width:13%">输入</th><th style="width:10%">物理链路</th><th style="width:12%">Cube 口</th>
+          <th style="width:17%">协议 / 驱动</th><th style="width:8%">更新率</th><th style="width:18%">飞控里谁用</th><th>上屏（MAVLink）</th></tr></thead>
+        <tbody id="stbody"></tbody>
+      </table>
+    </div>
+
+    <p class="lead" style="margin:10px 0 0">SERIAL4 固定给安全监控器的 10 Hz <code>$V10S</code> 心跳（<code>V10_SAFE_UART=4</code>），所以下视测距走 I2C2（建议暂定）；更新率为设计口径，台架实测后锁定。</p>
+
+    <div class="rules" style="margin-top:14px">
+      <div class="rule">
+        <div class="t">① 座舱屏（可选）</div>
+        <div class="d">HDMI / DSI 接机载电脑 RPi5，5 V 独立供电；只显示 MAVLink 的姿态、高度、空速、电量、告警，<b>不接传感器、不接 PWM/CAN</b>。</div>
+        <div class="w">屏或电脑死机 = 只丢显示，飞控照飞，RC 随时接管</div>
+      </div>
+      <div class="rule">
+        <div class="t">② 地面站 / 车机</div>
+        <div class="d">RPi5 经 4G / WiFi 把 MAVLink 推到浏览器；或 433 数传从 SERIAL1 直连地面站。现在 <code>/sim/</code>、<code>/fc/</code> 显示的是仿真状态，真机接法不变，只把数据源换成 MAVLink；车机走 <code>timee.world/car</code>。</div>
+        <div class="w">遥测断链不触发返航（FS_GCS_ENABL=0）；只有 RC 丢失才返航/迫降</div>
+      </div>
+      <div class="rule">
+        <div class="t">③ 遥控器屏</div>
+        <div class="d">ELRS 接收机把 CRSF 遥测回传给遥控器，显示电压、姿态、链路质量；这条链路不经过 RPi5，也不经过飞控主软件之外的东西。</div>
+        <div class="w">屏刷新 10–20 Hz、链路延迟 50–200 ms，只作辅助，不能拿来手动拉平</div>
+      </div>
+    </div>
   </div>
 
   <div class="card">
@@ -224,7 +333,8 @@ footer{font-size:13px;color:var(--muted);line-height:1.7;border-top:1px solid va
       <button class="btn" data-f="buy">只看另购</button>
       <button class="btn" data-f="board">板载自带</button>
       <button class="btn" data-f="diy">自制 / 结构</button>
-      <span class="fkeys">板载 = Cube 板上已有；另购 = 下单买；自制 = 自己做</span>
+      <button class="btn" data-f="grnd">地面设备</button>
+      <span class="fkeys">板载 = Cube 板上已有；另购 = 下单买；自制 = 自己做；地面 = 不上机</span>
     </div>
     <div class="scroll">
       <table>
@@ -239,6 +349,7 @@ footer{font-size:13px;color:var(--muted);line-height:1.7;border-top:1px solid va
     口径：<code>03_控制与飞控.md</code> §5 架构 / §7 感知 / §8 失效（2026-11-06）。
     软件侧已闭环（单元测试 26/26、安全监控 15/15、SIL 16/16），<b>硬件 0/10 未采购、未台架</b>，
     本页为设计口径，采购前须按实物复核（ESC 必须支持遥测、IMU 主备同批次、AS5600 地址冲突需 TCA9548A 或换 AS5048A）。
+    数据链路：SERIAL4 固定给安全监控器心跳，下视测距建议走 I2C2（建议暂定）；屏幕只读 MAVLink，不在控制回路内。
   </footer>
 </div>
 
@@ -261,8 +372,8 @@ const D = [
  {id:'mag', t:'罗盘', s:'RM3100 立杆', x:12,y:264,w:176,h:38,k:'sen', pwr:'飞控 I2C',
   role:'航向；低速段的主航向源。', iface:'立杆，离 ESC 母线 ≥350 mm',
   fail:'母线 300 A 下 200 mm 就有 3.4° 偏差 → 只做低速备份，巡航靠 GNSS 航迹。'},
- {id:'rng', t:'下视测距', s:'LW20 · 0.1–12 m', x:12,y:308,w:176,h:38,k:'sen', pwr:'飞控串口',
-  role:'拉平唯一可信的高度源。', iface:'前机身下侧 s 0.10–0.18 装窗，俯角 0–10°',
+ {id:'rng', t:'下视测距', s:'LW20 · 0.1–12 m', x:12,y:308,w:176,h:38,k:'sen', pwr:'飞控 I2C2',
+  role:'拉平唯一可信的高度源。', iface:'I2C2（建议暂定；SERIAL4 已被安全监控器心跳占用）；前机身下侧 s 0.10–0.18 装窗，俯角 0–10°',
   fail:'无备份。测距失效必须禁自动落地，改手动。'},
  {id:'enc', t:'倾转编码器 ×2', s:'17 bit 绝对式', x:12,y:352,w:176,h:38,k:'sen', pwr:'CAN1',
   role:'倾转角反馈：卡滞检测与配平闭环。', iface:'CAN1（Cube 无 SSI/模拟编码器输入）',
@@ -272,6 +383,9 @@ const D = [
   fail:'没有遥测则翼桨单发检测不出来，只能靠人感觉。'},
 
  {id:'fc', t:'Cube Orange 主飞控', s:'ArduPlane 4.6 · 400/50/10 Hz', x:214,y:88,w:200,h:332,k:'fc', pwr:'双 BEC',
+  ports:['I2C1  ← 空速 SDP3x','I2C2  ← 下视测距 LW20','SERIAL3 ← GNSS + 罗盘','SERIAL5 ← ELRS CRSF',
+         'SERIAL1 ← 433 数传','SERIAL2 ← 机载电脑','SERIAL4 → 安全监控器','CAN1  ← 倾转编码器',
+         'CAN2  ← ESC 遥测','Power1/2 ← 双 BEC','MAIN1-8 → 舵机 / 电调','AUX1  ← 锁销 / 舱盖'],
   role:'内环姿态、混控与限幅、failsafe、LUA 慢速调度全在这里；RC 直连，机载电脑不进内环。',
   iface:'14 路 PWM（8 主 + 6 辅）· 2×CAN · 5×UART · 双电源口',
   fail:'死机 → 独立安全监控器接管（断 ESC / 开伞）；机载电脑死机不影响飞行。'},
@@ -316,6 +430,11 @@ const D = [
   role:'俯仰 / 偏航的机械备份：驾驶杆→左右 Ø8 铝推杆→升降舵；脚蹬→Ø3 钢索→方向舵。',
   iface:'升降舵 ±20°、方向舵 ±25°（建议暂定）；<b>不进飞控</b>',
   fail:'倾转机构失效时唯一可用的俯仰手段，但只能保静稳定、<b>拉不平</b>。'},
+
+ {id:'scr', t:'屏幕 / 地面站', s:'MAVLink 只读 · 不接传感器', x:670,y:300,w:170,h:70,k:'grnd', pwr:'地面 5 V / 车机',
+  role:'显示飞控算完的姿态、高度、空速、电量与告警。座舱屏由 RPi5 的 HDMI/DSI 驱动；地面站和车机经 4G/WiFi 或 433 数传接收。',
+  iface:'不与任何传感器、PWM、CAN 直连；只订阅 MAVLink2：ATTITUDE / VFR_HUD / GLOBAL_POSITION_INT / BATTERY_STATUS / SYS_STATUS / STATUSTEXT',
+  fail:'屏幕、图传或机载电脑中断只丢显示，不影响飞行；遥控器屏走 ELRS 回传，独立于 RPi5。'},
 ];
 
 /* 边：sig 信号 / saf 安全 / mech 机械 */
@@ -332,11 +451,13 @@ const E = [
  {f:'mon',to:'relay',k:'saf',path:'M840,120 H850 V380 H541 V352'},
  {f:'relay',to:'esc3',k:'saf'},
  {f:'rc',to:'man',k:'mech'},
+ {f:'rpi',to:'scr',k:'sig',path:'M188,590 V606 H755 V370'},
+ {f:'dl',to:'scr',k:'sig',path:'M188,521 H650 V335 H670'},
 ];
 
-/* 来源：board = Cube 板上自带，buy = 另购，diy = 自己做 */
-const SRC_OF = {imu:'board', baro:'board', mon:'diy', man:'diy'};
-const SRC_LABEL = {board:'板载自带', buy:'另购', diy:'自制'};
+/* 来源：board = Cube 板上自带，buy = 另购，diy = 自己做，grnd = 地面设备 */
+const SRC_OF = {imu:'board', baro:'board', mon:'diy', man:'diy', scr:'grnd'};
+const SRC_LABEL = {board:'板载自带', buy:'另购', diy:'自制', grnd:'地面设备'};
 D.forEach(d => { d.src = SRC_OF[d.id] || 'buy'; });
 
 const BY = {}; D.forEach(d => BY[d.id] = d);
@@ -370,20 +491,35 @@ const edgeEls = E.map(e => {
   return p;
 });
 
+[ {x:690, y:600, t:'4G / WiFi · 图传'},
+  {x:500, y:514, t:'433 数传 · 备链路'} ].forEach(l => {
+  const t = el('text', {x:l.x, y:l.y, 'font-size':'10.5', fill:'#7fb4dd'}, gEdges);
+  t.textContent = l.t;
+});
+
 /* 节点 */
 const gNodes = el('g', {}, svg);
 const nodeEls = {};
 D.forEach(n => {
   const g = el('g', {class:'node k-' + n.k, 'data-id':n.id}, gNodes);
   el('rect', {x:n.x, y:n.y, width:n.w, height:n.h, rx:9, class:'n-box'}, g);
-  const t1 = el('text', {x:n.x+11, y:n.y + n.h/2 - 6, class:'n-t1'}, g);
+  const isFC = Array.isArray(n.ports);
+  const t1 = el('text', {x:n.x+11, y:n.y + (isFC ? 28 : n.h/2 - 6), class:'n-t1'}, g);
   t1.textContent = n.t;
-  const t2 = el('text', {x:n.x+11, y:n.y + n.h/2 + 10, class:'n-t2'}, g);
+  const t2 = el('text', {x:n.x+11, y:n.y + (isFC ? 46 : n.h/2 + 10), class:'n-t2'}, g);
   t2.textContent = n.s;
+  if (isFC){
+    const hd = el('text', {x:n.x+11, y:n.y+68, 'font-size':'10.5', fill:'#8194a8'}, g);
+    hd.textContent = '接口  ←  接入器件';
+    n.ports.forEach((p, i) => {
+      const t = el('text', {x:n.x+11, y:n.y+88+i*20, 'font-size':'10.5', fill:'#9fc0e2'}, g);
+      t.textContent = p;
+    });
+  }
   if (n.src !== 'buy'){
     const tag = el('text', {x:n.x+n.w-9, y:n.y+13, 'text-anchor':'end',
-      class:'n-tag' + (n.src === 'diy' ? ' diy' : '')}, g);
-    tag.textContent = n.src === 'board' ? '板载' : '自制';
+      class:'n-tag' + (n.src === 'diy' ? ' diy' : n.src === 'grnd' ? ' grnd' : '')}, g);
+    tag.textContent = n.src === 'board' ? '板载' : n.src === 'diy' ? '自制' : '地面';
   }
   g.addEventListener('click', () => select(n.id));
   nodeEls[n.id] = g;
@@ -410,7 +546,7 @@ function select(id){
   document.getElementById('dRole').innerHTML = n.role;
   document.getElementById('dIface').innerHTML = n.iface +
     '<br><span style="color:#8194a8">电源：' + n.pwr + ' · 来源：' +
-    (n.src === 'board' ? 'Cube 板载自带，不用另买' : n.src === 'diy' ? '自制 / 结构件' : '另购') + '</span>';
+    (n.src === 'board' ? 'Cube 板载自带，不用另买' : n.src === 'diy' ? '自制 / 结构件' : n.src === 'grnd' ? '地面 / 座舱设备，不上机' : '另购') + '</span>';
   document.getElementById('dFail').innerHTML = n.fail;
   const box = document.getElementById('dLinks');
   box.innerHTML = '<span class="chip" data-id="">全部</span>' +
@@ -481,6 +617,40 @@ function clearSel(){
   s.appendChild(warn);
 })();
 
+/* ---------------- 传感器数据链路表 ---------------- */
+(function sensorTable(){
+  const S = [
+   {n:'IMU ×3', bus:'板载 SPI', port:'板载', drv:'ICM-42688 驱动，三路投票', hz:'400 Hz 调度',
+    use:'姿态内环 + EKF3 角速率', mav:'ATTITUDE / RAW_IMU'},
+   {n:'气压 ×2', bus:'板载 I2C', port:'板载', drv:'BMP581 驱动', hz:'50 Hz',
+    use:'EKF3 高度趋势（地效内不可信）', mav:'SCALED_PRESSURE / VFR_HUD.alt'},
+   {n:'空速', bus:'I2C', port:'I2C1', drv:'SDP3x 差压驱动', hz:'50 Hz',
+    use:'速度/推力环、失速保护', mav:'VFR_HUD.airspeed'},
+   {n:'GNSS', bus:'UART', port:'SERIAL3', drv:'uBlox M10，5 Hz 定位', hz:'5 Hz',
+    use:'EKF3 位置/地速、导航 10 Hz', mav:'GPS_RAW_INT / GLOBAL_POSITION_INT'},
+   {n:'罗盘', bus:'I2C', port:'SERIAL3 口 I2C', drv:'RM3100 驱动', hz:'50 Hz',
+    use:'EKF3 航向（低速段主源）', mav:'VFR_HUD.heading / ATTITUDE.yaw'},
+   {n:'下视测距', bus:'I2C', port:'I2C2（建议暂定）', drv:'LW20 驱动', hz:'20 Hz',
+    use:'拉平触发（≤3 m）、EKF3 高度', mav:'DISTANCE_SENSOR'},
+   {n:'倾转编码器 ×2', bus:'CAN', port:'CAN1', drv:'DroneCAN，17 bit 绝对角', hz:'50 Hz',
+    use:'卡滞检测、配平闭环', mav:'SERVO_OUTPUT_RAW + STATUSTEXT'},
+   {n:'ESC 遥测', bus:'CAN / UART', port:'CAN2', drv:'DroneCAN ESC / BLHeli 遥测', hz:'10 Hz',
+    use:'单桨失效、电量估算', mav:'ESC_STATUS / BATTERY_STATUS'},
+   {n:'Power1/2', bus:'模拟', port:'Power1/2', drv:'电压 + 电流检测', hz:'10 Hz',
+    use:'电量门限、failsafe', mav:'BATTERY_STATUS / SYS_STATUS'},
+   {n:'ELRS ×2', bus:'UART', port:'SERIAL5 CRSF', drv:'CRSF 50 Hz，16 通道', hz:'50 Hz',
+    use:'摇杆输入、RC failsafe', mav:'RC_CHANNELS'},
+   {n:'433 数传', bus:'UART', port:'SERIAL1', drv:'MAVLink2', hz:'按需',
+    use:'返航/降落/熄火三条命', mav:'双向：命令 + 状态'},
+   {n:'机载电脑', bus:'UART', port:'SERIAL2', drv:'MAVLink2，921600 8N1', hz:'10 Hz',
+    use:'航点/模式/日志，<b>不进内环</b>', mav:'双向：目标 + 状态'},
+  ];
+  document.getElementById('stbody').innerHTML = S.map(r=>`<tr>
+    <td class="n">${r.n}</td><td class="g">${r.bus}</td><td class="g">${r.port}</td>
+    <td class="g">${r.drv}</td><td class="g">${r.hz}</td><td class="g">${r.use}</td>
+    <td class="g">${r.mav}</td></tr>`).join('');
+})();
+
 /* ---------------- 表 ---------------- */
 (function table(){
   const tb = document.getElementById('tbody');
@@ -488,7 +658,7 @@ function clearSel(){
 
   const cnt = k => D.filter(n => n.src === k).length;
   document.getElementById('hcount').textContent =
-    `${D.length} 件 · 板载 ${cnt('board')} · 另购 ${cnt('buy')} · 自制 ${cnt('diy')}`;
+    `${D.length} 件 · 板载 ${cnt('board')} · 另购 ${cnt('buy')} · 自制 ${cnt('diy')} · 地面 ${cnt('grnd')}`;
 
   function draw(){
     tb.innerHTML = D.filter(n => flt === 'all' || n.src === flt).map(n => `<tr>
