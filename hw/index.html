@@ -36,6 +36,7 @@ header .right{margin-left:auto;display:flex;gap:9px;padding-bottom:3px}
 .legend .saf i{border-color:#e05252;border-top-style:dashed}
 .legend .mech i{border-color:#8194a8;border-top-style:dashed}
 .legend .hint{margin-left:auto;color:var(--muted);font-size:13px}
+.mobnote{display:none}
 
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;
   padding:14px 16px;margin-bottom:14px}
@@ -46,9 +47,11 @@ header .right{margin-left:auto;display:flex;gap:9px;padding-bottom:3px}
 .svgscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 #topo{width:100%;height:auto;display:block;touch-action:manipulation}
 #flow{width:100%;height:auto;display:block}
+#wire{width:100%;height:auto;display:block}
 @media (max-width:820px){
   #topo{min-width:820px}
   #flow{min-width:760px}
+  #wire{min-width:760px}
 }
 #topo text{font-family:inherit;user-select:none}
 .n-box{fill:#141d27;stroke:#2c3b4a;stroke-width:1.4;transition:fill .12s,stroke .12s}
@@ -98,6 +101,8 @@ tr:hover td{background:rgba(255,255,255,.025)}
 .scroll{overflow:auto;max-height:520px;border:1px solid var(--line);border-radius:12px}
 .scroll > table{min-width:760px}
 .scroll > table.t-sensor{min-width:900px}
+.code{background:#0c1218;border:1px solid var(--line);border-radius:10px;padding:11px 14px;
+  font:12.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:#c9d6e3;overflow:auto;margin:10px 0 0}
 
 .src{display:inline-block;font-size:11.5px;border-radius:999px;padding:1px 8px;white-space:nowrap}
 .src.board{color:#7ee2a8;border:1px solid rgba(34,197,94,.45);background:rgba(34,197,94,.12)}
@@ -120,6 +125,7 @@ footer{font-size:13px;color:var(--muted);line-height:1.7;border-top:1px solid va
   .rules{grid-template-columns:1fr}
   .card h2{flex-wrap:wrap}
   .card h2 .hint{flex-basis:100%}
+  .mobnote{display:block;font-size:12px;color:var(--muted);margin:-2px 0 10px}
 }
 </style>
 </head>
@@ -142,6 +148,7 @@ footer{font-size:13px;color:var(--muted);line-height:1.7;border-top:1px solid va
     <span class="mech"><i></i>机械（不经飞控）</span>
     <span class="hint">点任一硬件看功能与失效；「板载」= Cube 自带，「地面」= 不上机、只收 MAVLink</span>
   </div>
+  <div class="mobnote">手机端：拓扑图、接线图和表格可左右滑动查看。</div>
 
   <div class="card">
     <h2>控制拓扑 <span class="hint">传感器 → 主飞控 → 执行器；屏幕只读 MAVLink，安全层旁路</span></h2>
@@ -241,6 +248,134 @@ footer{font-size:13px;color:var(--muted);line-height:1.7;border-top:1px solid va
         <div class="t">③ 遥控器屏</div>
         <div class="d">ELRS 接收机把 CRSF 遥测回传给遥控器，显示电压、姿态、链路质量；这条链路不经过 RPi5，也不经过飞控主软件之外的东西。</div>
         <div class="w">屏刷新 10–20 Hz、链路延迟 50–200 ms，只作辅助，不能拿来手动拉平</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>机载电脑：ESP32 行不行 <span class="hint">主线 RPi5 8 GB；ESP32 只做辅助节点</span></h2>
+    <p class="lead"><b>结论：ESP32 不能当主机载电脑。</b>它没有 Linux、没有 MAVSDK/ROS2，内存只有几百 KB，跑不了 921600 的 MAVLink2 + 日志 + 4G/WiFi + 图传并行；一次崩溃整个伴飞功能全丢。主线仍是树莓派 5 8 GB，需要视觉再加 Jetson。ESP32 只适合做 WiFi 数传桥、舱门/温度/RPM 辅助节点或调试屏。</p>
+    <div class="scroll" style="max-height:none">
+      <table>
+        <thead><tr><th style="width:17%">方案</th><th style="width:26%">能做什么</th><th style="width:28%">不能做什么 / 风险</th>
+          <th style="width:10%">功耗</th><th>结论</th></tr></thead>
+        <tbody>
+          <tr><td class="n">树莓派 5 8 GB</td><td class="g">MAVLink2 路由、日志、4G/WiFi、相机、航点上传；MAVSDK / ROS2</td>
+            <td class="g">无硬实时；SD 卡怕掉电；需散热</td><td class="g">5–10 W</td><td class="g"><b style="color:#7ee2a8">主线</b></td></tr>
+          <tr><td class="n">Jetson Orin Nano</td><td class="g">视觉、避障、图传，算力 20–40 TOPS</td>
+            <td class="g">功耗与散热更重，开机慢，价格高</td><td class="g">7–15 W</td><td class="g">需要视觉时升级</td></tr>
+          <tr><td class="n">x86 N100 迷你机</td><td class="g">完整 Linux / Windows，多串口，大硬盘</td>
+            <td class="g">12 V 供电、重量大、抗震一般</td><td class="g">6–15 W</td><td class="g">台架 / 地面站可用，机上不优先</td></tr>
+          <tr><td class="n">Orange Pi 5 / Rock 5B</td><td class="g">接近 RPi5 的性能，价格更低</td>
+            <td class="g">镜像与驱动生态弱，长期供货要核</td><td class="g">5–12 W</td><td class="g">备选，不做基线</td></tr>
+          <tr><td class="n">ESP32-S3</td><td class="g">WiFi MAVLink 桥、串口转发、舱门/温度/RPM 节点、继电器</td>
+            <td class="g">无 Linux / 文件系统 / 视频；921600 长流 + 日志会丢；无 MAVSDK</td>
+            <td class="g">0.5–1 W</td><td class="g"><b style="color:#f2a93b">辅助可以，主机不行</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="lead" style="margin:10px 0 0"><b>端口现实：</b>Cube 的 5 个 UART 已全部排满（SERIAL1 433 / SERIAL2 电脑 / SERIAL3 GNSS / SERIAL4 安全监控 / SERIAL5 ELRS），ESP32 想「直插飞控」没有空口；只能挂在 RPi 的 USB 后面，或等 CAN2 空出来走 CAN。</p>
+
+    <h2 style="margin-top:18px">电脑和 Cube 怎么连 <span class="hint">TELEM2 · SERIAL2 · 3 根线</span></h2>
+    <div class="svgscroll">
+      <svg id="wire" viewBox="0 0 860 230" role="img" aria-label="Cube 与树莓派接线图">
+        <rect x="20" y="40" width="220" height="140" rx="9" fill="#16324e" stroke="#3b8eea" stroke-width="1.6"/>
+        <text x="32" y="62" font-size="13" font-weight="600" fill="#e9f0f7">Cube Orange · TELEM2</text>
+        <text x="32" y="79" font-size="11.5" fill="#9fc0e2">SERIAL2 · MAVLink2</text>
+        <text x="32" y="101" font-size="11.5" fill="#8fa4b8">5V</text>
+        <text x="32" y="125" font-size="11.5" fill="#8fa4b8">TX</text>
+        <text x="32" y="149" font-size="11.5" fill="#8fa4b8">RX</text>
+        <text x="32" y="173" font-size="11.5" fill="#8fa4b8">GND</text>
+
+        <rect x="620" y="40" width="220" height="140" rx="9" fill="#1d1a2b" stroke="#5b4b8a" stroke-width="1.6"/>
+        <text x="808" y="62" font-size="13" font-weight="600" fill="#e9f0f7" text-anchor="end">树莓派 5 · GPIO14/15</text>
+        <text x="808" y="79" font-size="11.5" fill="#c4b5fd" text-anchor="end">/dev/serial0 · 3.3 V</text>
+        <text x="808" y="101" font-size="11.5" fill="#8fa4b8" text-anchor="end">5V</text>
+        <text x="808" y="125" font-size="11.5" fill="#8fa4b8" text-anchor="end">RX</text>
+        <text x="808" y="149" font-size="11.5" fill="#8fa4b8" text-anchor="end">TX</text>
+        <text x="808" y="173" font-size="11.5" fill="#8fa4b8" text-anchor="end">GND</text>
+
+        <line x1="240" y1="96" x2="620" y2="96" stroke="#e05252" stroke-width="1.6" stroke-dasharray="5 4" opacity=".8"/>
+        <line x1="424" y1="90" x2="436" y2="102" stroke="#e05252" stroke-width="2"/>
+        <line x1="436" y1="90" x2="424" y2="102" stroke="#e05252" stroke-width="2"/>
+        <text x="430" y="86" font-size="11" fill="#ff8d8d" text-anchor="middle">5 V 不互连</text>
+
+        <line x1="240" y1="120" x2="620" y2="120" stroke="#4c9ae8" stroke-width="1.8"/>
+        <line x1="240" y1="144" x2="620" y2="144" stroke="#4c9ae8" stroke-width="1.8"/>
+        <line x1="240" y1="168" x2="620" y2="168" stroke="#8194a8" stroke-width="1.8"/>
+        <text x="430" y="114" font-size="10.5" fill="#7fb4dd" text-anchor="middle">Cube TX → RPi RX</text>
+        <text x="430" y="138" font-size="10.5" fill="#7fb4dd" text-anchor="middle">Cube RX ← RPi TX</text>
+
+        <text x="430" y="204" font-size="12" fill="#8194a8" text-anchor="middle">3.3 V TTL · TX/RX 交叉 · 921600 8N1 · MAVLink2</text>
+        <text x="430" y="222" font-size="11.5" fill="#8194a8" text-anchor="middle">只接 3 根：TX、RX、GND；Cube 的 5 V 不给 RPi 供电。</text>
+      </svg>
+    </div>
+
+    <div class="rules" style="margin-top:12px">
+      <div class="rule">
+        <div class="t">① 接线</div>
+        <div class="d">Cube TELEM2 的 <b>TX → RPi RX</b>、<b>RX ← RPi TX</b>、<b>GND—GND</b>；两侧都是 3.3 V TTL，可直连。<b>5 V 不互连</b>，RPi 走自己的 BEC。线短、双绞、远离电机线。</div>
+        <div class="w">不共地 = 随机丢帧；把 5 V 对 5 V = 两路电源对打</div>
+      </div>
+      <div class="rule">
+        <div class="t">② Cube 参数</div>
+        <div class="d"><code>SERIAL2_PROTOCOL=2</code>（MAVLink2）<br><code>SERIAL2_BAUD=921</code>（921600）<br><code>FS_GCS_ENABL=0</code>；SR2 姿态/位置 10 Hz、其余 5 Hz。</div>
+        <div class="w">电脑心跳丢失不触发返航；只有 RC 丢失才返航/迫降</div>
+      </div>
+      <div class="rule">
+        <div class="t">③ 树莓派设置</div>
+        <div class="d">启用 UART（<code>enable_uart=1</code>、<code>dtoverlay=disable-bt</code>），用 <code>/dev/serial0</code>，用户加入 <code>dialout</code>；跑 <code>mavlink-router</code> 转发到 UDP 14550；开硬件看门狗。</div>
+        <div class="w">5 V/3 A 是文档口径，RPi5 峰值建议留 5 A（建议暂定）；公网只经 WireGuard/Tailscale，不直接映射 14550</div>
+      </div>
+    </div>
+
+    <pre class="code"># /etc/mavlink-router/main.conf（最小可用）
+[UartEndpoint cube]
+Device = /dev/serial0
+Baud = 921600
+
+[UdpEndpoint gcs]
+Mode = Normal
+Address = 0.0.0.0
+Port = 14550</pre>
+  </div>
+
+  <div class="card">
+    <h2>屏幕：iPad 行不行 <span class="hint">能当辅助屏 / 地面站，不能当主飞行仪表</span></h2>
+    <p class="lead"><b>结论：可以，但只能走网络、只能做辅助。</b>iPad 没有视频输入，不能像显示器一样用 HDMI 直连 RPi；它通过 WiFi/4G 打开 RPi 上的网页或 MAVLink 地面站 App。延迟 50–200 ms，不能用来拉平、避障或手动姿态修正；主飞行仍靠目视 + 飞控状态。现在可以直接用 Safari 打开 <code>timee.world/sim</code> 看仿真，真机只把数据源换成 MAVLink。</p>
+    <div class="scroll" style="max-height:none">
+      <table>
+        <thead><tr><th style="width:18%">屏幕</th><th style="width:30%">怎么接</th><th style="width:30%">限制</th><th>定位</th></tr></thead>
+        <tbody>
+          <tr><td class="n">iPad / 平板</td><td class="g">WiFi 或 4G → Safari 打开 RPi 网页，或支持 MAVLink/UDP 的地面站 App</td>
+            <td class="g">无视频输入，不能当 HDMI 屏；50–200 ms；阳光下反光、过热降亮度、后台会被杀</td>
+            <td class="g"><b style="color:#f2a93b">辅助 / 地面站</b></td></tr>
+          <tr><td class="n">专用高亮显示器</td><td class="g">HDMI / DSI 直连 RPi5，1000 nit 以上</td>
+            <td class="g">贵、重、要独立供电</td><td class="g">座舱主显示备选</td></tr>
+          <tr><td class="n">车机 / 笔记本</td><td class="g">4G / WiFi 浏览器，大屏看航迹与状态</td>
+            <td class="g">车机不能上机；笔记本重、续航短</td><td class="g">地面站</td></tr>
+          <tr><td class="n">遥控器屏</td><td class="g">ELRS 接收机直出 CRSF 遥测</td>
+            <td class="g">信息少、屏小</td><td class="g">链路备份</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="rules" style="margin-top:12px">
+      <div class="rule">
+        <div class="t">① 连接</div>
+        <div class="d">RPi5 开 WiFi AP 或接 4G 路由；iPad 连同一网络，Safari 打开 RPi 上的页面。RPi 用 <code>mavlink2rest</code> 或 <code>pymavlink + WebSocket</code> 把 MAVLink 转给浏览器。</div>
+        <div class="w">不要直接把 14550 映射到公网；远程走 WireGuard / Tailscale</div>
+      </div>
+      <div class="rule">
+        <div class="t">② 用途</div>
+        <div class="d">航点、地图、状态、告警、日志回放；也可以当乘客/地面观察屏。不做 PFD 主显示，不拿它拉平。</div>
+        <div class="w">屏幕断线、卡顿、过热都不影响飞控；RC 随时接管</div>
+      </div>
+      <div class="rule">
+        <div class="t">③ 供电与安装</div>
+        <div class="d">iPad 自带电池够一次起落；要充电走 USB-C 独立 5 V/3 A，不从飞控取电。支架避开反光、不挡视线，飞行中不插拔。</div>
+        <div class="w">飞行中充电发热 + 降亮度，夏天尤其明显</div>
       </div>
     </div>
   </div>
@@ -423,8 +558,8 @@ const D = [
  {id:'dl', t:'433 MHz 数传', s:'备链路 · 三条命', x:12,y:500,w:176,h:42,k:'lnk', pwr:'独立 5 V',
   role:'只跑「返航 / 降落 / 熄火」，不跑摇杆。', iface:'SERIAL1 MAVLink2；命令立即生效并锁存 3 s',
   fail:'主链路正常时以主为准；868/915 在国内无免许可窗口，频段采购前核定。'},
- {id:'rpi', t:'树莓派 5', s:'任务 / 日志 / 图传', x:12,y:548,w:176,h:42,k:'lnk', pwr:'独立 5 V 3 A',
-  role:'只发目标 / 模式 / 航点，只收状态 / 日志。', iface:'SERIAL2，921600 8N1 MAVLink2',
+ {id:'rpi', t:'树莓派 5', s:'任务 / 日志 / 图传', x:12,y:548,w:176,h:42,k:'lnk', pwr:'独立 5 V 3 A（峰值 5 A）',
+  role:'只发目标 / 模式 / 航点，只收状态 / 日志；ESP32 只能挂在它的 USB 后做辅助节点。', iface:'SERIAL2 / TELEM2，921600 8N1 MAVLink2；只接 TX/RX/GND，5 V 不互连',
   fail:'死机、重启、过热都不影响飞行；RC 随时接管。'},
  {id:'man', t:'手动尾翼通道', s:'推杆 + 钢索 · 无舵机', x:214,y:452,w:200,h:64,k:'mech', pwr:'无（机械）',
   role:'俯仰 / 偏航的机械备份：驾驶杆→左右 Ø8 铝推杆→升降舵；脚蹬→Ø3 钢索→方向舵。',
