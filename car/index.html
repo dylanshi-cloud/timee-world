@@ -24,9 +24,10 @@
 <div class="err" id="err"></div>
 <button id="go">进入终端</button>
 <button class="ghost" id="model" style="display:none">看 3D 模型</button>
+<button class="ghost" id="board" style="display:none">看拍板清单</button>
 <button class="ghost" id="forget" style="display:none">清除本机保存的令牌</button>
 <script>
-const TUNNEL = "https://que-contacting-overall-ranking.trycloudflare.com";
+const TUNNEL = "https://atlas-aluminium-plate-describes.trycloudflare.com";
 const K = "car_token";
 const tok = document.getElementById("tok");
 const err = document.getElementById("err");
@@ -44,6 +45,9 @@ if(saved){
   const mb = document.getElementById("model");
   mb.style.display = "block";
   mb.onclick = ()=> location.href = TUNNEL + "/m/" + saved + "/";
+  const bb = document.getElementById("board");
+  bb.style.display = "block";
+  bb.onclick = ()=> location.href = TUNNEL + "/b/" + saved + "/";
 }
 document.getElementById("go").onclick = ()=> go(tok.value.trim());
 tok.addEventListener("keydown", e => { if(e.key === "Enter") go(tok.value.trim()); });
