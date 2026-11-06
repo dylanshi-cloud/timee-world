@@ -1,121 +1,321 @@
 <!doctype html>
-<html lang="zh-CN"><head>
+<html lang="zh-CN">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>V10 飞控 · 软硬件进展</title>
+<title>V10 飞控进展</title>
 <style>
-:root{--bg:#0b0f14;--panel:#131a23;--line:#26313d;--ink:#e4ebf3;--mut:#93a3b5;
---accent:#4c9aff;--good:#35c48f;--warn:#e0a33a;--bad:#e05656}
+:root{
+  color-scheme:dark;
+  --page:#0b0f14; --surface:#141517; --surface2:#1a1c1f;
+  --ink:#f0efec; --ink2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --border:rgba(255,255,255,.10);
+  --series:#3987e5; --good:#0ca30c; --warn:#fab219;
+  --serious:#ec835a; --critical:#d03b3b; --track:#24262a;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);
-font:18px/1.55 -apple-system,"PingFang SC","Helvetica Neue",sans-serif;
-padding:22px 20px 40px}
-.wrap{max-width:1080px;margin:0 auto}
-.eyebrow{color:var(--accent);font-size:15px;letter-spacing:.08em;font-weight:600}
-h1{font-size:34px;margin:6px 0 4px;font-weight:700}
-.stamp{color:var(--mut);font-size:15px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
-.chip{border:1px solid var(--line);background:var(--panel);border-radius:999px;
-padding:6px 12px;font-size:15px;color:var(--mut)}
-.chip b{color:var(--ink)}
-.chip.warn{border-color:#5a431c;color:var(--warn)}
-.verdict{margin:16px 0 22px;padding:16px 18px;border-left:4px solid var(--accent);
-background:var(--panel);border-radius:10px;font-size:20px;line-height:1.5}
-h2{font-size:22px;margin:26px 0 12px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;
-padding:14px 14px 12px}
-.tile b{display:block;font-size:30px;line-height:1.1;font-variant-numeric:tabular-nums}
-.tile span{display:block;color:var(--mut);font-size:14px;margin-top:5px}
-.tile.good b{color:var(--good)}
-ul{margin:10px 0 0;padding-left:22px}
-li{margin:6px 0}
-table{width:100%;border-collapse:collapse;background:var(--panel);
-border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:16px}
-th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
-th{color:var(--mut);font-weight:600;font-size:14px}
-tr:last-child td{border-bottom:0}
-td.s{white-space:nowrap}
-.ok{color:var(--good)}.no{color:var(--warn)}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
-padding:16px 18px;margin:10px 0}
-.card.p0{border-left:4px solid var(--bad)}
-.card.p2{border-left:4px solid var(--warn)}
-.card h3{margin:0 0 4px;font-size:20px}
-.tag{display:inline-block;font-size:13px;border-radius:6px;padding:2px 8px;
-margin-left:8px;vertical-align:2px}
-.tag.p0{background:#3a1b1b;color:#ff8d8d}
-.tag.p2{background:#3a2c14;color:#f0b85a}
-.opt{margin:8px 0;color:var(--ink)}
-.opt .k{color:var(--accent);font-weight:700;margin-right:6px}
-.rec{color:var(--good);font-weight:600}
-.meta{color:var(--mut);font-size:15px;margin-top:8px}
-footer{margin-top:30px;color:var(--mut);font-size:14px;border-top:1px solid var(--line);padding-top:14px}
-@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}h1{font-size:28px}}
-</style></head><body><div class="wrap">
+html,body{margin:0;background:var(--page);color:var(--ink);
+  font:16px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Segoe UI",sans-serif;
+  -webkit-tap-highlight-color:transparent}
+body{padding:28px clamp(16px,3vw,44px) 40px;max-width:1440px;margin:0 auto}
+a{color:var(--series);text-decoration:none}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px 24px;margin-bottom:26px}
+.eyebrow{font-size:13px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+h1{font-size:clamp(30px,3.4vw,46px);line-height:1.05;margin:6px 0 0;font-weight:650;letter-spacing:-.01em}
+.meta{color:var(--ink2);font-size:14px;margin-top:8px}
+.meta b{color:var(--ink);font-weight:600}
+.head-right{margin-left:auto;display:flex;gap:10px;align-items:center}
+.ghost{border:1px solid var(--border);background:var(--surface);color:var(--ink2);
+  border-radius:10px;padding:9px 15px;font-size:14px;cursor:pointer}
+.ghost:hover{color:var(--ink);border-color:rgba(255,255,255,.22)}
 
-<div class="eyebrow">V10 载人 · 飞控系统</div>
-<h1>软硬件进展与待拍板</h1>
-<div class="stamp">快照 2026-11-06 13:05 · 数据源 fc_results.json / progress.json</div>
-<div class="chips">
-<span class="chip"><b>S1</b> 设计冻结 15/20</span>
-<span class="chip"><b>S2-E</b> 电气/热 6/12</span>
-<span class="chip"><b>S5</b> 首飞放行 4/15</span>
-<span class="chip warn">硬件未采购 · 未台架</span>
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
+.tile{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:18px 20px 16px;position:relative;overflow:hidden}
+.tile::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--series);opacity:.9}
+.tile.good::before{background:var(--good)}
+.tile .num{font-size:clamp(28px,2.6vw,40px);font-weight:650;letter-spacing:-.02em;line-height:1.05}
+.tile .num small{font-size:.42em;font-weight:500;color:var(--muted);letter-spacing:0}
+.tile .lab{font-size:14px;color:var(--ink2);margin-top:5px}
+.tile .sub{font-size:12px;color:var(--muted);margin-top:2px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:14px}
+.card h2{font-size:16px;font-weight:600;margin:0 0 3px;display:flex;align-items:baseline;gap:10px}
+.card h2 .hint{font-size:12px;font-weight:400;color:var(--muted)}
+.card .lead{font-size:13px;color:var(--muted);margin:0 0 18px}
+
+.cols{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;margin-bottom:14px}
+.cols .card{margin-bottom:0}
+
+.row{margin:13px 0}
+.row:first-of-type{margin-top:0}
+.rowhead{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.rowhead .name{font-size:14px;color:var(--ink)}
+.rowhead .val{margin-left:auto;font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.rowhead .val b{color:var(--ink);font-weight:600}
+.bar{height:11px;background:var(--track);border-radius:6px;overflow:hidden}
+.fill{height:100%;background:var(--series);border-radius:6px;
+  transition:width .4s ease}
+.fill.warn{background:var(--warn)}
+.fill.dim{background:#3a5f91}
+
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;
+  padding:4px 10px;font-size:12px;border:1px solid var(--border);color:var(--ink2)}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.chip.good .dot{background:var(--good)}
+.chip.warn{color:#f4cf7a;border-color:rgba(250,178,25,.35)}
+.chip.warn .dot{background:var(--warn)}
+.chip.series{color:#9dc3f2;border-color:rgba(57,135,229,.35)}
+.chip.series .dot{background:var(--series)}
+.chip.crit{color:#f0a3a3;border-color:rgba(208,59,59,.35)}
+.chip.crit .dot{background:var(--critical)}
+
+.bigstat{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.bigstat .n{font-size:52px;font-weight:650;line-height:1;letter-spacing:-.03em}
+.bigstat .n small{font-size:20px;color:var(--muted);font-weight:500}
+.bigstat .t{font-size:13px;color:var(--ink2);max-width:190px;line-height:1.35}
+.dots{display:flex;gap:7px;margin:14px 0 16px;flex-wrap:wrap}
+.dot10{width:24px;height:24px;border-radius:7px;border:1px solid var(--grid);background:var(--surface2)}
+.hwgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px 12px}
+.hw{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);
+  border-bottom:1px solid rgba(255,255,255,.05);padding:7px 0}
+.hw .st{margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap}
+.hw .led{width:8px;height:8px;border-radius:50%;background:#4a4a47;flex:none}
+
+.sil{display:grid;grid-template-columns:60px repeat(8,1fr);gap:7px;align-items:stretch}
+.sil .rl{display:flex;align-items:center;font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.case{background:var(--surface2);border:1px solid var(--border);border-radius:9px;
+  padding:9px 6px;text-align:center;line-height:1.25}
+.case .ok{color:var(--good);font-size:15px;font-weight:700}
+.case .nm{font-size:11px;color:var(--ink2);margin-top:1px}
+.case .top{font-size:10px;color:var(--muted)}
+
+.grid12{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.e{background:var(--surface2);border:1px solid var(--border);border-left:3px solid #3a3a38;
+  border-radius:8px;padding:9px 10px}
+.e.done{border-left-color:var(--good)}
+.e.run{border-left-color:var(--series)}
+.e.pl{border-left-color:#4a4a47;opacity:.92}
+.e .id{font-size:12px;color:var(--ink);font-variant-numeric:tabular-nums}
+.e .nm{font-size:11px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.e .pc{font-size:11px;margin-top:4px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.e.done .pc{color:var(--good)}
+.e.run .pc{color:#9dc3f2}
+
+ol.next{margin:0;padding-left:20px;color:var(--ink2);font-size:14px}
+ol.next li{margin:7px 0;padding-left:4px}
+ol.next b{color:var(--ink);font-weight:600}
+.decs{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.dec{border:1px solid var(--border);background:var(--surface2);border-radius:9px;
+  padding:7px 11px;font-size:12px;color:var(--ink2)}
+.dec b{color:var(--ink)}
+
+footer{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--muted);font-size:12px;
+  border-top:1px solid var(--grid);padding-top:14px;margin-top:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:980px){
+  .kpis{grid-template-columns:1fr 1fr}
+  .cols,.two{grid-template-columns:1fr}
+  .grid12{grid-template-columns:repeat(4,1fr)}
+  .sil{grid-template-columns:52px repeat(4,1fr)}
+}
+@media (max-width:560px){
+  body{padding:18px 14px 28px}
+  .kpis{grid-template-columns:1fr 1fr;gap:9px}
+  .tile{padding:14px}
+  .grid12{grid-template-columns:repeat(3,1fr)}
+  .hwgrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="eyebrow">V10 双翼三桨 · 飞控</div>
+    <h1>飞控进展</h1>
+    <div class="meta">数据 <b>2026-11-06 18:20</b> · 软件已闭环，硬件未上机 · 硬件在环 0%</div>
+  </div>
+  <div class="head-right">
+    <a class="ghost" href="https://timee.world/car">车机入口</a>
+    <button class="ghost" onclick="location.reload()">刷新</button>
+  </div>
+</header>
+
+<section class="kpis">
+  <div class="tile good">
+    <div class="num">26<small>/26</small></div>
+    <div class="lab">单元测试</div>
+    <div class="sub">飞控 Lua 逻辑</div>
+  </div>
+  <div class="tile good">
+    <div class="num">15<small>/15</small></div>
+    <div class="lab">安全监控单测</div>
+    <div class="sub">失效判定与切换</div>
+  </div>
+  <div class="tile good">
+    <div class="num">16<small>/16</small></div>
+    <div class="lab">SIL 失效场景</div>
+    <div class="sub">r9 8/8 · r12 8/8</div>
+  </div>
+  <div class="tile">
+    <div class="num">0</div>
+    <div class="lab">回放误切</div>
+    <div class="sub">5000 帧 / 100 s</div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>闸门进度 <span class="hint">计分项 / 总数</span></h2>
+  <p class="lead">S1 含 1 项警告（S1-15 配平能力）；另有 4 项在跑，尚未放行冻结。</p>
+
+  <div class="row">
+    <div class="rowhead"><span class="name">S1 结构冻结</span><span class="val"><b>16</b> / 20</span></div>
+    <div class="bar"><div class="fill" style="width:80%"></div></div>
+  </div>
+  <div class="row">
+    <div class="rowhead"><span class="name">S2-E 电气 / 热 / EMC</span><span class="val"><b>6</b> / 12</span></div>
+    <div class="bar"><div class="fill" style="width:50%"></div></div>
+  </div>
+  <div class="row">
+    <div class="rowhead"><span class="name">S5 验证与试飞</span><span class="val"><b>4</b> / 15</span></div>
+    <div class="bar"><div class="fill" style="width:27%"></div></div>
+  </div>
+</section>
+
+<div class="cols">
+  <section class="card">
+    <h2>S1 在跑项</h2>
+    <p class="lead">结构冻结前必须收口的四项</p>
+
+    <div class="row">
+      <div class="rowhead"><span class="name">S1-11 接口公差链</span><span class="val"><b>75%</b></span></div>
+      <div class="bar"><div class="fill" style="width:75%"></div></div>
+    </div>
+    <div class="row">
+      <div class="rowhead"><span class="name">S1-06 气动 v2</span><span class="val"><b>65%</b></span></div>
+      <div class="bar"><div class="fill" style="width:65%"></div></div>
+    </div>
+    <div class="row">
+      <div class="rowhead"><span class="name">S1-20 乘员头隙</span><span class="val"><b>60%</b></span></div>
+      <div class="bar"><div class="fill" style="width:60%"></div></div>
+    </div>
+    <div class="row">
+      <div class="rowhead"><span class="name">S1-10 人机与进出</span><span class="val"><b>40%</b></span></div>
+      <div class="bar"><div class="fill" style="width:40%"></div></div>
+    </div>
+
+    <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+      <span class="chip warn"><span class="dot"></span>S1-15 配平能力 · 警告</span>
+      <span class="chip good"><span class="dot"></span>S1-04 整机 FEM 已闭合</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>硬件就绪度</h2>
+    <p class="lead">选型已定，全部未采购、未台架</p>
+
+    <div class="bigstat">
+      <div class="n">0<small>/10</small></div>
+      <div class="t">台架判据完成<br>上电自检 · 舵机零位 · 失效注入 · 罗盘干扰 · ESC 遥测</div>
+    </div>
+    <div class="dots" title="10 项台架判据，0 项完成">
+      <span class="dot10"></span><span class="dot10"></span><span class="dot10"></span><span class="dot10"></span><span class="dot10"></span>
+      <span class="dot10"></span><span class="dot10"></span><span class="dot10"></span><span class="dot10"></span><span class="dot10"></span>
+    </div>
+
+    <div class="hwgrid">
+      <div class="hw"><span class="led"></span>Cube Orange<span class="st">未采购</span></div>
+      <div class="hw"><span class="led"></span>ICM-42688-P ×3<span class="st">未采购</span></div>
+      <div class="hw"><span class="led"></span>Here3+ / M10<span class="st">未采购</span></div>
+      <div class="hw"><span class="led"></span>RM3100 罗盘<span class="st">未采购</span></div>
+      <div class="hw"><span class="led"></span>SDP3x 空速<span class="st">未采购</span></div>
+      <div class="hw"><span class="led"></span>LW20 / TFmini-S<span class="st">未采购</span></div>
+      <div class="hw"><span class="led"></span>绝对编码器 ×2<span class="st">未采购</span></div>
+      <div class="hw"><span class="led"></span>带遥测电调<span class="st">未采购</span></div>
+    </div>
+  </section>
 </div>
 
-<div class="verdict">软件侧已闭环：单元 26/26、安全监控 15/15、SIL 16/16、100 s 回放 0 误切。硬件侧选型已定，但未采购、未台架，HIL 未做——现在不能把仿真写成试飞证据。</div>
+<section class="card">
+  <h2>SIL 场景矩阵 <span class="hint">16 / 16 通过</span></h2>
+  <p class="lead">两套质量基线各跑 8 个场景，全部 PASS；仿真 ≠ 试验。</p>
+  <div class="sil">
+    <div class="rl">r9 无人</div>
+    <div class="case"><div class="ok">✓</div><div class="nm">标称</div><div class="top">nominal</div></div>
+    <div class="case"><div class="ok">✓</div><div class="nm">遥控高</div><div class="top">rc_high</div></div>
+    <div class="case"><div class="ok">✓</div><div class="nm">遥控中</div><div class="top">rc_mid</div></div>
+    <div class="case"><div class="ok">✓</div><div class="nm">遥控低</div><div class="top">rc_low</div></div>
+    <div class="case"><div class="ok">✓</div><div class="nm">前桨失效</div><div class="top">front</div></div>
+    <div class="case"><div class="ok">✓</div><div class="nm">翼桨失效</div><div class="top">wing</div></div>
+    <div class="case"><div class="ok">✓</div><div class="nm">电池</div><div class="top">batt</div></div>
+    <div class="case"><div class="ok">✓</div><div class="nm">卡滞</div><div class="top">jam</div></div>
 
-<h2>软件</h2>
-<div class="grid">
-  <div class="tile good"><b>26/26</b><span>单元测试</span></div>
-  <div class="tile good"><b>15/15</b><span>安全监控单测</span></div>
-  <div class="tile good"><b>16/16</b><span>SIL 场景（r9 + r12）</span></div>
-  <div class="tile good"><b>0</b><span>回放误切 / 5000 帧</span></div>
+    <div class="rl">r12 载人</div>
+    <div class="case"><div class="ok">✓</div><div class="nm">标称</div><div class="top">nominal</div></div>
+    <div class="case"><div class="ok">✓</div><div class="nm">遥控高</div><div class="top">rc_high</div></div>
+    <div class="case"><div class="ok">✓</div><div class="nm">遥控中</div><div class="top">rc_mid</div></div>
+    <div class="case"><div class="ok">✓</div><div class="nm">遥控低</div><div class="top">rc_low</div></div>
+    <div class="case"><div class="ok">✓</div><div class="nm">前桨失效</div><div class="top">front</div></div>
+    <div class="case"><div class="ok">✓</div><div class="nm">翼桨失效</div><div class="top">wing</div></div>
+    <div class="case"><div class="ok">✓</div><div class="nm">电池</div><div class="top">batt</div></div>
+    <div class="case"><div class="ok">✓</div><div class="nm">卡滞</div><div class="top">jam</div></div>
+  </div>
+  <div style="margin-top:14px;display:flex;gap:18px;flex-wrap:wrap;color:var(--ink2);font-size:13px">
+    <span>回放峰值：滚转 <b style="color:var(--ink)">21.1°</b></span>
+    <span>俯仰 <b style="color:var(--ink)">14.6°</b></span>
+    <span>误切 <b style="color:var(--good)">0</b></span>
+  </div>
+</section>
+
+<section class="card">
+  <h2>S2-E 电气 / 热 / EMC <span class="hint">6 / 12 完成</span></h2>
+  <p class="lead">绿色已完成，蓝色在跑，灰色未开始；动力台架回填（E-11）仍为 0。</p>
+  <div class="grid12">
+    <div class="e run"><div class="id">E-01</div><div class="nm">300 A 瞬态母线</div><div class="pc">40%</div></div>
+    <div class="e done"><div class="id">E-02</div><div class="nm">峰值电压跌落</div><div class="pc">完成</div></div>
+    <div class="e done"><div class="id">E-03</div><div class="nm">峰值放电倍率</div><div class="pc">完成</div></div>
+    <div class="e pl"><div class="id">E-04</div><div class="nm">预充 / 熔断</div><div class="pc">20%</div></div>
+    <div class="e pl"><div class="id">E-05</div><div class="nm">线径温升</div><div class="pc">10%</div></div>
+    <div class="e pl"><div class="id">E-06</div><div class="nm">电机温升</div><div class="pc">0%</div></div>
+    <div class="e done"><div class="id">E-07</div><div class="nm">电调温升 / 余量</div><div class="pc">完成</div></div>
+    <div class="e done"><div class="id">E-08</div><div class="nm">电池巡航温升</div><div class="pc">完成</div></div>
+    <div class="e done"><div class="id">E-09</div><div class="nm">EMI / 罗盘磁场</div><div class="pc">完成</div></div>
+    <div class="e done"><div class="id">E-10</div><div class="nm">航时与能量闭合</div><div class="pc">完成</div></div>
+    <div class="e pl"><div class="id">E-11</div><div class="nm">动力台架回填</div><div class="pc">0%</div></div>
+    <div class="e pl"><div class="id">E-12</div><div class="nm">防火 / 热烟隔离</div><div class="pc">0%</div></div>
+  </div>
+</section>
+
+<div class="two">
+  <section class="card">
+    <h2>下一步</h2>
+    <ol class="next">
+      <li><b>采购 + 台架</b>：Cube Orange、三套 IMU、GNSS/罗盘、空速/激光、编码器、带遥测电调；10 项台架判据从 0 起步。</li>
+      <li><b>HIL</b>：台架通过后做硬件在环（S5-05），同步把蒙特卡洛从 12 次推到 1000 次。</li>
+      <li><b>收 S1</b>：S1-11 按 D41=C 复算；S1-06 / S1-10 / S1-20 收口后放行冻结。</li>
+      <li><b>不越级</b>：硬件未台架、HIL 未过，不进入 S5 签字，不做物理制造。</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>已拍板 <span class="hint">待拍板 0</span></h2>
+    <p class="lead">飞控与接口相关的最新决定</p>
+    <div class="decs">
+      <div class="dec"><b>D42 = A</b> 下翼根改梁 + 撑杆位置</div>
+      <div class="dec"><b>D41 = C</b> I-05 做控制 · I-06 首件实测</div>
+      <div class="dec"><b>D40 = B</b> 电池只做本机快拆</div>
+      <div class="dec"><b>D39 = B</b> 盒类燕尾锁 · 动力包 4×M5</div>
+      <div class="dec"><b>D38</b> M1/M2/M3 模块化快拆</div>
+    </div>
+  </section>
 </div>
-<ul>
-  <li>三层回路：姿态 400 Hz / 外环 50 Hz / 策略 10 Hz；独立安全监控 + Lua 心跳，主机死机不丢监控。</li>
-  <li>SIL 8 个失效场景（RC 高/中/低、前桨失效、翼桨单发、电池、倾转卡滞）× r9 / r12 两套参数，全部 PASS。</li>
-  <li>回放：100 s、5000 帧，误切 0；峰值滚转 21.1°、俯仰 14.6°。</li>
-  <li>未做：HIL 硬件在环、带倾转推力耦合的 SIL 标定、实机参数辨识。</li>
-</ul>
 
-<h2>硬件</h2>
-<table>
-<tr><th>件</th><th>选型</th><th>状态</th></tr>
-<tr><td>飞控</td><td>Cube Orange（标准载板，非 Mini）</td><td class="s no">未采购</td></tr>
-<tr><td>IMU</td><td>ICM-42688-P ×3，三路投票</td><td class="s no">未采购</td></tr>
-<tr><td>GNSS / 罗盘</td><td>Here3+ / M10 双频；RM3100 立杆</td><td class="s no">未采购</td></tr>
-<tr><td>空速 / 气压</td><td>SDP3x-500Pa；BMP581 ×2</td><td class="s no">未采购</td></tr>
-<tr><td>下视测距</td><td>LW20/C 或 TFmini-S</td><td class="s no">未采购</td></tr>
-<tr><td>倾转反馈</td><td>绝对编码器 ×2（17 bit）</td><td class="s no">未采购</td></tr>
-<tr><td>电调</td><td>带遥测，三路电流/转速</td><td class="s no">未采购</td></tr>
-<tr><td>安装</td><td>M3 飞控托盘（快拆，V10-D38）</td><td class="s ok">方案已定</td></tr>
-</table>
-<p class="meta">台架判据 10 项，完成 0；S2-E-11 动力台架回填 0%；S5-05 HIL 0%。硬件在环之前，所有控制结论只算仿真。</p>
+<footer>
+  <span>来源：fc_results.json（13:05） · progress.json（18:20） · decisions.json</span>
+  <span>仿真 ≠ 试验；硬件未采购、未台架</span>
+</footer>
 
-<h2>最近已定</h2>
-<ul>
-  <li><b>V10-D38</b> 整机模块化快拆：M1 传感器盒 / M2 动力包 / M3 飞控托盘，可跨机型转移。</li>
-  <li><b>V10-D39=B</b> 盒类免工具燕尾锁，动力包 4×M5 定位销 + 防脱销；接口增重 +0.64 kg（估）。</li>
-  <li><b>V10-D37=A</b> 主 IMU 留舱内，舱顶盒放 GPS / 双罗盘 / 静压。</li>
-</ul>
-
-<h2>需要拍板</h2>
-<div class="card p0">
-  <h3>V10-D41 尾翼/尾轮站位公差超 3 mm<span class="tag p0">P0 · 阻塞 S1</span></h3>
-  <div class="opt"><span class="k">A</span>控制措施全做：尾梁直线度 ≤0.5 mm/m、承口导向环、插入 150→200 mm、尾轮长圆孔；+0.1 kg，工艺 +3–5 天。</div>
-  <div class="opt"><span class="k">B</span>接受 RSS + 首件实测：不改图，S3 实测，超差配垫/配钻；零成本，可能返工。</div>
-  <div class="opt"><span class="k">C</span><span class="rec">推荐</span>：I-05 做控制（尾梁 + 导向环 + 插入 200），I-06 接受 RSS + 首件实测。只在不可调处花成本。</div>
-  <div class="meta">I-05 WC 4.60 / RSS 2.58；I-06 WC 4.41 / RSS 2.51；I-03 上下翼安装角恰好 3.00，零余量。</div>
-</div>
-<div class="card p2">
-  <h3>V10-D40 电池包是否纳入跨机型快拆（M4）<span class="tag p2">P2 · 不阻塞</span></h3>
-  <div class="opt"><span class="k">A</span>纳入 M4：统一 24S/100 V 托盘，可跨机型带走；+0.15 kg，电池被电压绑死。</div>
-  <div class="opt"><span class="k">B</span><span class="rec">推荐</span>：只做本机快拆，换机型另配电池；最轻最简单。</div>
-  <div class="opt"><span class="k">C</span>先不定，S3-04 出图前再拍。</div>
-</div>
-
-<footer>本页是给车机看的快照，不替代拍板清单；正式入口 timee.world/car → 看拍板清单。数据更新：2026-11-06 13:05。</footer>
-</div></body></html>
+</body>
+</html>
