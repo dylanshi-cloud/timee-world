@@ -69,6 +69,12 @@ main{display:grid;grid-template-columns:minmax(300px,.95fr) minmax(400px,1.2fr) 
 .tile .num small{font-size:13px;font-weight:500;color:var(--muted);margin-left:3px}
 .tile .lab{font-size:13px;color:var(--ink2);margin-top:4px}
 .tile .sub{font-size:12px;color:var(--muted);margin-top:1px}
+.srcTag{display:inline-block;font-size:10.5px;line-height:1.5;font-weight:500;color:#8fb6dd;
+  border:1px solid rgba(76,154,232,.35);background:rgba(76,154,232,.10);border-radius:999px;
+  padding:0 6px;white-space:nowrap;vertical-align:1px}
+.srcTag.calc{color:#a7b3bf;border-color:rgba(167,179,191,.32);background:rgba(167,179,191,.08)}
+.srcline{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.5}
+.srclegend{font-size:11.5px;color:var(--muted);line-height:1.6;padding:2px 2px 8px}
 
 .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
 .card h2{font-size:14px;font-weight:600;margin:0 0 2px;display:flex;align-items:baseline;gap:8px}
@@ -127,7 +133,7 @@ main{display:grid;grid-template-columns:minmax(300px,.95fr) minmax(400px,1.2fr) 
 <header>
   <div>
     <h1>V10 飞控模拟</h1>
-    <div class="sub">1130za · MTOW 198.57 kg · 演示用飞行动力学，不是适航验证</div>
+    <div class="sub">1130za · MTOW 198.57 kg · 演示用飞行动力学，不是适航验证 · 参数旁标注真机采集硬件</div>
   </div>
   <div class="right">
     <a class="btn" href="/fc/">飞控进展</a>
@@ -152,39 +158,40 @@ main{display:grid;grid-template-columns:minmax(300px,.95fr) minmax(400px,1.2fr) 
   <section class="card pfdcard">
     <h2>主飞行显示 <span class="hint">PFD · 姿态 / 空速 / 高度 / 航向</span></h2>
     <div class="pfdwrap"><canvas id="pfd"></canvas></div>
+    <div class="srcline">数据源：IMU ×3（姿态/过载）· SDP3x（空速）· BMP581 + LW20（高度）· RM3100 + GNSS（航向）</div>
   </section>
 
   <section class="panel">
     <div class="kpis">
       <div class="tile"><div class="num" id="kIas">24.0<small>m/s</small></div>
-        <div class="lab">空速 IAS</div><div class="sub" id="kIasSub">Vs 18.7 · 失速余量 5.3</div></div>
+        <div class="lab">空速 IAS <span class="srcTag">SDP3x · I2C1</span></div><div class="sub" id="kIasSub">Vs 18.7 · 失速余量 5.3</div></div>
       <div class="tile"><div class="num" id="kAlt">0<small>m</small></div>
-        <div class="lab">高度 ALT</div><div class="sub" id="kAltSub">起落架离地</div></div>
+        <div class="lab">高度 ALT <span class="srcTag">BMP581 + LW20</span></div><div class="sub" id="kAltSub">起落架离地</div></div>
       <div class="tile"><div class="num" id="kVs">0.0<small>m/s</small></div>
-        <div class="lab">升降率 VS</div><div class="sub" id="kVsSub">爬升</div></div>
+        <div class="lab">升降率 VS <span class="srcTag">BMP581</span></div><div class="sub" id="kVsSub">爬升</div></div>
       <div class="tile" id="tileNz"><div class="num" id="kNz">1.00<small>g</small></div>
-        <div class="lab">过载 n</div><div class="sub" id="kNzSub">限制 +4 / −2 g</div></div>
+        <div class="lab">过载 n <span class="srcTag">IMU ×3</span></div><div class="sub" id="kNzSub">限制 +4 / −2 g</div></div>
     </div>
 
     <div class="grid2">
       <div class="card">
         <h2>姿态 <span class="hint">机体轴</span></h2>
-        <div class="row"><div class="rowhead"><span class="name">俯仰 θ</span>
+        <div class="row"><div class="rowhead"><span class="name">俯仰 θ <span class="srcTag">IMU ×3</span></span>
           <span class="val"><b id="vPitch">0.0</b> °</span></div>
           <div class="bar"><div class="fill" id="bPitch" style="width:50%"></div></div></div>
-        <div class="row"><div class="rowhead"><span class="name">滚转 φ</span>
+        <div class="row"><div class="rowhead"><span class="name">滚转 φ <span class="srcTag">IMU ×3</span></span>
           <span class="val"><b id="vRoll">0.0</b> °</span></div>
           <div class="bar"><div class="fill" id="bRoll" style="width:50%"></div></div></div>
-        <div class="row"><div class="rowhead"><span class="name">航向 ψ</span>
+        <div class="row"><div class="rowhead"><span class="name">航向 ψ <span class="srcTag">RM3100 + GNSS</span></span>
           <span class="val"><b id="vHdg">000</b> °</span></div>
           <div class="bar"><div class="fill" id="bHdg" style="width:0%"></div></div></div>
-        <div class="row"><div class="rowhead"><span class="name">迎角 α</span>
+        <div class="row"><div class="rowhead"><span class="name">迎角 α <span class="srcTag">风标（可选）</span></span>
           <span class="val"><b id="vAoa">4.0</b> °</span></div>
           <div class="bar"><div class="fill" id="bAoa" style="width:30%"></div></div></div>
       </div>
 
       <div class="card">
-        <h2>动力 <span class="hint">三桨 / 电池</span></h2>
+        <h2>动力 <span class="hint">三桨 / 电池 · ESC 遥测 CAN2</span></h2>
         <div class="tri" style="margin-bottom:10px">
           <div class="motor"><div class="mn">前桨 Ø1.20</div>
             <div class="mv" id="mNose">0<small> rpm</small></div></div>
@@ -193,13 +200,13 @@ main{display:grid;grid-template-columns:minmax(300px,.95fr) minmax(400px,1.2fr) 
           <div class="motor"><div class="mn">右翼桨 Ø0.61</div>
             <div class="mv" id="mRight">0<small> rpm</small></div></div>
         </div>
-        <div class="row"><div class="rowhead"><span class="name">油门</span>
+        <div class="row"><div class="rowhead"><span class="name">油门 <span class="srcTag calc">飞控输出</span></span>
           <span class="val"><b id="vThr">0</b> %</span></div>
           <div class="bar"><div class="fill" id="bThr" style="width:0%"></div></div></div>
-        <div class="row"><div class="rowhead"><span class="name">电功率</span>
+        <div class="row"><div class="rowhead"><span class="name">电功率 <span class="srcTag">Power1/2</span></span>
           <span class="val"><b id="vPwr">0.0</b> kW</span></div>
           <div class="bar"><div class="fill" id="bPwr" style="width:0%"></div></div></div>
-        <div class="row"><div class="rowhead"><span class="name">电池 SOC</span>
+        <div class="row"><div class="rowhead"><span class="name">电池 SOC <span class="srcTag">Power1/2 + 积分</span></span>
           <span class="val"><b id="vSoc">100</b> % · <span id="vVolt">50.4</span> V</span></div>
           <div class="bar"><div class="fill good" id="bSoc" style="width:100%"></div></div></div>
       </div>
@@ -208,16 +215,16 @@ main{display:grid;grid-template-columns:minmax(300px,.95fr) minmax(400px,1.2fr) 
     <div class="grid2">
       <div class="card">
         <h2>操纵通道 <span class="hint">俯仰主通道＝前桨倾转</span></h2>
-        <div class="row"><div class="rowhead"><span class="name">前桨倾转</span>
+        <div class="row"><div class="rowhead"><span class="name">前桨倾转 <span class="srcTag">编码器 CAN1</span></span>
           <span class="val"><b id="vTiltF">3.6</b> °</span></div>
           <div class="bar"><div class="fill" id="bTiltF" style="width:50%"></div></div></div>
-        <div class="row"><div class="rowhead"><span class="name">副翼 L/R</span>
+        <div class="row"><div class="rowhead"><span class="name">副翼 L/R <span class="srcTag">舵机反馈</span></span>
           <span class="val"><b id="vAil">0</b> %</span></div>
           <div class="bar"><div class="fill" id="bAil" style="width:50%"></div></div></div>
-        <div class="row"><div class="rowhead"><span class="name">翼桨倾转</span>
+        <div class="row"><div class="rowhead"><span class="name">翼桨倾转 <span class="srcTag">编码器 CAN1</span></span>
           <span class="val"><b id="vTilt">0</b> °</span></div>
           <div class="bar"><div class="fill" id="bTilt" style="width:0%"></div></div></div>
-        <div class="row"><div class="rowhead"><span class="name">手动杆/脚蹬</span>
+        <div class="row"><div class="rowhead"><span class="name">手动杆/脚蹬 <span class="srcTag calc">机械 · 无采集</span></span>
           <span class="val"><b id="vMan">0</b> %</span></div>
           <div class="bar"><div class="fill" id="bMan" style="width:50%"></div></div></div>
         <div class="sub" style="font-size:12px;color:var(--muted);margin-top:8px">
@@ -225,7 +232,7 @@ main{display:grid;grid-template-columns:minmax(300px,.95fr) minmax(400px,1.2fr) 
       </div>
 
       <div class="card">
-        <h2>状态与事件 <span class="hint">自动航线演示</span></h2>
+        <h2>状态与事件 <span class="hint">自动航线演示 · 飞控状态机</span></h2>
         <div class="state" style="margin-bottom:10px">
           <span class="chip good"><span class="dot"></span>飞控 AUTO</span>
           <span class="chip" id="chipStall"><span class="dot"></span>失速保护待命</span>
@@ -237,7 +244,7 @@ main{display:grid;grid-template-columns:minmax(300px,.95fr) minmax(400px,1.2fr) 
 
     <div class="grid3">
       <div class="card">
-        <h2>气动 <span class="hint">实时 / 无量纲</span></h2>
+        <h2>气动 <span class="hint">实时 / 无量纲 · 模型计算</span></h2>
         <div class="kv"><span>升力系数 CL</span><b id="vCL">0.00</b></div>
         <div class="kv"><span>阻力系数 CD</span><b id="vCD">0.000</b></div>
         <div class="kv"><span>升阻比 L/D</span><b id="vLD">0.0</b></div>
@@ -247,7 +254,7 @@ main{display:grid;grid-template-columns:minmax(300px,.95fr) minmax(400px,1.2fr) 
       </div>
 
       <div class="card">
-        <h2>任务与能量 <span class="hint">自动航线</span></h2>
+        <h2>任务与能量 <span class="hint">自动航线 · GNSS / Power / 状态机</span></h2>
         <div class="kv"><span>已飞航程</span><b id="vDist">0.00<small> km</small></b></div>
         <div class="kv"><span>剩余续航</span><b id="vEndur">0<small> min</small></b></div>
         <div class="kv"><span>当前功率</span><b id="vPwr2">0.0<small> kW</small></b></div>
@@ -257,7 +264,7 @@ main{display:grid;grid-template-columns:minmax(300px,.95fr) minmax(400px,1.2fr) 
       </div>
 
       <div class="card">
-        <h2>模型口径 <span class="hint">S1-06 v3 / D27=B</span></h2>
+        <h2>模型口径 <span class="hint">S1-06 v3 / D27=B · 设计值</span></h2>
         <div class="kv"><span>MTOW</span><b>198.57<small> kg</small></b></div>
         <div class="kv"><span>参考面积 S</span><b>7.149<small> m²</small></b></div>
         <div class="kv"><span>展弦比 AR</span><b>3.87</b></div>
@@ -267,10 +274,11 @@ main{display:grid;grid-template-columns:minmax(300px,.95fr) minmax(400px,1.2fr) 
         <div class="kv"><span>电池 24S</span><b>6.11<small> kWh / 可用 4.89</small></b></div>
       </div>
     </div>
+    <div class="srclegend">标注 = 真机采集该参数的硬件；蓝色标签是机载传感器，<span class="srcTag calc">灰色标签</span>是飞控输出或模型计算，不是机载实测。本页数值均由仿真模型生成。</div>
   </section>
 
   <section class="card trackcard">
-    <h2>飞行轨迹 <span class="hint">俯视地标 · 高度剖面</span></h2>
+    <h2>飞行轨迹 <span class="hint">俯视地标 · 高度剖面 · GNSS / BMP581</span></h2>
     <div class="trackgrid">
       <div class="cvwrap"><canvas id="track"></canvas></div>
       <div class="cvwrap"><canvas id="profile"></canvas></div>
