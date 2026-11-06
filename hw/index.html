@@ -48,6 +48,8 @@ header .right{margin-left:auto;display:flex;gap:9px;padding-bottom:3px}
 .n-box{fill:#141d27;stroke:#2c3b4a;stroke-width:1.4;transition:fill .12s,stroke .12s}
 .n-t1{font-size:13px;font-weight:600;fill:#e9f0f7}
 .n-t2{font-size:12px;fill:#8fa4b8}
+.n-tag{font-size:10.5px;font-weight:600;fill:#4ade80;letter-spacing:.02em}
+.n-tag.diy{fill:#a78bfa}
 .node{cursor:pointer}
 .node:hover .n-box{stroke:#5aa9e6;fill:#17222e}
 .node.sel .n-box{stroke:#3b8eea;stroke-width:2.6;fill:#1a2a3b}
@@ -87,6 +89,14 @@ td.g{color:var(--ink2)}
 tr:hover td{background:rgba(255,255,255,.025)}
 .scroll{overflow:auto;max-height:520px;border:1px solid var(--line);border-radius:12px}
 
+.src{display:inline-block;font-size:11.5px;border-radius:999px;padding:1px 8px;white-space:nowrap}
+.src.board{color:#7ee2a8;border:1px solid rgba(34,197,94,.45);background:rgba(34,197,94,.12)}
+.src.buy{color:#9fb3c8;border:1px solid rgba(129,148,168,.35);background:rgba(129,148,168,.08)}
+.src.diy{color:#c4b5fd;border:1px solid rgba(167,139,250,.4);background:rgba(167,139,250,.1)}
+.filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}
+.filters .btn{padding:7px 13px;font-size:13px}
+.fkeys{margin-left:auto;font-size:12px;color:var(--muted)}
+
 .rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
 .rule{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
 .rule .t{font-size:14px;font-weight:620;margin-bottom:5px}
@@ -118,7 +128,7 @@ footer{font-size:13px;color:var(--muted);line-height:1.7;border-top:1px solid va
     <span class="sig"><i></i>信号 / 数据</span>
     <span class="saf"><i></i>安全链</span>
     <span class="mech"><i></i>机械（不经飞控）</span>
-    <span class="hint">点任一硬件看功能、接口与失效后果</span>
+    <span class="hint">点任一硬件看功能与失效；方块右上角绿字「板载」= Cube 自带</span>
   </div>
 
   <div class="card">
@@ -186,11 +196,40 @@ footer{font-size:13px;color:var(--muted);line-height:1.7;border-top:1px solid va
   </div>
 
   <div class="card">
-    <h2>全部硬件 <span class="hint">25 件 · 功能 / 接口 / 电源 / 失效</span></h2>
+    <h2>Cube 自带 <span class="hint">不用另买 · 只有两项传感器</span></h2>
+    <p class="lead">Cube Orange 标准载板买来就带了下列器件；除这些之外，<b>所有传感器和执行器都要单独采购</b>。</p>
+    <div class="rules">
+      <div class="rule">
+        <div class="t">① 板载自带（¥0）</div>
+        <div class="d">3× IMU（ICM-42688-P，三路投票）、2× 气压计（BMP581）、Power1/2 电压电流检测、蜂鸣器、安全开关、microSD 日志。</div>
+        <div class="w">数量固定，不能选配，也不能只买一颗</div>
+      </div>
+      <div class="rule">
+        <div class="t">② 只买一块板</div>
+        <div class="d">Cube Orange 标准载板（<b>不要 Mini</b>）：14 路 PWM、2×CAN、5×UART、I2C、双电源口。</div>
+        <div class="w">接口不算硬件，没有第二次采购</div>
+      </div>
+      <div class="rule">
+        <div class="t">③ 有口无器件</div>
+        <div class="d">空速管、GNSS/罗盘、下视测距、倾转编码器、ESC 遥测、ELRS、433 数传、树莓派：Cube 只给接口，器件全要另买。</div>
+        <div class="w">单价与交期按 §5.3 询价，别按「板上都有」做预算</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>全部硬件 <span class="hint" id="hcount"></span></h2>
+    <div class="filters">
+      <button class="btn on" data-f="all">全部</button>
+      <button class="btn" data-f="buy">只看另购</button>
+      <button class="btn" data-f="board">板载自带</button>
+      <button class="btn" data-f="diy">自制 / 结构</button>
+      <span class="fkeys">板载 = Cube 板上已有；另购 = 下单买；自制 = 自己做</span>
+    </div>
     <div class="scroll">
       <table>
-        <thead><tr><th style="width:14%">件</th><th style="width:24%">功能</th>
-          <th style="width:24%">接口 / 位置</th><th style="width:8%">电源</th><th>失效后果</th></tr></thead>
+        <thead><tr><th style="width:13%">件</th><th style="width:9%">来源</th><th style="width:22%">功能</th>
+          <th style="width:22%">接口 / 位置</th><th style="width:8%">电源</th><th>失效后果</th></tr></thead>
         <tbody id="tbody"></tbody>
       </table>
     </div>
@@ -295,6 +334,11 @@ const E = [
  {f:'rc',to:'man',k:'mech'},
 ];
 
+/* 来源：board = Cube 板上自带，buy = 另购，diy = 自己做 */
+const SRC_OF = {imu:'board', baro:'board', mon:'diy', man:'diy'};
+const SRC_LABEL = {board:'板载自带', buy:'另购', diy:'自制'};
+D.forEach(d => { d.src = SRC_OF[d.id] || 'buy'; });
+
 const BY = {}; D.forEach(d => BY[d.id] = d);
 const svg = document.getElementById('topo');
 const NS = 'http://www.w3.org/2000/svg';
@@ -336,6 +380,11 @@ D.forEach(n => {
   t1.textContent = n.t;
   const t2 = el('text', {x:n.x+11, y:n.y + n.h/2 + 10, class:'n-t2'}, g);
   t2.textContent = n.s;
+  if (n.src !== 'buy'){
+    const tag = el('text', {x:n.x+n.w-9, y:n.y+13, 'text-anchor':'end',
+      class:'n-tag' + (n.src === 'diy' ? ' diy' : '')}, g);
+    tag.textContent = n.src === 'board' ? '板载' : '自制';
+  }
   g.addEventListener('click', () => select(n.id));
   nodeEls[n.id] = g;
 });
@@ -359,7 +408,9 @@ function select(id){
   const n = BY[id];
   document.getElementById('dName').textContent = n.t;
   document.getElementById('dRole').innerHTML = n.role;
-  document.getElementById('dIface').innerHTML = n.iface + '<br><span style="color:#8194a8">电源：' + n.pwr + '</span>';
+  document.getElementById('dIface').innerHTML = n.iface +
+    '<br><span style="color:#8194a8">电源：' + n.pwr + ' · 来源：' +
+    (n.src === 'board' ? 'Cube 板载自带，不用另买' : n.src === 'diy' ? '自制 / 结构件' : '另购') + '</span>';
   document.getElementById('dFail').innerHTML = n.fail;
   const box = document.getElementById('dLinks');
   box.innerHTML = '<span class="chip" data-id="">全部</span>' +
@@ -433,12 +484,30 @@ function clearSel(){
 /* ---------------- 表 ---------------- */
 (function table(){
   const tb = document.getElementById('tbody');
-  tb.innerHTML = D.map(n => `<tr>
-    <td class="n">${n.t}</td>
-    <td class="g">${n.role}</td>
-    <td class="g">${n.iface}</td>
-    <td class="g">${n.pwr}</td>
-    <td class="g">${n.fail}</td></tr>`).join('');
+  let flt = 'all';
+
+  const cnt = k => D.filter(n => n.src === k).length;
+  document.getElementById('hcount').textContent =
+    `${D.length} 件 · 板载 ${cnt('board')} · 另购 ${cnt('buy')} · 自制 ${cnt('diy')}`;
+
+  function draw(){
+    tb.innerHTML = D.filter(n => flt === 'all' || n.src === flt).map(n => `<tr>
+      <td class="n">${n.t}</td>
+      <td><span class="src ${n.src}">${SRC_LABEL[n.src]}</span></td>
+      <td class="g">${n.role}</td>
+      <td class="g">${n.iface}</td>
+      <td class="g">${n.pwr}</td>
+      <td class="g">${n.fail}</td></tr>`).join('');
+  }
+
+  document.querySelectorAll('.filters .btn').forEach(b => {
+    b.onclick = () => {
+      flt = b.getAttribute('data-f');
+      document.querySelectorAll('.filters .btn').forEach(x => x.classList.toggle('on', x === b));
+      draw();
+    };
+  });
+  draw();
 })();
 
 /* 默认选中主飞控，进页面就有内容 */
