@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>V10 飞控模拟</title>
+<style>
+:root{
+  color-scheme:dark;
+  --page:#0a0f15; --surface:#121820; --surface2:#172029;
+  --ink:#eef2f6; --ink2:#b9c6d4; --muted:#8194a8;
+  --line:rgba(255,255,255,.10);
+  --accent:#3b8eea; --good:#22c55e; --warn:#f2a93b; --bad:#e05252;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--page);color:var(--ink);
+  font:14px/1.45 -apple-system,BlinkMacSystemFont,"PingFang SC","Segoe UI",sans-serif;
+  -webkit-tap-highlight-color:transparent;overflow:hidden}
+body{display:flex;flex-direction:column}
+a{color:var(--accent);text-decoration:none}
+header{display:flex;align-items:center;gap:14px;padding:9px 16px;
+  border-bottom:1px solid var(--line);background:#0d131a;flex:0 0 auto}
+header h1{font-size:18px;margin:0;font-weight:650;letter-spacing:.01em;line-height:1.25}
+header .sub{font-size:12px;color:var(--muted);line-height:1.35;margin-top:2px}
+header .right{margin-left:auto;display:flex;gap:8px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink2);
+  border-radius:9px;padding:8px 13px;font-size:13px;cursor:pointer;white-space:nowrap}
+.btn:hover{color:var(--ink)}
+.btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+
+main{display:grid;grid-template-columns:minmax(300px,36%) 1fr;gap:10px;
+  padding:10px;flex:1 1 auto;min-height:0}
+/* 左：飞机模拟（缩小） */
+.stage{position:relative;background:#070b10;border:1px solid var(--line);
+  border-radius:12px;overflow:hidden;min-height:0}
+#c{display:block;width:100%;height:100%}
+.hud{position:absolute;left:8px;top:8px;max-width:calc(100% - 16px);font-size:12px;
+  color:var(--ink2);background:rgba(8,12,17,.66);border:1px solid var(--line);
+  border-radius:8px;padding:5px 8px;line-height:1.45;pointer-events:none}
+.hud b{color:#fff;font-weight:600}
+.stagebar{position:absolute;left:8px;right:8px;bottom:8px;display:flex;gap:6px}
+.stagebar .btn{padding:6px 10px;font-size:12px;background:rgba(12,18,25,.8)}
+.phase{position:absolute;right:8px;bottom:46px;font-size:13px;font-weight:600;
+  color:#cfe3ff;background:rgba(20,40,70,.8);border:1px solid rgba(59,142,234,.45);
+  border-radius:999px;padding:4px 11px}
+/* 右：参数（大份额，字号 ≥12） */
+.panel{display:flex;flex-direction:column;gap:10px;min-height:0;overflow:auto;padding-right:2px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:12px 14px 11px;position:relative;overflow:hidden;min-width:0}
+.tile::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--accent)}
+.tile.good::before{background:var(--good)}
+.tile.warn::before{background:var(--warn)}
+.tile .num{font-size:clamp(24px,2.8vw,34px);font-weight:650;line-height:1.05;
+  letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tile .num small{font-size:13px;font-weight:500;color:var(--muted);margin-left:3px}
+.tile .lab{font-size:13px;color:var(--ink2);margin-top:4px}
+.tile .sub{font-size:12px;color:var(--muted);margin-top:1px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.card h2{font-size:14px;font-weight:600;margin:0 0 2px;display:flex;align-items:baseline;gap:8px}
+.card h2 .hint{font-size:12px;font-weight:400;color:var(--muted)}
+.card .lead{font-size:12px;color:var(--muted);margin:0 0 10px}
+.row{margin:9px 0}
+.row:first-of-type{margin-top:0}
+.rowhead{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
+.rowhead .name{font-size:13px;color:var(--ink2)}
+.rowhead .val{margin-left:auto;font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.rowhead .val b{color:var(--ink);font-weight:600;font-size:15px}
+.bar{height:9px;background:#222a33;border-radius:5px;overflow:hidden}
+.fill{height:100%;background:var(--accent);border-radius:5px;transition:width .12s linear}
+.fill.good{background:var(--good)} .fill.warn{background:var(--warn)} .fill.bad{background:var(--bad)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;flex:1 1 auto;min-height:0}
+.kv{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  font-size:13px;color:var(--ink2);padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.kv:last-child{border-bottom:0}
+.kv b{color:var(--ink);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.kv b small{font-size:12px;color:var(--muted);font-weight:500;margin-left:2px}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.motor{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+.motor .mn{font-size:12px;color:var(--muted)}
+.motor .mv{font-size:21px;font-weight:650;font-variant-numeric:tabular-nums;margin-top:2px}
+.motor .mv small{font-size:12px;color:var(--muted);font-weight:500}
+.log{font-size:13px;color:var(--ink2);line-height:1.7}
+.log .t{color:var(--muted);font-variant-numeric:tabular-nums;margin-right:8px}
+.log .w{color:var(--warn)} .log .b{color:var(--bad)} .log .g{color:var(--good)}
+.state{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);
+  border-radius:999px;padding:5px 11px;font-size:12px;color:var(--ink2)}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.chip.good .dot{background:var(--good)} .chip.warn .dot{background:var(--warn)}
+.chip.bad .dot{background:var(--bad)}
+@media (max-width:1050px){
+  main{grid-template-columns:minmax(240px,34%) 1fr}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .grid3{grid-template-columns:1fr 1fr}
+}
+@media (max-width:760px){
+  html,body{overflow:auto}
+  main{grid-template-columns:1fr;height:auto}
+  .stage{height:44vh}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .tri{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>V10 飞控模拟</h1>
+    <div class="sub">1130za · MTOW 198.57 kg · 演示用飞行动力学，不是适航验证</div>
+  </div>
+  <div class="right">
+    <a class="btn" href="/fc/">飞控进展</a>
+    <a class="btn" href="/car">车机入口</a>
+    <button class="btn" id="pause">暂停</button>
+  </div>
+</header>
+
+<main>
+  <section class="stage">
+    <canvas id="c"></canvas>
+    <div class="hud" id="hud">追尾视角 · 自动航线</div>
+    <div class="phase" id="phase">起飞爬升</div>
+    <div class="stagebar">
+      <button class="btn on" id="camChase">追尾</button>
+      <button class="btn" id="camSide">侧视</button>
+      <button class="btn" id="camTop">俯视</button>
+      <button class="btn" id="reset">重置</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="kpis">
+      <div class="tile"><div class="num" id="kIas">24.0<small>m/s</small></div>
+        <div class="lab">空速 IAS</div><div class="sub" id="kIasSub">Vs 18.7 · 失速余量 5.3</div></div>
+      <div class="tile"><div class="num" id="kAlt">0<small>m</small></div>
+        <div class="lab">高度 ALT</div><div class="sub" id="kAltSub">起落架离地</div></div>
+      <div class="tile"><div class="num" id="kVs">0.0<small>m/s</small></div>
+        <div class="lab">升降率 VS</div><div class="sub" id="kVsSub">爬升</div></div>
+      <div class="tile" id="tileNz"><div class="num" id="kNz">1.00<small>g</small></div>
+        <div class="lab">过载 n</div><div class="sub" id="kNzSub">限制 +4 / −2 g</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h2>姿态 <span class="hint">机体轴</span></h2>
+        <div class="row"><div class="rowhead"><span class="name">俯仰 θ</span>
+          <span class="val"><b id="vPitch">0.0</b> °</span></div>
+          <div class="bar"><div class="fill" id="bPitch" style="width:50%"></div></div></div>
+        <div class="row"><div class="rowhead"><span class="name">滚转 φ</span>
+          <span class="val"><b id="vRoll">0.0</b> °</span></div>
+          <div class="bar"><div class="fill" id="bRoll" style="width:50%"></div></div></div>
+        <div class="row"><div class="rowhead"><span class="name">航向 ψ</span>
+          <span class="val"><b id="vHdg">000</b> °</span></div>
+          <div class="bar"><div class="fill" id="bHdg" style="width:0%"></div></div></div>
+        <div class="row"><div class="rowhead"><span class="name">迎角 α</span>
+          <span class="val"><b id="vAoa">4.0</b> °</span></div>
+          <div class="bar"><div class="fill" id="bAoa" style="width:30%"></div></div></div>
+      </div>
+
+      <div class="card">
+        <h2>动力 <span class="hint">三桨 / 电池</span></h2>
+        <div class="tri" style="margin-bottom:10px">
+          <div class="motor"><div class="mn">前桨 Ø1.20</div>
+            <div class="mv" id="mNose">0<small> rpm</small></div></div>
+          <div class="motor"><div class="mn">左翼桨 Ø0.61</div>
+            <div class="mv" id="mLeft">0<small> rpm</small></div></div>
+          <div class="motor"><div class="mn">右翼桨 Ø0.61</div>
+            <div class="mv" id="mRight">0<small> rpm</small></div></div>
+        </div>
+        <div class="row"><div class="rowhead"><span class="name">油门</span>
+          <span class="val"><b id="vThr">0</b> %</span></div>
+          <div class="bar"><div class="fill" id="bThr" style="width:0%"></div></div></div>
+        <div class="row"><div class="rowhead"><span class="name">电功率</span>
+          <span class="val"><b id="vPwr">0.0</b> kW</span></div>
+          <div class="bar"><div class="fill" id="bPwr" style="width:0%"></div></div></div>
+        <div class="row"><div class="rowhead"><span class="name">电池 SOC</span>
+          <span class="val"><b id="vSoc">100</b> % · <span id="vVolt">50.4</span> V</span></div>
+          <div class="bar"><div class="fill good" id="bSoc" style="width:100%"></div></div></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h2>操纵面 <span class="hint">指令 / 实际</span></h2>
+        <div class="row"><div class="rowhead"><span class="name">升降舵</span>
+          <span class="val"><b id="vEle">0</b> %</span></div>
+          <div class="bar"><div class="fill" id="bEle" style="width:50%"></div></div></div>
+        <div class="row"><div class="rowhead"><span class="name">副翼</span>
+          <span class="val"><b id="vAil">0</b> %</span></div>
+          <div class="bar"><div class="fill" id="bAil" style="width:50%"></div></div></div>
+        <div class="row"><div class="rowhead"><span class="name">方向舵</span>
+          <span class="val"><b id="vRud">0</b> %</span></div>
+          <div class="bar"><div class="fill" id="bRud" style="width:50%"></div></div></div>
+        <div class="row"><div class="rowhead"><span class="name">翼桨倾转</span>
+          <span class="val"><b id="vTilt">0</b> °</span></div>
+          <div class="bar"><div class="fill" id="bTilt" style="width:0%"></div></div></div>
+      </div>
+
+      <div class="card">
+        <h2>状态与事件 <span class="hint">自动航线演示</span></h2>
+        <div class="state" style="margin-bottom:10px">
+          <span class="chip good"><span class="dot"></span>飞控 AUTO</span>
+          <span class="chip" id="chipStall"><span class="dot"></span>失速保护待命</span>
+          <span class="chip" id="chipBatt"><span class="dot"></span>电池正常</span>
+        </div>
+        <div class="log" id="log"></div>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="card">
+        <h2>气动 <span class="hint">实时 / 无量纲</span></h2>
+        <div class="kv"><span>升力系数 CL</span><b id="vCL">0.00</b></div>
+        <div class="kv"><span>阻力系数 CD</span><b id="vCD">0.000</b></div>
+        <div class="kv"><span>升阻比 L/D</span><b id="vLD">0.0</b></div>
+        <div class="kv"><span>升力</span><b id="vLift">0<small> N</small></b></div>
+        <div class="kv"><span>推重比 T/W</span><b id="vTW">0.00</b></div>
+        <div class="kv"><span>动压 q</span><b id="vQ">0<small> Pa</small></b></div>
+      </div>
+
+      <div class="card">
+        <h2>任务与能量 <span class="hint">自动航线</span></h2>
+        <div class="kv"><span>已飞航程</span><b id="vDist">0.00<small> km</small></b></div>
+        <div class="kv"><span>剩余续航</span><b id="vEndur">0<small> min</small></b></div>
+        <div class="kv"><span>当前功率</span><b id="vPwr2">0.0<small> kW</small></b></div>
+        <div class="kv"><span>单耗</span><b id="vSpc">0<small> Wh/km</small></b></div>
+        <div class="kv"><span>航向偏差</span><b id="vHdgErr">0<small> °</small></b></div>
+        <div class="kv"><span>阶段计时</span><b id="vPhT">0<small> s</small></b></div>
+      </div>
+
+      <div class="card">
+        <h2>模型口径 <span class="hint">S1-06 v3 / D27=B</span></h2>
+        <div class="kv"><span>MTOW</span><b>198.57<small> kg</small></b></div>
+        <div class="kv"><span>参考面积 S</span><b>7.149<small> m²</small></b></div>
+        <div class="kv"><span>展弦比 AR</span><b>3.87</b></div>
+        <div class="kv"><span>CLmax（三维）</span><b>1.266</b></div>
+        <div class="kv"><span>失速速度 Vs</span><b>18.7<small> m/s</small></b></div>
+        <div class="kv"><span>静稳定裕度 SM</span><b>20.5<small> %</small></b></div>
+        <div class="kv"><span>电池 24S</span><b>6.11<small> kWh / 可用 4.89</small></b></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+"use strict";
+/* ---------- 常量（1130za / S1-06 v3 口径） ---------- */
+const M = 198.57, G = 9.80665, RHO = 1.225;
+const S = 7.1488, AR = 3.8702, CL0 = 0.4376, CLA = 0.06935; // per deg
+const CLMAX = 1.266, VS = 18.74, A_STALL = 11.9;
+const CD0 = 0.080;                 // 标定到巡航 26 m/s / 12.2 kW（24S 包口径）
+const BATT_KWH = 4.891;            // 24S 6.114 kWh 总 / 4.891 可用
+
+/* ---------- 仿真状态 ---------- */
+let st, paused = false, cam = "chase", last = 0, simT = 0, phaseT = 0, phaseIdx = 0;
+let logLines = [];
+const PHASES = [
+  {name:"起飞爬升", alt:120, V:23.5, hdg:0,   dur:38, note:"全油门爬升"},
+  {name:"巡航",     alt:140, V:26.0, hdg:90,  dur:42, note:"高度保持"},
+  {name:"转弯",     alt:140, V:25.0, hdg:180, dur:34, note:"右盘旋"},
+  {name:"进近",     alt:55,  V:21.5, hdg:270, dur:40, note:"下降至 55 m"},
+  {name:"复飞",     alt:120, V:24.0, hdg:0,   dur:30, note:"拉起复飞"},
+];
+
+function reset(){
+  st = {V:24, gam:0, psi:0, phi:0, th:0, alt:30, x:0, y:0,
+        thr:0.55, soc:1, aoa:4, nz:1, ele:0, ail:0, rud:0, tilt:0,
+        pwr:0, stall:false, dist:0, q:0, cl:CL0, cd:0.04, hdgErr:0};
+  simT = 0; phaseT = 0; phaseIdx = 0; logLines = [];
+  log("开始自动航线演示", "g");
+}
+
+function log(msg, cls=""){
+  const t = Math.floor(simT);
+  logLines.unshift(`<div><span class="t">${String(Math.floor(t/60)).padStart(2,"0")}:${String(t%60).padStart(2,"0")}</span><span class="${cls}">${msg}</span></div>`);
+  logLines = logLines.slice(0, 6);
+  document.getElementById("log").innerHTML = logLines.join("");
+}
+
+/* ---------- 飞行模型（点质量 + 姿态跟随） ---------- */
+function step(dt){
+  const ph = PHASES[phaseIdx];
+  phaseT += dt; simT += dt;
+  if (phaseT > ph.dur){
+    phaseT = 0; phaseIdx = (phaseIdx + 1) % PHASES.length;
+    const np = PHASES[phaseIdx];
+    document.getElementById("phase").textContent = np.name;
+    log(`阶段切换 → ${np.name}：${np.note}`);
+  }
+
+  // 航向误差 → 滚转指令
+  let eh = ((ph.hdg - st.psi + 540) % 360) - 180;
+  const phiCmd = Math.max(-32, Math.min(32, eh * 0.55));
+  st.phi += Math.max(-28*dt, Math.min(28*dt, phiCmd - st.phi));
+
+  // 高度误差 → 航迹角
+  const gamCmd = Math.max(-7, Math.min(8, (ph.alt - st.alt) * 0.035));
+  st.gam += Math.max(-2.2*dt, Math.min(2.2*dt, gamCmd - st.gam));
+
+  // 速度保持 → 油门
+  const thrCmd = Math.max(0, Math.min(1, st.thr + (ph.V - st.V) * 0.045));
+  st.thr += Math.max(-0.5*dt, Math.min(0.5*dt, thrCmd - st.thr));
+
+  // 升力/迎角
+  const q = 0.5 * RHO * st.V * st.V;
+  const clNeed = M * G / (q * S * Math.max(0.35, Math.cos(st.phi * Math.PI/180)));
+  st.aoa = (clNeed - CL0) / CLA;
+  const cl = Math.min(CLMAX, CL0 + CLA * st.aoa);
+  st.nz = cl * q * S / (M * G);
+  st.stall = st.aoa > A_STALL;
+
+  // 阻力与推力
+  const cdi = cl*cl / (Math.PI * AR * 1.04);
+  const cd = CD0 + cdi;
+  st.q = q; st.cl = cl; st.cd = cd; st.hdgErr = eh;
+  const D = q * S * cd;
+  const Tmax = 965 + 2 * 210;                   // 静推力口径
+  const T = st.thr * Tmax;
+  const acc = (T*Math.cos(st.gam*Math.PI/180) - D - M*G*Math.sin(st.gam*Math.PI/180)) / M
+              - (st.stall ? 3.2 : 0);
+  st.V = Math.max(12, st.V + acc * dt);
+
+  // 运动学
+  const rad = Math.PI/180;
+  st.alt += st.V * Math.sin(st.gam*rad) * dt;
+  if (st.alt < 0){ st.alt = 0; st.gam = Math.max(st.gam, 0); }
+  st.psi = (st.psi + (G * Math.tan(st.phi*rad) / Math.max(12, st.V)) * 180/Math.PI * dt + 360) % 360;
+  const vh = st.V * Math.cos(st.gam*rad);
+  st.x += vh * Math.cos(st.psi*rad) * dt;
+  st.y += vh * Math.sin(st.psi*rad) * dt;
+  st.dist += st.V * dt;
+
+  // 俯仰角
+  st.th = st.gam + st.aoa * 0.72 + (st.stall ? 2.5 : 0);
+
+  // 舵面（显示用）
+  st.ele = Math.max(-100, Math.min(100, (st.aoa - 4) * 9 + (st.thr - 0.6) * 20));
+  st.ail = st.phi * 2.6;
+  st.rud = Math.max(-100, Math.min(100, -st.phi * 0.9 + eh * 0.35));
+  st.tilt = Math.max(0, Math.min(30, (1 - st.V/26) * 30));
+
+  // 功率/电池
+  const eta = 0.72;
+  st.pwr = T * st.V / eta / 1000 + 0.9;
+  st.soc = Math.max(0, st.soc - st.pwr * dt / 3600 / BATT_KWH);
+}
+
+/* ---------- 3D 渲染 ---------- */
+const cv = document.getElementById("c"), ctx = cv.getContext("2d");
+let W = 0, H = 0, DPR = 1;
+function resize(){
+  const r = cv.parentElement.getBoundingClientRect();
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = r.width; H = r.height;
+  cv.width = W * DPR; cv.height = H * DPR;
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+window.addEventListener("resize", resize);
+
+// body -> world：Rz(yaw)·Ry(pitch)·Rx(roll)，z 上 x 前 y 右
+function rotMat(yaw, pitch, roll){
+  const cy=Math.cos(yaw), sy=Math.sin(yaw);
+  const cp=Math.cos(pitch), sp=Math.sin(pitch);
+  const cr=Math.cos(roll), sr=Math.sin(roll);
+  return [
+    [cy*cp, cy*sp*sr - sy*cr, cy*sp*cr + sy*sr],
+    [sy*cp, sy*sp*sr + cy*cr, sy*sp*cr - cy*sr],
+    [-sp,   cp*sr,            cp*cr],
+  ];
+}
+// world -> body：Rᵀ
+function worldToBody(p, R){
+  return [
+    R[0][0]*p[0] + R[1][0]*p[1] + R[2][0]*p[2],
+    R[0][1]*p[0] + R[1][1]*p[1] + R[2][1]*p[2],
+    R[0][2]*p[0] + R[1][2]*p[1] + R[2][2]*p[2],
+  ];
+}
+
+function project(pb, camPos, camDir){
+  // body 坐标下的点 -> 屏幕
+  const d = [pb[0]-camPos[0], pb[1]-camPos[1], pb[2]-camPos[2]];
+  const f = [camDir[0], camDir[1], camDir[2]];
+  const xc = d[0]*f[0] + d[1]*f[1] + d[2]*f[2];
+  if (xc < 0.4) return null;
+  // right/up 基
+  const up0 = [0,0,1];
+  let rx = f[1]*up0[2]-f[2]*up0[1], ry = f[2]*up0[0]-f[0]*up0[2], rz = f[0]*up0[1]-f[1]*up0[0];
+  const rn = Math.hypot(rx,ry,rz) || 1; rx/=rn; ry/=rn; rz/=rn;
+  const ux = ry*f[2]-rz*f[1], uy = rz*f[0]-rx*f[2], uz = rx*f[1]-ry*f[0];
+  const yc = d[0]*rx + d[1]*ry + d[2]*rz;
+  const zc = d[0]*ux + d[1]*uy + d[2]*uz;
+  const focal = Math.min(W, H) * 1.15;
+  return [W/2 + focal*yc/xc, H*0.5 - focal*zc/xc, xc];
+}
+
+const CAM = {
+  chase:{pos:[-8.2, 0, 2.6], look:[1.2, 0, 0.35], fov:1.15},
+  side: {pos:[-1.0, -9.5, 1.8], look:[0.6, 0, 0.2], fov:1.15},
+  top:  {pos:[-0.5, 0, 9.5], look:[0.8, 0, 0], fov:1.5},
+};
+
+// 机体外形（x 前，y 右，z 上）
+const AIR = {
+  fus:  [[-0.5,-0.18,-0.16],[2.3,-0.26,-0.20],[2.3,0.26,-0.20],[-0.5,0.18,-0.16],
+         [-0.5,-0.18,0.30],[2.3,-0.26,0.16],[2.3,0.26,0.16],[-0.5,0.18,0.30]],
+  up:   [[0.55,-3.0,1.12],[1.55,-3.0,1.12],[1.55,3.0,1.12],[0.55,3.0,1.12]],
+  lo:   [[0.15,-1.0,-0.02],[1.10,-1.0,-0.02],[1.10,1.0,-0.02],[0.15,1.0,-0.02]],
+  ht:   [[3.15,-1.05,0.46],[3.77,-1.05,0.46],[3.77,1.05,0.46],[3.15,1.05,0.46]],
+  fin:  [[3.30,0,0.46],[3.95,0,1.42],[3.72,0,1.42],[3.30,0,0.46]],
+};
+const FACES = [
+  {p:[0,1,2,3], c:"#2b3a49"}, {p:[4,5,6,7], c:"#3a4d60"},
+  {p:[0,1,5,4], c:"#33455a"}, {p:[2,3,7,6], c:"#26343f"},
+  {p:[1,2,6,5], c:"#3e5670"}, {p:[0,3,7,4], c:"#22303b"},
+];
+function drawScene(){
+  const ph = Math.PI/180;
+  const yaw = st.psi*ph, pitch = st.th*ph, roll = st.phi*ph;
+  const c0 = CAM[cam];
+  const camPos = c0.pos, look = c0.look;
+  let f = [look[0]-camPos[0], look[1]-camPos[1], look[2]-camPos[2]];
+  const fl = Math.hypot(f[0],f[1],f[2]); f = [f[0]/fl, f[1]/fl, f[2]/fl];
+
+  // 天空
+  const g = ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0, "#0b1520"); g.addColorStop(0.55, "#13314a"); g.addColorStop(1, "#1d4a63");
+  ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+  // 世界 → 机体（Rᵀ）
+  const RM = rotMat(yaw, pitch, roll);
+  const alt = Math.max(0, st.alt);
+  const bodyOf = (wx, wy, wz) => worldToBody([wx - st.x, wy - st.y, wz - st.alt], RM);
+
+  // 地平线：两个零相对高度、相距 30 km 的方向点
+  const a1 = (st.psi - 85) * ph, a2 = (st.psi + 85) * ph, DH = 30000;
+  const h1 = project(worldToBody([DH*Math.cos(a1), DH*Math.sin(a1), 0], RM), camPos, f);
+  const h2 = project(worldToBody([DH*Math.cos(a2), DH*Math.sin(a2), 0], RM), camPos, f);
+  if (h1 && h2){
+    const dx = h2[0]-h1[0], dy = h2[1]-h1[1], L = Math.hypot(dx,dy) || 1;
+    const ux = dx/L, uy = dy/L;
+    let nx = -uy, ny = ux;
+    if (ny < 0){ nx = -nx; ny = -ny; }
+    const K = Math.max(W, H) * 2;
+    ctx.beginPath();
+    ctx.moveTo(h1[0]-ux*K, h1[1]-uy*K);
+    ctx.lineTo(h2[0]+ux*K, h2[1]+uy*K);
+    ctx.lineTo(h2[0]+ux*K+nx*K*2, h2[1]+uy*K+ny*K*2);
+    ctx.lineTo(h1[0]-ux*K+nx*K*2, h1[1]-uy*K+ny*K*2);
+    ctx.closePath();
+    ctx.fillStyle = "#0d1a24"; ctx.fill();
+  }
+
+  // 地面网格（按世界坐标对齐，随航迹滑动）
+  const stepM = alt > 300 ? 100 : alt > 120 ? 50 : 25;
+  const N = 22;
+  const bx0 = Math.round(st.x/stepM)*stepM, by0 = Math.round(st.y/stepM)*stepM;
+  ctx.lineWidth = 1;
+  for (let i = -N; i <= N; i++){
+    for (const along of [0, 1]){
+      let prev = null;
+      for (let t = -N; t <= N; t += 1){
+        const wx = along ? bx0 + t*stepM : bx0 + i*stepM;
+        const wy = along ? by0 + i*stepM : by0 + t*stepM;
+        const s = project(bodyOf(wx, wy, 0), camPos, f);
+        if (prev && s){
+          const fade = Math.max(0.04, Math.min(0.32, 0.34 - s[2]/2400));
+          ctx.strokeStyle = `rgba(120,180,220,${fade})`;
+          ctx.beginPath(); ctx.moveTo(prev[0], prev[1]); ctx.lineTo(s[0], s[1]); ctx.stroke();
+        }
+        prev = s;
+      }
+    }
+  }
+
+  // 飞机面片（机体坐标直接投影）
+  const faces = [];
+  for (const fc of FACES){
+    const pts = fc.p.map(i => AIR.fus[i]);
+    const s = pts.map(p => project(p, camPos, f));
+    if (s.every(v=>v)) faces.push({s, c:fc.c, d: s.reduce((a,v)=>a+v[2],0)/4});
+  }
+  const addFace = (pts, c)=>{
+    const s = pts.map(p => project(p, camPos, f));
+    if (s.every(v=>v)) faces.push({s, c, d: s.reduce((a,v)=>a+v[2],0)/pts.length});
+  };
+  addFace(AIR.up, "#2073b8"); addFace(AIR.lo, "#1d5f97");
+  addFace(AIR.ht, "#2a7fc4"); addFace(AIR.fin, "#2f6f9f");
+  faces.sort((a,b)=>b.d-a.d);
+  for (const fa of faces){
+    ctx.beginPath();
+    ctx.moveTo(fa.s[0][0], fa.s[0][1]);
+    for (let i=1;i<fa.s.length;i++) ctx.lineTo(fa.s[i][0], fa.s[i][1]);
+    ctx.closePath();
+    ctx.fillStyle = fa.c; ctx.fill();
+    ctx.strokeStyle = "rgba(180,215,240,.35)"; ctx.stroke();
+  }
+
+  // 桨盘（投影半径随距离变化）
+  const focal = Math.min(W, H) * 1.15;
+  for (const [px, py, pz, r] of [[-0.02, 0, 0.49, 0.60], [0.42, -1.65, 1.30, 0.31], [0.42, 1.65, 1.30, 0.31]]){
+    const s = project([px, py, pz], camPos, f);
+    if (!s) continue;
+    const rr = Math.max(3, Math.min(Math.max(W,H), focal * r / s[2]));
+    ctx.beginPath();
+    ctx.arc(s[0], s[1], rr, 0, Math.PI*2);
+    ctx.strokeStyle = `rgba(150,220,255,${0.25 + 0.35*st.thr})`;
+    ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = `rgba(120,190,255,${0.05 + 0.10*st.thr})`;
+    ctx.fill();
+  }
+
+  // 速度矢量箭头
+  const vs = project([-0.5, 0, 0], camPos, f);
+  if (vs){
+    ctx.strokeStyle = "rgba(120,255,180,.5)"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(vs[0], vs[1]); ctx.lineTo(vs[0]-10, vs[1]+26); ctx.stroke();
+  }
+}
+
+/* ---------- 面板刷新 ---------- */
+function fmt(v, d=1){ return v.toFixed(d); }
+function updateUI(){
+  const ias = st.V;
+  document.getElementById("kIas").innerHTML = `${fmt(ias)}<small>m/s</small>`;
+  document.getElementById("kIasSub").textContent = `Vs ${VS.toFixed(1)} · 失速余量 ${(ias-VS).toFixed(1)} m/s`;
+  document.getElementById("kAlt").innerHTML = `${st.alt.toFixed(0)}<small>m</small>`;
+  document.getElementById("kAltSub").textContent = st.gam > 0.3 ? "爬升" : st.gam < -0.3 ? "下降" : "平飞";
+  const vs = st.V * Math.sin(st.gam*Math.PI/180);
+  document.getElementById("kVs").innerHTML = `${vs>=0?"+":""}${fmt(vs)}<small>m/s</small>`;
+  document.getElementById("kVsSub").textContent = `航迹角 ${fmt(st.gam)}°`;
+  document.getElementById("kNz").innerHTML = `${fmt(st.nz,2)}<small>g</small>`;
+  document.getElementById("tileNz").className = "tile " + (st.nz>4||st.nz<0 ? "warn" : "good");
+
+  document.getElementById("vPitch").textContent = fmt(st.th);
+  document.getElementById("vRoll").textContent = fmt(st.phi);
+  document.getElementById("vHdg").textContent = String(Math.round(st.psi)).padStart(3,"0");
+  document.getElementById("vAoa").textContent = fmt(st.aoa);
+  document.getElementById("bPitch").style.width = Math.max(2,Math.min(100, 50 + st.th*1.6)) + "%";
+  document.getElementById("bRoll").style.width = Math.max(2,Math.min(100, 50 + st.phi*1.5)) + "%";
+  document.getElementById("bHdg").style.width = (st.psi/360*100) + "%";
+  const ba = document.getElementById("bAoa");
+  ba.style.width = Math.max(3, Math.min(100, st.aoa/A_STALL*100)) + "%";
+  ba.className = "fill " + (st.aoa > A_STALL*0.9 ? "bad" : st.aoa > A_STALL*0.75 ? "warn" : "good");
+
+  const Tmax = 965 + 2*210, T = st.thr*Tmax;
+  document.getElementById("mNose").innerHTML  = `${Math.round(6000*Math.sqrt(T*0.6/965))}<small> rpm</small>`;
+  document.getElementById("mLeft").innerHTML  = `${Math.round(9000*Math.sqrt(T*0.2/210))}<small> rpm</small>`;
+  document.getElementById("mRight").innerHTML = `${Math.round(9000*Math.sqrt(T*0.2/210))}<small> rpm</small>`;
+  document.getElementById("vThr").textContent = Math.round(st.thr*100);
+  document.getElementById("bThr").style.width = (st.thr*100) + "%";
+  document.getElementById("vPwr").textContent = fmt(st.pwr);
+  document.getElementById("bPwr").style.width = Math.min(100, st.pwr/30*100) + "%";
+  document.getElementById("vSoc").textContent = Math.round(st.soc*100);
+  document.getElementById("vVolt").textContent = fmt(79.2 + 21.6*st.soc, 1);
+  const bs = document.getElementById("bSoc");
+  bs.style.width = (st.soc*100) + "%";
+  bs.className = "fill " + (st.soc < 0.15 ? "bad" : st.soc < 0.3 ? "warn" : "good");
+
+  document.getElementById("vEle").textContent = Math.round(st.ele);
+  document.getElementById("vAil").textContent = Math.round(st.ail);
+  document.getElementById("vRud").textContent = Math.round(st.rud);
+  document.getElementById("vTilt").textContent = Math.round(st.tilt);
+  document.getElementById("bEle").style.width = Math.max(2,Math.min(100, 50 + st.ele*0.45)) + "%";
+  document.getElementById("bAil").style.width = Math.max(2,Math.min(100, 50 + st.ail*0.45)) + "%";
+  document.getElementById("bRud").style.width = Math.max(2,Math.min(100, 50 + st.rud*0.45)) + "%";
+  document.getElementById("bTilt").style.width = (st.tilt/30*100) + "%";
+
+  const cs = document.getElementById("chipStall");
+  cs.className = "chip " + (st.stall ? "bad" : "good");
+  cs.querySelector(".dot") && (cs.querySelector(".dot").style.background = st.stall ? "var(--bad)" : "var(--good)");
+  cs.childNodes[1].textContent = st.stall ? "失速告警" : "失速保护待命";
+  const cb = document.getElementById("chipBatt");
+  cb.className = "chip " + (st.soc < 0.15 ? "bad" : st.soc < 0.3 ? "warn" : "good");
+  cb.childNodes[1].textContent = st.soc < 0.15 ? "电量低" : st.soc < 0.3 ? "电量注意" : "电池正常";
+
+  const Tnow = st.thr * Tmax;
+  document.getElementById("vCL").textContent = st.cl.toFixed(3);
+  document.getElementById("vCD").textContent = st.cd.toFixed(3);
+  document.getElementById("vLD").textContent = (st.cl/st.cd).toFixed(1);
+  document.getElementById("vLift").innerHTML = `${Math.round(st.cl*st.q*S)}<small> N</small>`;
+  document.getElementById("vTW").textContent = (Tnow/(M*G)).toFixed(2);
+  document.getElementById("vQ").innerHTML = `${Math.round(st.q)}<small> Pa</small>`;
+  document.getElementById("vDist").innerHTML = `${(st.dist/1000).toFixed(2)}<small> km</small>`;
+  const endur = st.pwr > 0.1 ? st.soc * BATT_KWH * 60 / st.pwr : 0;
+  document.getElementById("vEndur").innerHTML = `${Math.round(endur)}<small> min</small>`;
+  document.getElementById("vPwr2").innerHTML = `${st.pwr.toFixed(1)}<small> kW</small>`;
+  document.getElementById("vSpc").innerHTML = `${Math.round(st.pwr*277.8/Math.max(10,st.V))}<small> Wh/km</small>`;
+  document.getElementById("vHdgErr").innerHTML = `${st.hdgErr>=0?"+":""}${st.hdgErr.toFixed(1)}<small> °</small>`;
+  document.getElementById("vPhT").innerHTML = `${Math.round(phaseT)}<small> s</small>`;
+
+  document.getElementById("hud").innerHTML =
+    `${cam==="chase"?"追尾":cam==="side"?"侧视":"俯视"}视角 · ${PHASES[phaseIdx].name} · 航程 ${(st.dist/1000).toFixed(2)} km`;
+}
+
+/* ---------- 主循环 ---------- */
+function frame(t){
+  if (!last) last = t;
+  let dt = Math.min(0.05, (t - last)/1000); last = t;
+  if (!paused){
+    let sub = dt;
+    while (sub > 0){ const h = Math.min(0.02, sub); step(h); sub -= h; }
+    if (stallLogged !== st.stall){
+      if (st.stall) log("迎角超限：失速保护介入", "b");
+      else log("迎角恢复", "g");
+      stallLogged = st.stall;
+    }
+  }
+  drawScene(); updateUI();
+  requestAnimationFrame(frame);
+}
+let stallLogged = false;
+
+/* ---------- 交互 ---------- */
+document.getElementById("pause").onclick = e => {
+  paused = !paused;
+  e.target.classList.toggle("on", paused);
+  e.target.textContent = paused ? "继续" : "暂停";
+};
+document.getElementById("reset").onclick = ()=>{ reset(); log("重置演示", "g"); };
+function setCam(c, id){
+  cam = c;
+  ["camChase","camSide","camTop"].forEach(k=>
+    document.getElementById(k).classList.toggle("on", k===id));
+}
+document.getElementById("camChase").onclick = ()=>setCam("chase","camChase");
+document.getElementById("camSide").onclick  = ()=>setCam("side","camSide");
+document.getElementById("camTop").onclick   = ()=>setCam("top","camTop");
+
+resize(); reset();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
