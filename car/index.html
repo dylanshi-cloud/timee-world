@@ -23,6 +23,7 @@
        autocomplete="off" spellcheck="false" placeholder="令牌">
 <div class="err" id="err"></div>
 <button id="go">进入终端</button>
+<button class="ghost" id="model" style="display:none">看 3D 模型</button>
 <button class="ghost" id="forget" style="display:none">清除本机保存的令牌</button>
 <script>
 const TUNNEL = "https://cherry-cardiovascular-metropolitan-genre.trycloudflare.com";
@@ -40,6 +41,9 @@ if(saved){
   document.getElementById("hint").textContent = "已记住令牌";
   tok.value = saved; tok.style.display = "none";
   forget.style.display = "block";
+  const mb = document.getElementById("model");
+  mb.style.display = "block";
+  mb.onclick = ()=> location.href = TUNNEL + "/m/" + saved + "/";
 }
 document.getElementById("go").onclick = ()=> go(tok.value.trim());
 tok.addEventListener("keydown", e => { if(e.key === "Enter") go(tok.value.trim()); });
