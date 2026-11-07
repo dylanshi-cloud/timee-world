@@ -73,6 +73,7 @@ body{padding-bottom:74px}
   font-size:11.5px;box-shadow:0 0 14px rgba(94,234,212,.15)}
 .guide-label b{color:var(--accent);font-family:var(--mono)}
 .guide.low .guide-label{bottom:auto;top:44px}
+.guide.atleft .guide-label{left:0;transform:none}
 @media(max-width:760px){.guide-label{left:0;transform:none}}
 .opt.lead{border-color:var(--accent);background:#0d2422;animation:guideGlow 1.7s ease-in-out infinite}
 @keyframes guideGlow{0%,100%{box-shadow:0 0 0 0 rgba(94,234,212,0)}
@@ -493,6 +494,7 @@ function placeGuide(g,animate){
   if(!g){ guide.style.display='none'; markGuide(null); return; }
   guide.style.display='block';
   guide.classList.toggle('low',!!g.low);
+  guide.classList.toggle('atleft',g.x<150);
   document.querySelector('#guideLabel').innerHTML=g.label;
   markGuide(g.el);
   const from=guideVisual||{x:innerWidth-96,y:innerHeight-180};
