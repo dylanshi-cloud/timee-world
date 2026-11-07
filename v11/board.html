@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>V10 载人 · 拍板清单</title>
+<title>V11 · 拍板清单</title>
 <style>
 :root{
   --bg:#0b0f14; --panel:#121820; --panel2:#0f151c; --line:#24303d;
@@ -53,26 +53,26 @@ h1 small{font-size:13px;color:var(--dim);font-weight:400;margin-left:10px}
 .savebar .svs{font-size:12px;color:var(--dim);white-space:nowrap}
 .savebar .svs b{color:var(--accent);font-family:var(--mono)}
 body{padding-bottom:74px}
-/* 领航小飞机 */
-.guide{position:fixed;left:0;top:0;z-index:30;pointer-events:none;will-change:transform}
-.guide-plane{position:relative;display:block;width:56px;height:56px;border:0;background:none;padding:0;
+/* 发亮鼠标指针（引导） */
+.guide{position:fixed;left:0;top:0;z-index:30;pointer-events:none;will-change:left,top}
+.guide-plane{position:relative;display:block;width:38px;height:38px;border:0;background:none;padding:0;
   cursor:pointer;pointer-events:auto;
   filter:drop-shadow(0 0 5px rgba(94,234,212,.95)) drop-shadow(0 0 18px rgba(94,234,212,.55));
-  animation:guideBob 2.8s ease-in-out infinite}
-.guide-plane svg{width:56px;height:56px;display:block;transform-origin:50% 50%}
+  animation:guideBob 2.6s ease-in-out infinite}
+.guide-plane svg{width:38px;height:38px;display:block}
 .guide-plane:active{scale:.94}
-.guide-halo{position:absolute;left:50%;top:50%;width:72px;height:72px;transform:translate(-50%,-50%);
+.guide-halo{position:absolute;left:50%;top:50%;width:56px;height:56px;transform:translate(-50%,-50%);
   border-radius:50%;background:radial-gradient(circle,rgba(94,234,212,.30),rgba(94,234,212,0) 68%);
-  animation:guidePulse 2.2s ease-out infinite;pointer-events:none}
+  animation:guidePulse 2.1s ease-out infinite;pointer-events:none}
 @keyframes guidePulse{0%{opacity:.95;transform:translate(-50%,-50%) scale(.55)}
-  100%{opacity:0;transform:translate(-50%,-50%) scale(1.55)}}
-@keyframes guideBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.guide-label{position:absolute;left:50%;bottom:62px;transform:translateX(-50%);
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
+@keyframes guideBob{0%,100%{transform:translate(0,0)}50%{transform:translate(2px,-4px)}}
+.guide-label{position:absolute;left:50%;bottom:44px;transform:translateX(-50%);
   max-width:calc(100vw - 28px);white-space:nowrap;text-align:center;
   background:#0b1a1c;border:1px solid #2f5f4f;color:#c9f7ee;border-radius:7px;padding:4px 9px;
   font-size:11.5px;box-shadow:0 0 14px rgba(94,234,212,.15)}
 .guide-label b{color:var(--accent);font-family:var(--mono)}
-.guide.low .guide-label{bottom:auto;top:62px}
+.guide.low .guide-label{bottom:auto;top:44px}
 @media(max-width:760px){.guide-label{left:0;transform:none}}
 .opt.lead{border-color:var(--accent);background:#0d2422;animation:guideGlow 1.7s ease-in-out infinite}
 @keyframes guideGlow{0%,100%{box-shadow:0 0 0 0 rgba(94,234,212,0)}
@@ -174,8 +174,8 @@ if(new URLSearchParams(location.search).get('embed')==='1') document.documentEle
 <div style="margin:0 0 12px;padding:8px 11px;border:1px dashed #4a3418;border-radius:8px;background:#241a0e;color:#f59e0b;font-size:12px">远程只读快照：选择只保存在本机浏览器，拍完请把结果复制回对话，Claude 才能写进 decisions.json。</div>
 <header>
   <div>
-    <h1>载人验证机 · 拍板清单 <small>只列需要你判断 / 签字的事项</small></h1>
-    <div class="sub">当前主程序 <b>V11 两桨 + 升降舵</b>（S0 构型复核）；V10 r15 冻结。本页保留未关闭的 V10 卡片。</div>
+    <h1>V11 载人验证机 · 拍板清单 <small>只列需要你判断 / 签字的事项</small></h1>
+    <div class="sub">当前主程序 <b>V11 两桨 + 升降舵</b>（S0 构型复核）；V10 r15 冻结。本页只列 V11 未关闭事项。</div>
   </div>
   <div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
     <a class="btn primary" href="index.html">V11 驾驶舱 · 文件地图 →</a>
@@ -184,35 +184,33 @@ if(new URLSearchParams(location.search).get('embed')==='1') document.documentEle
 </header>
 
 <div class="base">
-  <b>基线：</b>模型 parts_r9m_<b>1130za</b> / <b>132 件 · 349 实体</b> / MTOW <b>198.57 kg（估 ±2）</b>，包线 <b>180–220 kg</b> / 乘员 <b>70 kg · 1.70 m</b>。
-  <b class="warn">S1 闸门 15/20，未签字；本清单不授权任何物理制造。</b>
+  <b>基线：</b>模型 aircraft_v11_<b>v11a</b> / <b>123 件</b> / 目标 MTOW <b>199.15 kg</b>（硬限 200，余量 0.85）/ 乘员 <b>70 kg · 1.70 m</b>。
+  <b class="warn">S0 未签字，不下料/开模/采购长周期件；不得引用 V10 的 S 放行包。</b>
   拍板后由 Claude 写入 <code>agent/knowledge/decisions.json</code> 并刷新状态机。
   <div class="snap">
-    <span><b>S1</b> 15/20 · 未放行</span>
-    <span><b>事件</b> 54/127 · 51%</span>
-    <span><b>关键链首项</b> S1-01 · 96%</span>
-    <span><b>首飞阻断</b> 13</span>
-    <span><b>可启动</b> 0 · 可预研 6</span>
-    <span><b>模型</b> 1130za · 132 件</span>
-    <span class="muted">快照 2026-11-07 16:42</span>
+    <span><b>S0</b> 未签字 · 不物理制造</span>
+    <span><b>要素</b> 7/46 闭合</span>
+    <span><b>待拍板</b> 2</span>
+    <span><b>模型</b> v11a · 123 件</span>
+    <span class="muted">快照 2026-11-07 16:55</span>
   </div>
 </div>
 
 <div class="kpis">
-  <div class="kpi today"><div class="n" id="kToday">—</div><div class="l">今天待拍</div></div>
-  <div class="kpi s1"><div class="n" id="kS1">—</div><div class="l">S1 前待拍</div></div>
-  <div class="kpi week"><div class="n" id="kWeek">—</div><div class="l">本周待拍（不阻塞 S1-01）</div></div>
+  <div class="kpi today"><div class="n" id="kToday">—</div><div class="l">本关待拍（S0）</div></div>
+  <div class="kpi s1"><div class="n" id="kS1">—</div><div class="l">稍后待拍</div></div>
+  <div class="kpi week"><div class="n" id="kWeek">—</div><div class="l">并行 · 不阻塞 S0</div></div>
   <div class="kpi done"><div class="n" id="kDone">—</div><div class="l">已记录 / 全部</div></div>
 </div>
 
 <div class="bar">
   <button class="btn on" data-filter="all">全部</button>
-  <button class="btn" data-filter="today">今天</button>
-  <button class="btn" data-filter="s1">S1 前</button>
-  <button class="btn" data-filter="week">本周</button>
+  <button class="btn" data-filter="today">本关</button>
+  <button class="btn" data-filter="s1">稍后</button>
+  <button class="btn" data-filter="week">并行</button>
   <button class="btn" data-filter="other">另线</button>
   <button class="btn" data-filter="undecided">未记录</button>
-  <button class="btn on" id="guideToggle">领航：开</button>
+  <button class="btn on" id="guideToggle">引导：开</button>
   <div class="spacer"></div>
   <button class="btn ghost" id="copyMd">复制拍板结果</button>
   <button class="btn ghost" id="exportJson">导出 JSON</button>
@@ -224,25 +222,23 @@ if(new URLSearchParams(location.search).get('embed')==='1') document.documentEle
 <footer>
   <b>复盘规则：</b>每次拍板后点「保存」，立即后台写入 <code>agent/state/拍板记录.json</code>（不下载），按钮变「已完成」即锁定；Claude 读取该文件写入决策库、更新风险/进度并刷新闸门。若后台保存服务未启动，选择仍保存在本机浏览器，可点「导出 JSON」手动落盘。本页只保留选择和备注，不做第二套状态。<br>
   <b>字段（供后续做成 skill / agent）：</b>id · 分组 · 优先级 · 截止 · 问题 · 选项 · 推荐项 · 代价 · 不拍后果 · 阻塞对象 · 证据 · 用户选择 · 备注 · 时间戳。<br>
-  <b>证据：</b><code>agent.py status / next / decision</code>、<code>agent/knowledge/decisions.json</code>、<code>agent/knowledge/risks.json</code>、<code>02_结构方案.md</code>、<code>短舱结构_r14.md</code>、R-V10-15、D17–D20 提案。
+  <b>证据：</b><code>agent.py status / next / decision</code>、<code>agent/knowledge/decisions.json</code>、<code>agent/knowledge/risks.json</code>、<code>agent/knowledge/v11_elements.json</code>、<code>V11_两桨升降舵构型.md</code>、<code>V11_功能需求差异.md</code>。
 </footer>
 </div>
 <div class="guide" id="guide" aria-hidden="true">
   <div class="guide-label" id="guideLabel"></div>
   <button class="guide-plane" id="guidePlane" title="带我到下一项推荐">
     <span class="guide-halo"></span>
-    <svg viewBox="0 0 64 64" aria-hidden="true">
+    <svg viewBox="0 0 34 34" aria-hidden="true">
       <defs>
-        <linearGradient id="planeGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#d9fffa"/>
+        <linearGradient id="ptrGrad" x1="0" y1="0" x2="0.6" y2="1">
+          <stop offset="0" stop-color="#eafffb"/>
           <stop offset=".45" stop-color="#5eead4"/>
           <stop offset="1" stop-color="#22d3ee"/>
         </linearGradient>
       </defs>
-      <path d="M6 33 L58 9 L42 55 L33 36 L18 45 Z" fill="url(#planeGrad)"
-        stroke="#eafffb" stroke-width="1.4" stroke-linejoin="round"/>
-      <path d="M33 36 L58 9" stroke="#0b0f14" stroke-width="2" opacity=".42"/>
-      <circle cx="49" cy="14" r="1.8" fill="#fff" opacity=".95"/>
+      <path d="M5 3 L5 25.5 L11.2 19.6 L15.6 29.5 L19.6 27.7 L15.2 17.9 L23.2 17.9 Z"
+        fill="url(#ptrGrad)" stroke="#eafffb" stroke-width="1.3" stroke-linejoin="round"/>
     </svg>
   </button>
 </div>
@@ -256,60 +252,27 @@ if(new URLSearchParams(location.search).get('embed')==='1') document.documentEle
 <script>
 const GROUPS = {
   "today": {
-    "name": "S1 关 · 设计冻结",
-    "hint": "S1-01：全机 BRep 0 干涉（1130za = V10-D27=B + V10-D42=A 定稿几何）（2026-11-15 到期）"
+    "name": "S0 关 · 待拍板",
+    "hint": "V10-D50：V11 巡航停桨后没有偏航，是否补方向舵（S0 关，未签字）"
   },
   "s1": {
-    "name": "模型参数 · 1130za",
-    "hint": "132 件 / 349 实体 · MTOW 198.57（S1-02 质量模型，1130za + V10-D41=C 承口 0.10 kg） kg（包线 180–220）"
+    "name": "S0 关 · 可稍后",
+    "hint": "同一关内可分批拍"
   },
   "week": {
-    "name": "本关并行 · 不阻塞",
+    "name": "并行 · 不阻塞 S0",
     "hint": "可以晚几关再拍"
   },
   "other": {
     "name": "另线 · 150 kg 无人验证机",
-    "hint": "独立基线，不混入 V10 载人数字"
+    "hint": "独立基线，不混入 V11 数字"
   }
 };
 
 const ITEMS = [
   {
-    "id": "V10-D43",
-    "group": "today",
-    "pri": "P1",
-    "due": "S1 设计冻结 2026-11-15 前",
-    "title": "S1-06 的「误差 ≤5%」没有基准，是按自洽签字还是先补 CFD",
-    "q": "判据是 CLmax/失速速度误差 ≤5 %，但本机没有风洞或 CFD 基准可比，只有方法自检（Helmbold −6.2 %/+4.4 %、20 m 翼距退化 −0.09 %、网格/尾迹 0.41 %）。按字面无法判过。",
-    "opts": [
-      {
-        "k": "A",
-        "t": "按方法自洽签字，≤5 % 定量验证移入 S2（风洞小模型或双翼滑流 CFD）（推荐）",
-        "rec": true,
-        "d": "不阻塞 11-15 冻结；气动条目进冻结时标注「自检」而非「实测」，S2 补基准。"
-      },
-      {
-        "k": "B",
-        "t": "S1 冻结前补一轮双翼滑流 CFD",
-        "rec": false,
-        "d": "判据可正面回答，但周期 3–4 周，S1 冻结大概率推迟到 12 月，且首轮 CFD 也要自己标定。"
-      },
-      {
-        "k": "C",
-        "t": "先做风洞（单翼/双翼小模型）再签",
-        "rec": false,
-        "d": "证据最硬，但周期与费用远超 S1 窗口，等于把冻结推到明年。"
-      }
-    ],
-    "rec": "A",
-    "cost": "S1 冻结时不具备实测误差带；S2 增加一项验证任务（约 2–3 周）。",
-    "ifnot": "S1-06 停在 92 % 无法判过，S1 结构冻结（2026-11-15）被气动一项卡住。",
-    "blocks": "S1-06 判过、S1 设计冻结、S2 气动验证排期",
-    "ev": "analysis/s1_06_biplane.md 第 7 条；自检 −6.2 %/+4.4 %、−0.09 %、0.41 %；CLmax 1.266 @二维 1.40，Vs 18.74 m/s"
-  },
-  {
     "id": "V10-D50",
-    "group": "week",
+    "group": "today",
     "pri": "P0",
     "due": "V11 S0 构型复核前",
     "title": "V11 巡航停桨后没有偏航，是否补方向舵",
@@ -342,7 +305,7 @@ const ITEMS = [
   },
   {
     "id": "V11-D02",
-    "group": "week",
+    "group": "today",
     "pri": "P0",
     "due": "V11 S0 构型复核前",
     "title": "起飞倾转日程：56° 零矩角，58° 以上超出升降舵行程",
@@ -533,7 +496,7 @@ function guideGeometry(){
     const btn=document.querySelector(saved?'#copyMd2':'#saveAll');
     if(!btn) return null;
     const r=btn.getBoundingClientRect();
-    return {el:null,id:null,done:true,saved,x:r.left+r.width/2-28,y:r.top-72,low:false,off:false,
+    return {el:null,id:null,done:true,saved,x:r.left+r.width/2-19,y:r.top-54,low:false,off:false,
       label:saved?'全部已完成 · 复制结果':'全部选好了 · 点保存'};
   }
   const card=cardOf(x.id);
@@ -541,19 +504,19 @@ function guideGeometry(){
     const allBtn=document.querySelector('[data-filter="all"]');
     if(!allBtn) return null;
     const r=allBtn.getBoundingClientRect();
-    return {el:null,id:null,hidden:true,x:r.left+r.width/2-28,y:r.top+r.height+10,low:true,off:false,
+    return {el:null,id:null,hidden:true,x:r.left+r.width/2-19,y:r.top+r.height+10,low:true,off:false,
       label:`下一项 <b>${esc(shortId(x.id))}</b> · 先点『全部』`};
   }
   const opt=card.querySelector('.opt.rec')||card.querySelector('.opt');
   if(!opt) return null;
   const r=opt.getBoundingClientRect();
   const cr=card.getBoundingClientRect();
-  const margin=8, w=56;
-  let px=Math.min(Math.max(cr.left-64,margin),innerWidth-w-margin);
-  let py=Math.min(Math.max(r.top+r.height/2-28,72),innerHeight-82);
+  const margin=8, w=38;
+  let px=Math.min(Math.max(cr.left-46,margin),innerWidth-w-margin);
+  let py=Math.min(Math.max(r.top+r.height/2-19,72),innerHeight-82);
   let low=false;
   const off = r.top>innerHeight-40?'down':(r.bottom<40?'up':false);
-  if(off==='down'){ py=innerHeight-88; }
+  if(off==='down'){ py=innerHeight-72; }
   else if(off==='up'){ py=78; }
   if(py<120) low=true;
   return {el:opt,id:x.id,x:px,y:py,low,off,
@@ -574,9 +537,7 @@ function placeGuide(g,animate){
   const from=guideVisual||{x:innerWidth-96,y:innerHeight-180};
   if(!animate){
     guideVisual={x:g.x,y:g.y};
-    guide.style.transform=`translate(${g.x}px,${g.y}px)`;
-    const svg=guide.querySelector('svg');
-    if(svg) svg.style.transform='rotate(35deg)';
+    guide.style.left=g.x+'px'; guide.style.top=g.y+'px';
     return;
   }
   cancelAnimationFrame(guideAnim);
@@ -588,12 +549,7 @@ function placeGuide(g,animate){
     const e=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;
     const x=(1-e)*(1-e)*from.x+2*(1-e)*e*cx+e*e*g.x;
     const y=(1-e)*(1-e)*from.y+2*(1-e)*e*cy+e*e*g.y;
-    const dx=2*(1-e)*(cx-from.x)+2*e*(g.x-cx);
-    const dy=2*(1-e)*(cy-from.y)+2*e*(g.y-cy);
-    const ang=Math.atan2(dy,dx)*180/Math.PI;
-    guide.style.transform=`translate(${x}px,${y}px)`;
-    const svg=guide.querySelector('svg');
-    if(svg) svg.style.transform=`rotate(${ang}deg)`;
+    guide.style.left=x+'px'; guide.style.top=y+'px';
     guideVisual={x,y};
     if(u<1) guideAnim=requestAnimationFrame(step);
   }
@@ -705,7 +661,7 @@ document.querySelector('#reset').addEventListener('click',()=>{
 
 const guideToggle=document.querySelector('#guideToggle');
 function paintGuideToggle(){
-  guideToggle.textContent=guideOn?'领航：开':'领航：关';
+  guideToggle.textContent=guideOn?'引导：开':'引导：关';
   guideToggle.classList.toggle('on',guideOn);
 }
 guideToggle.addEventListener('click',()=>{
