@@ -23,9 +23,10 @@ header{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:1
 header h1{font-size:28px;margin:0;font-weight:680;letter-spacing:-.01em}
 header .sub{font-size:14px;color:var(--muted);padding-bottom:4px}
 header .right{margin-left:auto;display:flex;gap:9px;padding-bottom:3px}
-.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink2);
-  border-radius:10px;padding:9px 15px;font-size:14px}
-.btn:hover{color:var(--ink);border-color:rgba(255,255,255,.22)}
+.btn{border:1px solid rgba(255,255,255,.18);background:var(--surface);color:var(--ink);
+  border-radius:10px;padding:9px 15px;font-size:14px;font-weight:550;transition:.15s}
+.btn:hover{color:#fff;border-color:var(--accent);background:#152a44;
+  transform:translateY(-1px);box-shadow:0 4px 14px rgba(59,142,234,.18)}
 .btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
 
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--ink2);

@@ -191,7 +191,7 @@ if(new URLSearchParams(location.search).get('embed')==='1') document.documentEle
   <div class="snap">
     <span><b>S0</b> 未签字 · 不物理制造</span>
     <span><b>要素</b> 10/47 闭合</span>
-    <span><b>待拍板</b> 0</span>
+    <span><b>待拍板</b> 1</span>
     <span><b>模型</b> v11a · 123 件</span>
     <span class="muted">快照 2026-11-07 16:55</span>
   </div>
@@ -254,7 +254,7 @@ if(new URLSearchParams(location.search).get('embed')==='1') document.documentEle
 const GROUPS = {
   "today": {
     "name": "S0 关 · 待拍板",
-    "hint": "S0 已清"
+    "hint": "V11-D12：撑杆到头后下翼前梁超 23%：加梁 / 退接头 / 改判据（S0 关，未签字）"
   },
   "s1": {
     "name": "S0 关 · 可稍后",
@@ -270,7 +270,47 @@ const GROUPS = {
   }
 };
 
-const ITEMS = [];
+const ITEMS = [
+  {
+    "id": "V11-D12",
+    "group": "today",
+    "pri": "P0",
+    "due": "S1 设计冻结 2026-11-15 前",
+    "title": "撑杆到头后下翼前梁超 23%：加梁 / 退接头 / 改判据",
+    "q": "端部撑杆（V11-D11）已按你的要求改好，但 FEM 复算下翼前梁根部 4g 226.2 MPa（判据 184）。怎么闭合？",
+    "opts": [
+      {
+        "k": "A",
+        "t": "端部保留，下前梁 Ø55×2 → Ø55×3（0–0.60 段）",
+        "rec": true,
+        "d": "4g 226.2→176.9 MPa（96% 判据）。+0.51 kg → MTOW 199.87→200.38，超 200 kg 硬限 0.38 kg，须同时在别处减 0.4 kg；Ø 不能再放大：机翼剖面只有 71 mm 高，Ø65 已贴蒙皮，且梁加粗后刚度吸引更多弯矩——Ø65 反而 184.6（100.3%），几乎没用。"
+      },
+      {
+        "k": "B",
+        "t": "端部保留，改按 κ=0.5 判据（证明 D 盒剪切连续）",
+        "rec": false,
+        "d": "κ=0.5 下 128.3 MPa 通过，0 kg；但要在 S1 冻结（11-15）前用壳单元或试验证明下翼蒙皮+D 盒能提供 0.5 的剪切连续度，时间很紧。"
+      },
+      {
+        "k": "C",
+        "t": "下接头退到 y=0.70",
+        "rec": false,
+        "d": "0 kg、不改梁，4g 177.6 MPa（96%）；但离翼尖 0.30 m，视觉上是「中段偏外」，达不到你要的端部。"
+      },
+      {
+        "k": "D",
+        "t": "端部四杆 + 在 y0.60 各加一对短斜撑",
+        "rec": false,
+        "d": "受力回 142.7 MPa，+0.2 kg；但每边 4 根杆、全机 8 根，与「四根连杆」冲突。"
+      }
+    ],
+    "rec": "A",
+    "cost": "A：+0.51 kg（MTOW 200.38，需另减 0.4 kg）；B：0 kg 但需新分析；C：0 kg；D：+0.2 kg 且多 4 根杆。",
+    "ifnot": "S1-04 停在 FAIL，S1 设计冻结判不过；下翼按现状出图会在 S2-A 被推翻。",
+    "blocks": "S1-04 判过、S1 设计冻结、下翼/撑杆出图",
+    "ev": "S1-04 复算（V10_STRUT_BASE=0.90）：κ=0 4g 前梁 226.2/后梁 150.3；Ø55×3 176.9、Ø65×2 184.6、Ø70×2 166.7、Ø55×4 148.8；y0.70 时 177.6；κ=0.5 128.3。R-V11-09"
+  }
+];
 
 const KEY='v10_decision_board_v1';
 let state={choices:{},updated:null};

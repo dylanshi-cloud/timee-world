@@ -24,9 +24,11 @@ header{display:flex;align-items:center;gap:14px;padding:9px 16px;
 header h1{font-size:18px;margin:0;font-weight:650;letter-spacing:.01em;line-height:1.25}
 header .sub{font-size:12px;color:var(--muted);line-height:1.35;margin-top:2px}
 header .right{margin-left:auto;display:flex;gap:8px}
-.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink2);
-  border-radius:9px;padding:8px 13px;font-size:13px;cursor:pointer;white-space:nowrap}
-.btn:hover{color:var(--ink)}
+.btn{border:1px solid rgba(255,255,255,.18);background:var(--surface);color:var(--ink);
+  border-radius:9px;padding:8px 13px;font-size:13px;cursor:pointer;white-space:nowrap;
+  font-weight:550;transition:.15s}
+.btn:hover{color:#fff;border-color:var(--accent);background:#152a44;
+  transform:translateY(-1px);box-shadow:0 4px 14px rgba(59,142,234,.18)}
 .btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
 
 main{display:grid;grid-template-columns:minmax(300px,.95fr) minmax(400px,1.2fr) minmax(330px,1fr);
