@@ -77,7 +77,7 @@ body.locked{overflow:hidden}
     <small>每条线都有「为什么 / 常见错法 / X1 实例 / 可执行判据」，模型每改一轮按顺序重跑</small></h1>
   <div class="summary">
     X1 体检 <b class="ok">全部通过</b><br>
-    35/35 项通过 · 2026-11-15 13:37<br>
+    39/39 项通过 · 2026-11-15 13:58<br>
     <a class="back" href="index.html">← 回驾驶舱</a>
   </div>
 </div>
@@ -144,7 +144,7 @@ body.locked{overflow:hidden}
     <p class="lead">舵机→摇臂→推杆→舵面是一条几何链，任何一环偏 1 mm 都会变成虚位或卡死。</p>
     <div class="two">
       <div><h3>常见错法</h3><ul><li>只验静态位置，不验极限偏转</li><li>平板前缘配平板后缘，一偏 20° 就顶进固定段</li><li>拉杆跨过 2.86 m 半展，刚度、间隙全不可控</li></ul></div>
-      <div><h3>X1 这一轮</h3><ul><li>升降：机身内双舵机 + 推杆；转向：小翼根部舵机 + 短拉杆（不过半展）</li><li>舵面前缘做成绕铰轴的半圆，固定段挖同轴凹槽，间隙 2.5 mm 全周</li><li>方向舵 ±25° 0.00 cm³，升降舵 ±25° 与鸭翼 0.28 cm³、与机身 0.00 cm³</li></ul></div>
+      <div><h3>X1 这一轮</h3><ul><li>升降：机身内双舵机 + 推杆；转向：小翼根部舵机 + 短拉杆（不过半展）</li><li>舵面前缘做成绕铰轴的半圆，固定段挖同轴凹槽，间隙 2.5 mm 全周</li><li>方向舵 ±25° 0.00 cm³，升降舵 ±25° 与鸭翼 0.28 cm³、与机身 0.00 cm³</li><li>舵面外移后有效面积 −23.5%、权限 −23.7%：行程 25°→30° 补回至 −9.7%，30° 几何仍 0.75 cm³</li></ul></div>
     </div>
     <div class="crit"><b>判据</b>链上间隙 0 mm；±20°/±25° 极限偏转干涉 &lt;1 cm³。</div>
     <div class="row ok"><span class="rn">✓</span><span class="rt">推杆—舵机 0 mm / 推杆—摇臂 0 mm</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">拉杆—舵机 0 mm / 拉杆—摇臂 0 mm</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">推杆—舵机 0 mm / 推杆—摇臂 0 mm</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">拉杆—舵机 0 mm / 拉杆—摇臂 0 mm</span></div>
@@ -179,14 +179,14 @@ body.locked{overflow:hidden}
 <article class="line" id="l08">
   <div class="no">08</div>
   <div class="body">
-    <h2>干涉与间隙 <span class="chip ok">16/16 通过</span></h2>
+    <h2>干涉与间隙 <span class="chip ok">20/20 通过</span></h2>
     <p class="lead">静态不碰不代表能用。极限偏转、桨盘锥面、地面姿态才是真判据。</p>
     <div class="two">
       <div><h3>常见错法</h3><ul><li>只查装配位置，舵面一次没偏过</li><li>舵面只查与固定翼面，没查机身：埋在内侧的舵面一偏就切蒙皮</li><li>舱盖只查关闭位置，不查开启扫掠弧</li><li>拿包围盒当精确干涉，细长件全部误判</li><li>忘了螺旋桨是圆盘不是桨叶</li></ul></div>
       <div><h3>X1 这一轮</h3><ul><li>45 对 STRICT 必须 0 cm³；20 对 ALLOW 给体积上限</li><li>桨尖离地 1.142 m，桨盘距机翼前缘 0.230 m</li><li>舵面偏转用真实铰轴旋转后再求交</li></ul></div>
     </div>
     <div class="crit"><b>判据</b>STRICT 全 0；偏转 &lt;1 cm³；桨尖 ≥0.20 m；桨盘 ≥0.10 m。</div>
-    <div class="row ok"><span class="rn">✓</span><span class="rt">rudder_r 20° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">rudder_l 20° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">rudder_r 25° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">rudder_l 25° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 20° 与鸭翼 0.10 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 20° 与机头 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 20° 与鸭翼 0.10 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 20° 与机头 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 25° 与鸭翼 0.29 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 25° 与机头 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 25° 与鸭翼 0.29 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 25° 与机头 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">0–80° 扫掠最坏 无碰 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">后缘 1.200 到翼前缘 1.280，净空 80 mm（&gt;= 50）</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">1.142 m（&gt;= 0.20）</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">0.230 m（&gt;= 0.10）</span></div>
+    <div class="row ok"><span class="rn">✓</span><span class="rt">rudder_r 20° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">rudder_l 20° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">rudder_r 25° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">rudder_l 25° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 20° 与鸭翼 0.10 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 20° 与机头 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 20° 与鸭翼 0.10 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 20° 与机头 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 25° 与鸭翼 0.29 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 25° 与机头 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 25° 与鸭翼 0.29 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 25° 与机头 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 30° 与鸭翼 0.75 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 30° 与机头 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 30° 与鸭翼 0.75 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 30° 与机头 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">0–80° 扫掠最坏 无碰 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">后缘 1.200 到翼前缘 1.280，净空 80 mm（&gt;= 50）</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">1.142 m（&gt;= 0.20）</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">0.230 m（&gt;= 0.10）</span></div>
   </div>
 </article>
 <article class="line" id="l09">
@@ -215,7 +215,7 @@ body.locked{overflow:hidden}
     
   </div>
 </article>
-<footer>生成于 2026-11-15 13:38 · model/x1/audit_x1.py → x1_audit.json → 本页</footer>
+<footer>生成于 2026-11-15 13:59 · model/x1/audit_x1.py → x1_audit.json → 本页</footer>
 </div><div id="lock" class="lock">
   <form class="lockbox" id="lockform" autocomplete="off">
     <div class="lockmark">V11 · 载人电动飞行器</div>
