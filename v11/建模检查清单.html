@@ -77,7 +77,7 @@ body.locked{overflow:hidden}
     <small>每条线都有「为什么 / 常见错法 / X1 实例 / 可执行判据」，模型每改一轮按顺序重跑</small></h1>
   <div class="summary">
     X1 体检 <b class="ok">全部通过</b><br>
-    29/29 项通过 · 2026-11-15 12:08<br>
+    35/35 项通过 · 2026-11-15 13:37<br>
     <a class="back" href="index.html">← 回驾驶舱</a>
   </div>
 </div>
@@ -105,10 +105,10 @@ body.locked{overflow:hidden}
     <p class="lead">参数只能活在一个地方。模型、文档、看板三处各写一个数，下一轮必然对不上。</p>
     <div class="two">
       <div><h3>常见错法</h3><ul><li>手抄数字进 PPT，回过头不知道哪个是真的</li><li>同一零件在两个脚本里各建一次，改了一个忘了另一个</li><li>件号只活在 BOM 里，模型里出现新件没人发现</li></ul></div>
-      <div><h3>X1 这一轮</h3><ul><li>build_x1.py 是唯一真源：63 件全部由它生成，STEP、质量、用图同源</li><li>43 个件号自动校验，模型里出现的件号必须在 PN_ORDER 内</li><li>坐标系固定：x 机头方向、y 展向、z 向上，原点在机尾框</li></ul></div>
+      <div><h3>X1 这一轮</h3><ul><li>build_x1.py 是唯一真源：64 件全部由它生成，STEP、质量、用图同源</li><li>45 个件号自动校验，模型里出现的件号必须在 PN_ORDER 内</li><li>坐标系固定：x 机头方向、y 展向、z 向上，原点在机尾框</li></ul></div>
     </div>
     <div class="crit"><b>判据</b>模型件号 ⊆ PN_ORDER，缺一个即 FAIL；任何图纸数字必须能回指脚本。</div>
-    <div class="row ok"><span class="rn">✓</span><span class="rt">模型件号 43 个，PN_ORDER 未收录 无</span></div>
+    <div class="row ok"><span class="rn">✓</span><span class="rt">模型件号 45 个，PN_ORDER 未收录 无</span></div>
   </div>
 </article>
 <article class="line" id="l03">
@@ -118,7 +118,7 @@ body.locked{overflow:hidden}
     <p class="lead">结构、操纵、动力、起落架四条线并行推进，接口一旦漂移，四条线一起返工。</p>
     <div class="two">
       <div><h3>常见错法</h3><ul><li>铰线跟着外形走：弦长收窄时等百分比铰线会弯成折线（X1 上一版偏 42 mm）</li><li>冻结表只记外形点，不记舵机安装点、摇臂眼位</li><li>改完外形不回写冻结表，结构线拿旧接口开工</li></ul></div>
-      <div><h3>X1 这一轮</h3><ul><li>10 个冻结接口写进 x1_geom.json，含 4 个操纵接口</li><li>升降舵铰线是一根后掠 1.9° 的直轴：x = −0.160 + 0.0334·|y|</li><li>方向舵铰轴 x = 2.093 m，绕小翼外倾轴倾斜 14°</li></ul></div>
+      <div><h3>X1 这一轮</h3><ul><li>14 个冻结接口写进 x1_geom.json，含 5 个操纵接口</li><li>升降舵铰线是一根后掠 1.9° 的直轴：x = −0.160 + 0.0334·|y|，舵面从 |y|≥0.28 才开始</li><li>方向舵铰轴 x = 2.093 m，绕小翼外倾轴倾斜 14°；舱盖前铰 [0.245, 0, 0.958] 也冻结</li></ul></div>
     </div>
     <div class="crit"><b>判据</b>铰线对采样站位做最小二乘，最大偏离 ≤5 mm；弦向位置在 5%–95%。</div>
     <div class="row ok"><span class="rn">✓</span><span class="rt">最小二乘直线，最大偏离 0.0 mm（&lt;= 5 mm 才算一根直铰）</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">d(x)/d(y)=0.0334（后掠 1.9°）</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">弦向位置 0.29–0.75（须在 5%–95% 之间）</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">缺操纵接口：无</span></div>
@@ -131,7 +131,7 @@ body.locked{overflow:hidden}
     <p class="lead">模型里「看起来连着」不等于受力传得过去；悬空件在纸上不会掉，在机上会掉。</p>
     <div class="two">
       <div><h3>常见错法</h3><ul><li>舵机、电池、人挂在空中，离最近结构还有几十毫米</li><li>只画翼盒外形，没有梁、肋、接头</li><li>撑杆落在蒙皮上，没有把载荷送进框</li></ul></div>
-      <div><h3>X1 这一轮</h3><ul><li>20 个结构/操纵件逐一查最近邻包围盒距离，全部 ≤5 mm</li><li>推杆—舵机、推杆—摇臂必须相碰（0 mm）</li><li>机翼一根主梁 + 后梁，鸭翼梁直接接到机头框</li></ul></div>
+      <div><h3>X1 这一轮</h3><ul><li>20 个结构/操纵件逐一查最近邻包围盒距离，全部 ≤5 mm</li><li>推杆—舵机、推杆—摇臂必须相碰（0 mm）</li><li>机翼主梁 + 后梁；鸭翼前梁 + 后梁两点支撑，后梁接头落到机头框</li></ul></div>
     </div>
     <div class="crit"><b>判据</b>悬空件 0；传力链每一环间隙 0；埋入件走 ALLOW 表并给体积上限。</div>
     <div class="row ok"><span class="rn">✓</span><span class="rt">最近邻 &gt; 5 mm 的件：无</span></div>
@@ -144,7 +144,7 @@ body.locked{overflow:hidden}
     <p class="lead">舵机→摇臂→推杆→舵面是一条几何链，任何一环偏 1 mm 都会变成虚位或卡死。</p>
     <div class="two">
       <div><h3>常见错法</h3><ul><li>只验静态位置，不验极限偏转</li><li>平板前缘配平板后缘，一偏 20° 就顶进固定段</li><li>拉杆跨过 2.86 m 半展，刚度、间隙全不可控</li></ul></div>
-      <div><h3>X1 这一轮</h3><ul><li>升降：机身内双舵机 + 推杆；转向：小翼根部舵机 + 短拉杆（不过半展）</li><li>舵面前缘做成绕铰轴的半圆，固定段挖同轴凹槽，间隙 2.5 mm 全周</li><li>方向舵 ±25° 干涉 0.00 cm³，升降舵 ±25° 0.28 cm³</li></ul></div>
+      <div><h3>X1 这一轮</h3><ul><li>升降：机身内双舵机 + 推杆；转向：小翼根部舵机 + 短拉杆（不过半展）</li><li>舵面前缘做成绕铰轴的半圆，固定段挖同轴凹槽，间隙 2.5 mm 全周</li><li>方向舵 ±25° 0.00 cm³，升降舵 ±25° 与鸭翼 0.28 cm³、与机身 0.00 cm³</li></ul></div>
     </div>
     <div class="crit"><b>判据</b>链上间隙 0 mm；±20°/±25° 极限偏转干涉 &lt;1 cm³。</div>
     <div class="row ok"><span class="rn">✓</span><span class="rt">推杆—舵机 0 mm / 推杆—摇臂 0 mm</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">拉杆—舵机 0 mm / 拉杆—摇臂 0 mm</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">推杆—舵机 0 mm / 推杆—摇臂 0 mm</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">拉杆—舵机 0 mm / 拉杆—摇臂 0 mm</span></div>
@@ -157,10 +157,10 @@ body.locked{overflow:hidden}
     <p class="lead">载人机的重心窗口比气动焦点更硬：超窗口不是性能下降，是飞不起来。</p>
     <div class="two">
       <div><h3>常见错法</h3><ul><li>混用别的构型/别的批次的 MTOW 和翼载</li><li>空机重量和翼载不是同一口径，两个数各自好看</li><li>只算空机 CG，不算人、行李、电池前后限</li></ul></div>
-      <div><h3>X1 这一轮</h3><ul><li>台账：空机 101.31 kg，MTOW 196.31 kg（含 70 kg 乘员 + 25 kg 行李）</li><li>CG 含乘员 1.001 m、压行李 1.154 m，都在 0.95–1.20 窗口内</li><li>设计点 215 kg 单列一行：翼载 36.7；台账口径 33.5，不互相覆盖</li></ul></div>
+      <div><h3>X1 这一轮</h3><ul><li>台账：空机 101.87 kg，MTOW 196.87 kg（含 70 kg 乘员 + 25 kg 行李）</li><li>CG 含乘员 0.995 m、压行李 1.148 m，都在 0.95–1.20 窗口内</li><li>设计点 215 kg 单列一行：翼载 36.7；台账口径 33.6，不互相覆盖</li></ul></div>
     </div>
     <div class="crit"><b>判据</b>台账闭合（空机+70+25）；两个 CG 都在窗口内；两种口径分开写。</div>
-    <div class="row ok"><span class="rn">✓</span><span class="rt">空机 101.31 + 70 + 25 = 196.31 kg</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">含乘员 1.001 / 压行李 1.154（窗口 0.95–1.20）</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">台账 196.3 kg → 33.5；设计点 215 kg → 36.7（两个数分开写，不混用）</span></div>
+    <div class="row ok"><span class="rn">✓</span><span class="rt">空机 101.87 + 70 + 25 = 196.87 kg</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">含乘员 0.995 / 压行李 1.148（窗口 0.95–1.20）</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">台账 196.9 kg → 33.6；设计点 215 kg → 36.7（两个数分开写，不混用）</span></div>
   </div>
 </article>
 <article class="line" id="l07">
@@ -170,23 +170,23 @@ body.locked{overflow:hidden}
     <p class="lead">座舱是唯一不能「以后再说」的部件：人进不去、头顶碰蒙皮，后面全白做。</p>
     <div class="two">
       <div><h3>常见错法</h3><ul><li>用比例假人，脚长、坐高都是估的</li><li>头顶余量从座椅量到蒙皮，忘了蒙皮厚度和框</li><li>舱盖开合轨迹没查，开了撞头</li></ul></div>
-      <div><h3>X1 这一轮</h3><ul><li>复用 V11 D60 的 13 件坐姿假人，整体前拖下落落到 X1 座盆</li><li>头顶余量 49.9 mm @ x=1.142</li><li>舱盖前铰 75° 开启，出图验证不碰座舱口</li></ul></div>
+      <div><h3>X1 这一轮</h3><ul><li>复用 V11 D60 的 13 件坐姿假人，按关节重新摆姿：上身立直、脚落到舱底板</li><li>头顶余量 51.1 mm @ x=1.025；靠背后倾 18°</li><li>舱盖绕前铰 0–80° 逐度扫掠，整条弧 0 cm³，后缘收在 1.20</li></ul></div>
     </div>
     <div class="crit"><b>判据</b>头顶 ≥20 mm；脚、膝、肘不穿蒙皮；舱盖开合全程 0 干涉。</div>
-    <div class="row ok"><span class="rn">✓</span><span class="rt">49.9 mm @ x=1.142（&gt;= 20）</span></div>
+    <div class="row ok"><span class="rn">✓</span><span class="rt">51.1 mm @ x=1.025（&gt;= 20）</span></div>
   </div>
 </article>
 <article class="line" id="l08">
   <div class="no">08</div>
   <div class="body">
-    <h2>干涉与间隙 <span class="chip ok">10/10 通过</span></h2>
+    <h2>干涉与间隙 <span class="chip ok">16/16 通过</span></h2>
     <p class="lead">静态不碰不代表能用。极限偏转、桨盘锥面、地面姿态才是真判据。</p>
     <div class="two">
-      <div><h3>常见错法</h3><ul><li>只查装配位置，舵面一次没偏过</li><li>拿包围盒当精确干涉，细长件全部误判</li><li>忘了螺旋桨是圆盘不是桨叶</li></ul></div>
-      <div><h3>X1 这一轮</h3><ul><li>39 对 STRICT 必须 0 cm³；20 对 ALLOW 给体积上限</li><li>桨尖离地 1.142 m，桨盘距机翼前缘 0.230 m</li><li>舵面偏转用真实铰轴旋转后再求交</li></ul></div>
+      <div><h3>常见错法</h3><ul><li>只查装配位置，舵面一次没偏过</li><li>舵面只查与固定翼面，没查机身：埋在内侧的舵面一偏就切蒙皮</li><li>舱盖只查关闭位置，不查开启扫掠弧</li><li>拿包围盒当精确干涉，细长件全部误判</li><li>忘了螺旋桨是圆盘不是桨叶</li></ul></div>
+      <div><h3>X1 这一轮</h3><ul><li>45 对 STRICT 必须 0 cm³；20 对 ALLOW 给体积上限</li><li>桨尖离地 1.142 m，桨盘距机翼前缘 0.230 m</li><li>舵面偏转用真实铰轴旋转后再求交</li></ul></div>
     </div>
     <div class="crit"><b>判据</b>STRICT 全 0；偏转 &lt;1 cm³；桨尖 ≥0.20 m；桨盘 ≥0.10 m。</div>
-    <div class="row ok"><span class="rn">✓</span><span class="rt">rudder_r 20° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">rudder_l 20° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">rudder_r 25° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">rudder_l 25° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 20° 与鸭翼 0.09 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 20° 与鸭翼 0.09 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 25° 与鸭翼 0.28 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 25° 与鸭翼 0.28 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">1.142 m（&gt;= 0.20）</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">0.230 m（&gt;= 0.10）</span></div>
+    <div class="row ok"><span class="rn">✓</span><span class="rt">rudder_r 20° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">rudder_l 20° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">rudder_r 25° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">rudder_l 25° 与小翼 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 20° 与鸭翼 0.10 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 20° 与机头 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 20° 与鸭翼 0.10 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 20° 与机头 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 25° 与鸭翼 0.29 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_r 25° 与机头 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 25° 与鸭翼 0.29 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">elev_l 25° 与机头 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">0–80° 扫掠最坏 无碰 0.00 cm³</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">后缘 1.200 到翼前缘 1.280，净空 80 mm（&gt;= 50）</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">1.142 m（&gt;= 0.20）</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">0.230 m（&gt;= 0.10）</span></div>
   </div>
 </article>
 <article class="line" id="l09">
@@ -196,7 +196,7 @@ body.locked{overflow:hidden}
     <p class="lead">装不进去、拆不下来、调不了，是概念模型最常见的「能用但做不出」。</p>
     <div class="two">
       <div><h3>常见错法</h3><ul><li>舵机悬在蒙皮里，没有安装面、没有检修口</li><li>左右对称件各编一个件号，BOM 翻倍</li><li>零件尺寸超过板材/型材规格，没人发现</li></ul></div>
-      <div><h3>X1 这一轮</h3><ul><li>4 台舵机都贴到结构或壳体（0 mm），可拆盖板留检修口</li><li>43 个件号对应 62 件实物，左右对称件共用件号</li><li>单件最重 40 kg 电池、7.1 kg 机翼，两人可抬</li></ul></div>
+      <div><h3>X1 这一轮</h3><ul><li>4 台舵机都贴到结构或壳体（0 mm），可拆盖板留检修口</li><li>45 个件号对应 63 件实物，左右对称件共用件号</li><li>单件最重 40 kg 电池、7.1 kg 机翼，两人可抬</li></ul></div>
     </div>
     <div class="crit"><b>判据</b>舵机到最近结构 ≤5 mm；件号复用与 BOM 一致；单件 ≤两人可抬。</div>
     <div class="row ok"><span class="rn">✓</span><span class="rt">pitch_servo_r 到最近结构/壳体 0 mm</span></div><div class="row ok"><span class="rn">✓</span><span class="rt">yaw_servo_r 到最近结构/壳体 0 mm</span></div>
@@ -215,7 +215,7 @@ body.locked{overflow:hidden}
     
   </div>
 </article>
-<footer>生成于 2026-11-15 12:09 · model/x1/audit_x1.py → x1_audit.json → 本页</footer>
+<footer>生成于 2026-11-15 13:38 · model/x1/audit_x1.py → x1_audit.json → 本页</footer>
 </div><div id="lock" class="lock">
   <form class="lockbox" id="lockform" autocomplete="off">
     <div class="lockmark">V11 · 载人电动飞行器</div>
